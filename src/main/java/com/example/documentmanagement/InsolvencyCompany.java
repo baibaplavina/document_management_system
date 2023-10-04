@@ -16,6 +16,7 @@ public class InsolvencyCompany {
     private int registrationNumber;
     private String companyName;
     private String companyAddress;
+    private String courtName;
     private String courtCaseNumber;
     private Date courtDecisionDate;
     private String e_address;
