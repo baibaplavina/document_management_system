@@ -1,38 +1,35 @@
 package com.example.documentmanagement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @Controller
 public class WebsiteController {
 
+
     @Autowired
     private AdministratorService administratorService;
+
 
     @GetMapping("/")
     public String displayHomePage(){
         return"index";
     }
-    @GetMapping("/create-process")
-    public String displayCreateNewProcessPage(){
-        return "createProcess";
-    }
-    @GetMapping("/view-processes")
-    public String displayAllProcessesPage(){
-        return "viewProcessesList";
-    }
+
     @GetMapping("/create-document")
-    public String displayCreateDocumentPage(){
+    public String displayProcessDocumentPage(){
+
         return "processDocumentPage";
     }
-
     @GetMapping("/create-administrator")
-    public String displayCreateAdministrator(){
-        return "createAdministrator";
+    public String displayCreateAdminPage(){
+        return "administratorProfile";
     }
+
 
     @PostMapping("/create-administrator")
     public String handleAdministratorRegistration(Administrator administrator){
