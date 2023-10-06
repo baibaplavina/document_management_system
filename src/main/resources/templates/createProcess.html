@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Create New Process Page</title>
@@ -8,17 +8,18 @@
 
 </head>
 <body>
-<header class="border border-success m-5 text-center text-green p-3">
+<header th:replace="~{fragments/headers.html::process-creator}"></header>
+<!--<header class="border border-success m-5 text-center text-green p-3">
     <h2>DOCUMENT MANAGEMENT SYSTEM</h2>
+</header>-->
 
-</header>
-<main class="border border-success m-5 card-body row p-5">
+<main class="border border-success m-5 p-10" >
 
-    <section class="container">
-        <form class="form-inline" id="creatProcessForm" action="/create-process" method="post">
-            <fieldset>
-                <legend >New Process registration form</legend>
-                <div class="form-group mx-sm-3 mb-2" >
+    <section class="container m-5 p-10  ">
+        <form class="form-inline p-10 " id="creatProcessForm" action="/create-process" method="post">
+            <fieldset class="form-title p-10">
+                <h5>New Process registration form</h5>
+                <div class="form-group mx-sm-3 mb-2 " >
                     <label>Insolvency Company Registration Number:</label>
                     <input type="text" placeholder="registration Number" name="registrationNumber">
                 </div>
@@ -31,24 +32,29 @@
                     <input type="text" placeholder="address" name="companyAddress">
                 </div>
                 <div class="form-group mx-sm-3 mb-2">
+                    <label>Court Name:</label>
+                    <input type="text" placeholder="court name" name="courtName">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
                     <label>Court Case number:</label>
                     <input type="text" placeholder="case number" name="courtCaseNumber">
                 </div>
+               <!--<div class="form-group mx-sm-3 mb-2">
+                    <label>Court Decision Date:</label>
+                    <input type="date" placeholder="court decision date" name="courtDecisionDate">
+                </div>-->
                 <div class="form-group mx-sm-3 mb-2">
                     <label>Insolvency Company e-address:</label>
                     <label>
-                        <input type="text" placeholder="e-address" name="e-address">
+                        <input type="text" placeholder="e-address" name="e_address">
                     </label>
                 </div>
-                <div class="form-group mx-sm-3 mb-2">
-                    <label>Court Decision Date:</label>
-                    <input type="date" placeholder="date" name="courtDecisionDate">
-                </div>
                 <br>
-                <a class="btn btn-outline-success me-2 p-2" type="submit" href="/create-process">SAVE PROCESS</a>
+                <button class="btn btn-outline-success me-2 p-2" type="submit">Save </button>
             </fieldset>
         </form>
-    </section>
+    </section >
+    <section th:replace="~{fragments/sections.html::section-caseList}"></section>
 
 </main>
 
