@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class InsolvencyCompanyController {
-    private InsolvencyCompanyService insolvencyCompanyService;
+    private InsolvencyProcessService insolvencyProcessService;
 
     @Autowired
-    public InsolvencyCompanyController(InsolvencyCompanyService insolvencyCompanyService) {
-        this.insolvencyCompanyService = insolvencyCompanyService;
+    public InsolvencyCompanyController(InsolvencyProcessService insolvencyProcessService) {
+        this.insolvencyProcessService = insolvencyProcessService;
     }
 
     @PostMapping("/create-process")
-    public String createInsolvencyCompany(InsolvencyCompany insolvencyCompany) {
+    public String createInsolvencyCompany(InsolvencyProcess insolvencyProcess) {
         try {
-            insolvencyCompanyService.createInsolvencyCompany(insolvencyCompany);
+            insolvencyProcessService.createInsolvencyProcess(insolvencyProcess);
             return "redirect:/create-process?message=INSOLVENCY_COMPANY_CREATED_SUCCESSFULLY";
         } catch (Exception exception) {
             return "redirect:/create-process?message=INSOLVENCY_COMPANY_CREATION_FAILED&error=" + exception.getMessage();
@@ -32,7 +32,7 @@ public class InsolvencyCompanyController {
                                   Model model) {
         model.addAttribute("message", message);
         model.addAttribute("error", error);
-        model.addAttribute("processList", insolvencyCompanyService.findAll());
+        model.addAttribute("processList", insolvencyProcessService.findAll());
         return "createProcess";
     }
     @GetMapping("/view-processes")
@@ -41,7 +41,7 @@ public class InsolvencyCompanyController {
                                      Model model) {
         model.addAttribute("message", message);
         model.addAttribute("error", error);
-        model.addAttribute("processList", insolvencyCompanyService.findAll());
+        model.addAttribute("processList", insolvencyProcessService.findAll());
         return "viewProcessesList";
     }
 
