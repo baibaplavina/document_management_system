@@ -31,7 +31,7 @@ public class UploadingController {
     public String uploadExcelFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
         if (file.isEmpty()) {
             attributes.addFlashAttribute("message", "Please select a file to upload.");
-            return "redirect:/";
+            return "redirect:/upload";
         }
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -52,7 +52,7 @@ public class UploadingController {
 
         attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
 
-        return "redirect:/";
+        return "redirect:/files";
     }
 
     @GetMapping("/download")

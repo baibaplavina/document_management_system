@@ -1,12 +1,12 @@
 package com.example.documentmanagement;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,17 +14,29 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Administrator {
     @Id
-    @GeneratedValue()
-    private Long id;
-    private int certificateNumber;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long adminId;
+    @Column(name = "certificateNumber")
+    private String certificateNumber;
+    @Column(name = "adminName")
     private String adminName;
+    @Column(name = "adminSurname")
     private String adminSurname;
+    @Column(name = "adminAddress")
     private String adminAddress;
+    @Column(name = "adminEmail")
     private String adminEmail;
+    @Column(name = "adminE_address")
     private String adminE_address;
+    @Column(name = "adminPhoneNumber")
     private String adminPhoneNumber;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "adminGender")
     private Gender adminGender;
-
+    private Timestamp lastUpdated;
+    private Timestamp createdAt;
+    @OneToMany
+    private List<InsolvencyProcess> listOfProcesses;
 
 
 }

@@ -1,8 +1,6 @@
 package com.example.documentmanagement;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Entity
-public class InsolvencyCompany {
+public class InsolvencyProcess {
     @Id
     @GeneratedValue()
     private Long id;
@@ -28,5 +26,8 @@ public class InsolvencyCompany {
     private String e_address;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    @ManyToOne
+    @JoinColumn(name="adminId", nullable=false)
+    private Administrator admin;
 
 }
