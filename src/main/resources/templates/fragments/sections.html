@@ -1,0 +1,11 @@
+<section th:fragment="section-caseList" class="container d-flex flex-column m-5">
+  <h5>The list of processes</h5>
+  <div class="company justify-content-between"th:each = "process: ${processList}">
+    <span class="fw-bold" th:text="${process.getCompanyName()}"></span>
+    <span class="details"th:text="${process.getRegistrationNumber()}"></span>
+    <span class="details" th:text="${process.getCourtName()}"></span>
+    <span class="details" th:text="${process.getCourtCaseNumber()}"></span>
+    <span class="details" th:text="${process.getE_address()}"></span>
+    <button class="btn btn-outline-success me-2 p-2" type="submit"> Edit </button>
+  </div>
+</section>

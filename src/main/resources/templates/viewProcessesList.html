@@ -7,9 +7,10 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 </head>
-<body >
+<body>
+<header th:replace="~{fragments/headers.html::process-list}"></header>
 
-<header class="border border-success m-5 text-center text-green p-3">
+<!--<header class="border border-success m-5 text-center text-green p-3">
     <h2>DOCUMENT MANAGEMENT SYSTEM</h2>
     <nav class="container-fluid bg-light-green text-white  d-md-flex justify-content-between">
         <a class="btn btn-outline-success me-2" type="button" href="/create-process"> Create New Process</a>
@@ -17,14 +18,11 @@
         <a class="btn btn-outline-success me-2" type="button" href="/view-ended-processes"> View Processes ended in court </a>
     </nav>
 
-</header>
+</header>-->
 
 <main class="border border-success text-start m-5 row p-5">
-<h1> The list of selected processes:</h1>
-<div>1. </div>
-<div>2. </div>
-<div>3. </div>
-<div>4. </div>
+    <section th:replace="~{fragments/sections.html::section-caseList}"></section>
+
 </main>
 
 </body>
