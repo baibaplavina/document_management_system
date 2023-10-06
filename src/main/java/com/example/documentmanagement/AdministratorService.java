@@ -26,9 +26,7 @@ public class AdministratorService {
                 administrator.getCertificateNumber().isEmpty() || administrator.getAdminEmail().isEmpty() ||
                 administrator.getAdminAddress().isEmpty() || administrator.getAdminGender().toString() == null)
             throw new Exception("All lines should be filled in, please check");
-            else {
-            administratorRepository.saveAndFlush(administrator);
-        }
+        administratorRepository.saveAndFlush(administrator);
         return administrator;
     }
 
