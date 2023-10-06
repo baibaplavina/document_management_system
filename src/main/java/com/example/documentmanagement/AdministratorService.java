@@ -31,4 +31,50 @@ public class AdministratorService {
         }
         return administrator;
     }
+
+
+
+    public Administrator findAdministratorByCertificateNumber(int number) throws Exception {
+
+        for (Administrator admin : administratorRepository.findAll()) {
+            if (admin.getCertificateNumber().equals(number))
+                return administratorRepository.findByCertificateNumber(number);
+        }
+        throw new Exception("Administrator not found");
+
+    }
+
+    public Administrator editAdministrator(Administrator admin) throws Exception {
+
+        for (Administrator currentAdmin : administratorRepository.findAll()) {
+
+            if (currentAdmin.getAdminId().equals(admin.getAdminId())) {
+
+                currentAdmin.setCertificateNumber(admin.getCertificateNumber());
+                currentAdmin.setAdminName(admin.getAdminName());
+                currentAdmin.setAdminSurname(admin.getAdminSurname());
+                currentAdmin.setAdminAddress(admin.getAdminAddress());
+                currentAdmin.setAdminEmail(admin.getAdminEmail());
+                currentAdmin.setAdminE_address(admin.getAdminE_address());
+                currentAdmin.setAdminPhoneNumber(admin.getAdminPhoneNumber());
+                currentAdmin.setAdminGender(admin.getAdminGender());
+
+                administratorRepository.save(currentAdmin);
+                return currentAdmin;
+            }
+        }
+
+        throw new Exception("administrator not found!");
+
+    }
+
+
+    public void deleteAdministrator(Long id) {
+
+        administratorRepository.deleteById(id);
+    }
+
+
+
+
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +15,7 @@ import java.sql.Timestamp;
 public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long adminId;
     @Column(name = "certificateNumber")
     private String certificateNumber;
     @Column(name = "adminName")
@@ -34,5 +35,8 @@ public class Administrator {
     private Gender adminGender;
     private Timestamp lastUpdated;
     private Timestamp createdAt;
+    @OneToMany
+    private List<InsolvencyProcess> listOfProcesses;
+
 
 }
