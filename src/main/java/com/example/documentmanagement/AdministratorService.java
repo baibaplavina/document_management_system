@@ -3,7 +3,6 @@ package com.example.documentmanagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,5 +35,16 @@ public class AdministratorService {
         throw new Exception("Administrator not found");
 
     }
+
+    public Administrator findAdministratorById(Long id) throws Exception {
+
+        for (Administrator admin : administratorRepository.findAll()) {
+            if (admin.getAdminId().equals(id))
+                return administratorRepository.findById(id).get();
+        }
+        throw new Exception("Administrator not found");
+
+    }
+
 
 }
