@@ -70,7 +70,7 @@ public class UploadingController {
 
         response.setContentType("application/msword");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + "blank";
+        String headerValue = "attachment; filename = " + "blank.doc";
         response.setHeader(headerKey, headerValue);
 
         ServletOutputStream outputStream = response.getOutputStream();

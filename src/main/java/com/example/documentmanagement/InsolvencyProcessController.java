@@ -30,6 +30,7 @@ public class InsolvencyProcessController {
         model.addAttribute("message", message);
         model.addAttribute("error", error);
         model.addAttribute("process", new InsolvencyProcess());
+        model.addAttribute("processList", insolvencyProcessService.findAll());
         model.addAttribute("adminList", adminList);
 
         return "createProcess";
