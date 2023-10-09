@@ -1,11 +1,36 @@
-<section th:fragment="section-caseList" class="container d-flex flex-column m-5">
-  <h5>The list of processes</h5>
-  <div class="company justify-content-between"th:each = "process: ${processList}">
-    <span class="fw-bold" th:text="${process.getCompanyName()}"></span>
-    <span class="details"th:text="${process.getRegistrationNumber()}"></span>
-    <span class="details" th:text="${process.getCourtName()}"></span>
-    <span class="details" th:text="${process.getCourtCaseNumber()}"></span>
-    <span class="details" th:text="${process.getE_address()}"></span>
-    <button class="btn btn-outline-success me-2 p-2" type="submit"> Edit </button>
-  </div>
+<section th:fragment="section-caseList" class="container">
+    <br>
+    <br>
+    <h3>The List Of Processes:</h3>
+    <br>
+    <br>
+    <table class="table table-bordered text-center">
+        <thead class="table-header-dark">
+        <tr>
+            <th> Process ID</th>
+            <th> Company Name</th>
+            <th> Registration Number</th>
+            <th> Court Name</th>
+            <th> Court Case Number</th>
+            <th> Company E-address</th>
+            <th> Open</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="process: ${processList}">
+            <tr>
+                <td class="fw-bold"> [[${process.id}]]</td>
+                <td class="fw-bold" th:text="${process.getCompanyName()}"></td>
+                <td class="details" th:text="${process.getRegistrationNumber()}"></td>
+                <td class="details" th:text="${process.getCourtName()}"></td>
+                <td class="details" th:text="${process.getCourtCaseNumber()}"></td>
+                <td class="details" th:text="${process.getE_address()}"></td>
+                <td>
+                    <a class="btn btn-success" href="/process-documents" type="submit"> Open </a>
+                </td>
+
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
 </section>

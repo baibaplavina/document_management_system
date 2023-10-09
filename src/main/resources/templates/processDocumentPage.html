@@ -5,18 +5,47 @@
     <title>Create Document Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet"  href="styles/header.css">
 </head>
 <body>
-<header class="border border-success m-5 text-center text-green p-3">
-    <h2>DOCUMENT MANAGEMENT SYSTEM</h2>
-
-</header>
-<main class="border border-danger m-5 text-center text-danger">
-    <h3> The content still needs to be discussed</h3>
 
 
+<header th:replace="~{fragments/headers.html::header-process-documents}"
+        class="container-fluid text-center bg-success text-white"></header>
+<main >
+    <!--<h2 th:each="process:${processList}" th:text="${'Company ' + process.getCompanyName() + ' profile'}"></h2>-->
+    <section class="border border-success m-5 text-left text-black mt-2 mb-2 p-5">
+        <h3> Push the button of the document you want to create:</h3>
+        <div class="container mt-2 mb-2">
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot maksātnespējīgās sabiedrības  veidlapu (Create Company Blank)</button>
+        </div>
+    </section>
+    <section class="border border-success m-5 text-left text-black p-5">
+        <h3> Create request to public authorities - press button:</h3>
+        <div  >
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Uzņēmumu reģistrs (Company Register)</button>
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Kuģu reģistrs (Ship)</button>
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Lauksaimniecības datu centrs (Agric)</button>
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Tehniskās uzraudzības aģentūra (State tech)</button>
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Valsts zemes dienests (Land)</button>
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button>
+        </div>
+    </section>
+    <section class="border border-success m-5 text-left text-black p-5">
+        <h3> Document list to upload:</h3>
+        <div class="container col-xs-3">
+            <label for="formFileDisabled" class="form-label">1. Upload Cost List</label>
+            <input class="form-control" type="file" id="formFileDisabled">
+            <label for="formFileDisabled" class="form-label">2. Upload Assets List</label>
+            <input class="form-control" type="file" id="formFileDisabled1">
+            <label for="formFileDisabled" class="form-label">3. Upload Other documents</label>
+            <input class="form-control" type="file" id="formFileDisabled2">
+            <!--       https://getbootstrap.com/docs/5.3/forms/input-group/
+            Custom file input-->
+        </div>
+    </section>
 </main>
-
-
+<footer th:replace="~{fragments/footer.html::footer}"></footer>
 </body>
 </html>
