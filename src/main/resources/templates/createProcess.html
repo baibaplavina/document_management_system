@@ -5,58 +5,63 @@
     <title>Create New Process Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet"  href="styles/header.css">
 
 </head>
 <body>
 <header th:replace="~{fragments/headers.html::process-creator}"></header>
-<!--<header class="border border-success m-5 text-center text-green p-3">
-    <h2>DOCUMENT MANAGEMENT SYSTEM</h2>
-</header>-->
 
-<main class="border border-success m-5 p-10" >
-
-    <section class="container m-5 p-10  ">
-        <form class="form-inline p-10 " id="creatProcessForm" action="/create-process" method="post">
-            <fieldset class="form-title p-10">
-                <h5>New Process registration form</h5>
-                <div class="form-group mx-sm-3 mb-2 " >
-                    <label>Insolvency Company Registration Number:</label>
-                    <input type="text" placeholder="registration Number" name="registrationNumber">
+<main class="border border-success text-start m-5 row p-2">
+    <section class="container">
+        <h3>New Process Registration Form</h3>
+        <form class="form-inline " id="creatProcessForm" action="/create-process" method="post" th:object="${process}">
+                <div class="input-group mt-2" >
+                    <select th:field="*{admin}" class="form-control" required>
+                           <th:block th:each="admin:${adminList}" >
+                        <option th:text="${admin.adminName}" th:value="${admin.adminId}"></option>
+                           </th:block>
+                    </select>
                 </div>
-                <div class="form-group mx-sm-3 mb-2">
-                    <label>Insolvency Company Name: </label>
-                    <input type="text" placeholder="company name" name="companyName">
+                <div class="input-group mt-2" >
+                    <label class="input-group-text">Insolvency Company Registration Number:</label>
+                    <input class="form-control" type="text" placeholder="registration number" name="registrationNumber">
                 </div>
-                <div class="form-group mx-sm-3 mb-2">
-                    <label>Insolvency Company Address:</label>
-                    <input type="text" placeholder="address" name="companyAddress">
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Insolvency Company Name: </label>
+                    <input class="form-control"type="text" placeholder="company name" name="companyName">
                 </div>
-                <div class="form-group mx-sm-3 mb-2">
-                    <label>Court Name:</label>
-                    <input type="text" placeholder="court name" name="courtName">
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Insolvency Company Address:</label>
+                    <input class="form-control"type="text" placeholder="address" name="companyAddress">
                 </div>
-                <div class="form-group mx-sm-3 mb-2">
-                    <label>Court Case number:</label>
-                    <input type="text" placeholder="case number" name="courtCaseNumber">
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Court Name:</label>
+                    <input class="form-control"type="text" placeholder="court name" name="courtName">
                 </div>
-               <!--<div class="form-group mx-sm-3 mb-2">
-                    <label>Court Decision Date:</label>
-                    <input type="date" placeholder="court decision date" name="courtDecisionDate">
-                </div>-->
-                <div class="form-group mx-sm-3 mb-2">
-                    <label>Insolvency Company e-address:</label>
-                    <label>
-                        <input type="text" placeholder="e-address" name="e_address">
-                    </label>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Court Case number:</label>
+                    <input class="form-control"type="text" placeholder="case number" name="courtCaseNumber">
                 </div>
-                <br>
-                <button class="btn btn-outline-success me-2 p-2" type="submit">Save </button>
-            </fieldset>
+               <div class="input-group  mt-2 ">
+                    <label class="input-group-text">Court Decision Date:</label>
+                    <input class="col-xs-3 " type="date" placeholder="court decision date" name="courtDecisionDate">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">E-Adrese (EAdress) </label>
+                    <input class="form-control" placeholder="e-address" name="e_address" type="text">
+                </div >
+                <div class="mt-2">
+                <button class="btn btn-dark text-white p-3" type="submit">Saglabāt (save) </button>
+                <button class="btn btn-dark text-white p-3" type="submit">Labot profilu (edit profile) </button>
+                </div>
         </form>
-    </section >
+
+    </section>
+   <!-- <section th:replace="~{fragments/sections.html::section-caseList}"></section>-->
     <section th:replace="~{fragments/sections.html::section-caseList}"></section>
 
 </main>
+<footer th:replace="~{fragments/footer.html::footer}"></footer>
 
 </body>
 </html>

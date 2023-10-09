@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -21,6 +22,11 @@ import java.io.InputStream;
 @Controller
 public class UploadingController {
 
+    @Autowired
+    private AdministratorService administratorService;
+
+    @Autowired
+    private TemplateService templateService;
 
     @GetMapping("/files")
     public String homepage() {
@@ -55,12 +61,30 @@ public class UploadingController {
         return "redirect:/files";
     }
 
-    @GetMapping("/download")
-    public void downloadFile(Model model, HttpServletResponse response) throws IOException {
+    @GetMapping("/download-blank")
+    public void downloadBlank(Model model, HttpServletResponse response) throws IOException {
 
-        Template_first templateFirst = new Template_first();
+        TemplateService templateFirst = new TemplateService(administratorService);
 
-        byte[] xwpfDocumentBytes = templateFirst.exportWordDoc().toByteArray();
+        byte[] xwpfDocumentBytes = templateFirst.exportBlankDoc().toByteArray();
+
+        response.setContentType("application/msword");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + "blank";
+        response.setHeader(headerKey, headerValue);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(xwpfDocumentBytes);
+        outputStream.close();
+
+    }
+
+    @GetMapping("/download-filled")
+    public void downloadFilledFile(Model model, HttpServletResponse response) throws IOException {
+
+
+
+        byte[] xwpfDocumentBytes = templateService.exportWordDoc().toByteArray();
 
         response.setContentType("application/msword");
         String headerKey = "Content-Disposition";
@@ -72,4 +96,23 @@ public class UploadingController {
         outputStream.close();
 
     }
+
+    @GetMapping("/download-tables")
+    public void downloadTables(Model model, HttpServletResponse response) throws IOException {
+
+        TemplateService templateService = new TemplateService(administratorService);
+
+        byte[] xwpfDocumentBytes = templateService.exportTableDoc().toByteArray();
+
+        response.setContentType("application/msword");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + "tables";
+        response.setHeader(headerKey, headerValue);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(xwpfDocumentBytes);
+        outputStream.close();
+
+    }
+
 }

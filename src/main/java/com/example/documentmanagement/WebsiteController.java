@@ -14,17 +14,11 @@ public class WebsiteController {
     @Autowired
     private AdministratorService administratorService;
 
-
     @GetMapping("/")
     public String displayHomePage(){
         return"index";
     }
 
-    @GetMapping("/create-document")
-    public String displayProcessDocumentPage(){
-
-        return "processDocumentPage";
-    }
     @GetMapping("/create-administrator")
     public String displayCreateAdminPage(){
         return "createAdministrator";
