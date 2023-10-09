@@ -9,23 +9,28 @@ import java.util.List;
 public class InsolvencyProcessService {
     @Autowired
     public InsolvencyProcessRepository insolvencyProcessRepository;
+    @Autowired
+    public AdministratorRepository administratorRepository;
 
     List<InsolvencyProcess> findAll() {
         return insolvencyProcessRepository.findAll();
 
     }
-
     public InsolvencyProcess createInsolvencyProcess(InsolvencyProcess insolvencyProcess) throws Exception {
-        if (insolvencyProcess.getCompanyName().isEmpty()||insolvencyProcess.getCourtName().isEmpty()
-                ||insolvencyProcess.getCompanyAddress().isEmpty())
+        if (insolvencyProcess.getRegistrationNumber()==0 ||
+                insolvencyProcess.getCompanyName().isEmpty()
+                || insolvencyProcess.getCompanyAddress().isEmpty()
+                || insolvencyProcess.getCourtName().isEmpty()
+                || insolvencyProcess.getCourtCaseNumber().isEmpty()
+                || insolvencyProcess.getE_address().isEmpty())
+            throw new Exception("Some information is missing, please re-fill the form");
+            System.out.println(insolvencyProcess);
+            insolvencyProcessRepository.saveAndFlush(insolvencyProcess);
 
-            throw new Exception("All lines should be filled in, please re-check");
-        else {
-            insolvencyProcessRepository.save(insolvencyProcess);
 
-        }
         return insolvencyProcess;
     }
+
 
     public void deleteInsolvencyProcess(Long id) {
 
