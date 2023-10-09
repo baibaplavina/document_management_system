@@ -30,9 +30,9 @@ public class WebsiteController {
         System.out.println(administrator);
         try {
            administratorService.createAdministrator(administrator);
-            return "redirect:/register?status=ADMINISTRATOR_REGISTRATION_SUCCESS";
+            return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_SUCCESS";
         } catch (Exception exception) {
-            return "redirect:/register?status=ADMINISTRATOR_REGISTRATION_FAILED&error=" + exception.getMessage();
+            return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_FAILED&error=" + exception.getMessage();
         }
     }
 
