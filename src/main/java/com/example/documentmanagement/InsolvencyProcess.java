@@ -23,7 +23,7 @@ public class InsolvencyProcess {
     private String companyAddress;
     private String courtName;
     private String courtCaseNumber;
-    @DateTimeFormat(pattern = "mm/dd/yyyy")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date courtDecisionDate;
     private String e_address;
     @DateTimeFormat(pattern = "mm/dd/yyyy")
