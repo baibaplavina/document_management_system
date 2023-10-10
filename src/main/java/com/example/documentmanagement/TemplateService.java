@@ -1,5 +1,7 @@
 package com.example.documentmanagement;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,16 +9,20 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
 public class TemplateService {
 
     private AdministratorService administratorService;
+    private InsolvencyProcessService insolvencyProcessService;
 
     @Autowired
-    public TemplateService(AdministratorService administratorService) {
+    public TemplateService(AdministratorService administratorService, InsolvencyProcessService insolvencyProcessService) {
         this.administratorService = administratorService;
+        this.insolvencyProcessService = insolvencyProcessService;
     }
 
     public ByteArrayOutputStream exportBlankDoc() throws IOException {
@@ -98,7 +104,7 @@ public class TemplateService {
         }
     }
 
-    public ByteArrayOutputStream exportTableDoc() throws IOException {
+    public ByteArrayOutputStream exportTableDoc(Long processId) throws IOException {
 
         InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
@@ -106,11 +112,11 @@ public class TemplateService {
         try {
 
             replaceHeaderText(doc);
-            create1_1table(doc);
-            create1_2table(doc);
-            create3table(doc);
+            create1_1table(doc, processId);
+            //   create1_2table(doc);
+            //  create3table(doc);
 
-            replaceText(doc, "iecelta/iecelts", "Inserted_text");
+            //  replaceText(doc, "iecelta/iecelts", "Inserted_text");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -124,12 +130,13 @@ public class TemplateService {
     }
 
 
-    private void create1_1table(XWPFDocument doc) {
+    private void create1_1table(XWPFDocument doc, Long processId) throws Exception {
 
         XWPFRun run = doc.createParagraph().createRun();
         run.setFontFamily("Times New Roman");
         run.setFontSize(12);
         run.setBold(true);
+        run.setText("Process id:  " + processId);
         run.setText(" 1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā ");
 
         XWPFTable createdTable = doc.createTable();
@@ -143,10 +150,28 @@ public class TemplateService {
         styleCell(createdTable.getRow(0).getCell(0), "Summa, EUR");
         styleCell(createdTable.getRow(0).getCell(1), "Pamatojums");
 
-        createdTable.createRow();
-        createdTable.createRow();
-        doc.createParagraph();
+        InsolvencyProcess insolvencyProcess = insolvencyProcessService.findInsolvencyProcessById(processId);
+        String assetList = insolvencyProcess.getAssetsList();
+        String sums = insolvencyProcess.getAssetsListCosts();
 
+        List<String> listOfAssets = new ArrayList<>(Arrays.asList(assetList.split(",")));
+        List<String> listOfSums = new ArrayList<>(Arrays.asList(sums.split(",")));
+
+
+        for (int i = 0; i < listOfAssets.size(); i++) {
+            createdTable.createRow();
+
+        }
+        for (int i = 1; i <= listOfAssets.size(); i++) {
+            styleCell(createdTable.getRow(i).getCell(0), listOfSums.get(i - 1));
+            styleCell(createdTable.getRow(i).getCell(1), listOfAssets.get(i - 1));
+
+        }
+        XWPFTableRow row = createdTable.createRow();
+        styleCell(row.getCell(0), insolvencyProcess.getAssetsTotalCosts());
+        styleCell(row.getCell(1), "Kopā /Total");
+
+        doc.createParagraph();
 
     }
 
@@ -237,4 +262,63 @@ public class TemplateService {
         run.setText(s);
         cell.removeParagraph(0);
     }
+
+    public void handleAssetsUpload(InputStream stream, Long processId) throws Exception {
+        Workbook workbook = WorkbookFactory.create(stream);
+
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colNumMpaRiciba = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("MPA rīcība".equals(cellValue1)) {
+                colNumMpaRiciba = i;
+                break;
+            }
+        }
+
+        int colNumApmers = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Iegūto naudas līdzekļu apmērs".equals(cellValue1)) {
+                colNumApmers = i;
+                break;
+            }
+        }
+
+        if (colNumMpaRiciba > -1 && colNumApmers > -1) {
+            StringBuilder sbMpa = new StringBuilder();
+            StringBuilder sbSums = new StringBuilder();
+            char separator = ',';
+
+            for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+                if (dataSheet.getRow(i).getCell(colNumMpaRiciba) != null && !dataSheet.getRow(i).getCell(colNumMpaRiciba).toString().isEmpty()) {
+                    sbMpa.append(dataSheet.getRow(i).getCell(colNumMpaRiciba).getStringCellValue());
+                    if (dataSheet.getRow(i).getCell(colNumApmers) == null || dataSheet.getRow(i).getCell(colNumApmers).toString().isEmpty()) {
+                        sbSums.append("-");
+                    }
+                    Cell cell = dataSheet.getRow(i).getCell(colNumApmers);
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+
+                    sbSums.append(cell.getStringCellValue());
+                    sbMpa.append(separator);
+                    sbSums.append(separator);
+                }
+
+            }
+            String assets = sbMpa.substring(0, sbMpa.length() - 1);
+            String assetSums = sbSums.substring(0, sbSums.length() - 1);
+
+            InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+            insolvencyProcess.setId(processId);
+            insolvencyProcess.setAssetsList(assets);
+            insolvencyProcess.setAssetsListCosts(assetSums);
+
+            insolvencyProcess.setAssetsTotalCosts(dataSheet.getRow(dataSheet.getLastRowNum()).getCell(colNumApmers).getStringCellValue());
+            insolvencyProcessService.editInsolvencyProcessAssets(insolvencyProcess);
+
+        }
+    }
+
 }

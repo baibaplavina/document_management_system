@@ -27,7 +27,6 @@ public class InsolvencyProcessService {
             System.out.println(insolvencyProcess);
             insolvencyProcessRepository.saveAndFlush(insolvencyProcess);
 
-
         return insolvencyProcess;
     }
 
@@ -36,5 +35,36 @@ public class InsolvencyProcessService {
 
         insolvencyProcessRepository.deleteById(id);
     }
+
+    public InsolvencyProcess editInsolvencyProcessAssets(InsolvencyProcess process) throws Exception {
+
+        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
+
+            if (currentProcess.getId().equals(process.getId())) {
+
+                currentProcess.setAssetsList(process.getAssetsList());
+                currentProcess.setAssetsListCosts(process.getAssetsListCosts());
+                currentProcess.setAssetsTotalCosts(process.getAssetsTotalCosts());
+
+                insolvencyProcessRepository.save(currentProcess);
+                return currentProcess;
+            }
+        }
+
+        throw new Exception("process not found by id!");
+
+    }
+
+    public InsolvencyProcess findInsolvencyProcessById(Long id) throws Exception {
+
+        for (InsolvencyProcess process : insolvencyProcessRepository.findAll()) {
+            if (process.getId().equals(id))
+                return insolvencyProcessRepository.findById(id).get();
+        }
+        throw new Exception("Insolvency process not found");
+
+    }
+
+
 
 }
