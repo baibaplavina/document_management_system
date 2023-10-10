@@ -18,7 +18,7 @@ public class InsolvencyProcess {
     @Id
     @GeneratedValue()
     private Long id;
-    private int registrationNumber;
+    private String registrationNumber;
     private String companyName;
     private String companyAddress;
     private String courtName;

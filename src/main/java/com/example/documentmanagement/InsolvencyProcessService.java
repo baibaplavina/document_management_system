@@ -17,7 +17,7 @@ public class InsolvencyProcessService {
 
     }
     public InsolvencyProcess createInsolvencyProcess(InsolvencyProcess insolvencyProcess) throws Exception {
-        if (insolvencyProcess.getRegistrationNumber()==0 ||
+        if (insolvencyProcess.getRegistrationNumber().isEmpty() ||
                 insolvencyProcess.getCompanyName().isEmpty()
                 || insolvencyProcess.getCompanyAddress().isEmpty()
                 || insolvencyProcess.getCourtName().isEmpty()
@@ -26,7 +26,6 @@ public class InsolvencyProcessService {
             throw new Exception("Some information is missing, please re-fill the form");
             System.out.println(insolvencyProcess);
             insolvencyProcessRepository.saveAndFlush(insolvencyProcess);
-
 
         return insolvencyProcess;
     }
