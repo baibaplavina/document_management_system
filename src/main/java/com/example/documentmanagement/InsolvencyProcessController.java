@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -57,7 +58,7 @@ public class InsolvencyProcessController {
         model.addAttribute("processList", insolvencyProcessService.findAll());
         return "viewProcessesList";
     }
-    @GetMapping("/process-documents")
+ /*   @GetMapping("/process-documents")
     public String displayProcessDocumentPage(@RequestParam(required = false) String message,
                                       @RequestParam(required = false) String error,
                                       Model model) {
@@ -65,5 +66,20 @@ public class InsolvencyProcessController {
         model.addAttribute("error", error);
         model.addAttribute("processList", insolvencyProcessService.findAll());
         return "processDocumentPage";
+    } */
+
+    @GetMapping("/process-documents/{id}")
+    public String displayProcessDocumentPage(@PathVariable() Long id, Model model) {
+
+        try {
+            InsolvencyProcess process = insolvencyProcessService.findInsolvencyProcessById(id);
+            model.addAttribute("process", process);
+            return "processDocumentPage";
+        } catch (Exception exception) {
+
+            return "redirect:/?message=VIEW_PROCESS_FAILED&error=" + exception.getMessage();
+        }
+
     }
+
 }

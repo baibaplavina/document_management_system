@@ -25,8 +25,12 @@
                 <td class="details" th:text="${process.getCourtName()}"></td>
                 <td class="details" th:text="${process.getCourtCaseNumber()}"></td>
                 <td class="details" th:text="${process.getE_address()}"></td>
+
                 <td>
-                    <a class="btn btn-success" href="/process-documents" type="submit"> Open </a>
+                    <!--
+                    <a class="btn btn-success" href="/process-documents" type="submit"> Open </a> -->
+                    <a th:href="${'/process-documents/' + process.getId()}" class="btn btn-success" role="button" type="submit">Open </a>
+
                 </td>
 
             </tr>

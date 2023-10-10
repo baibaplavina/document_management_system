@@ -3,14 +3,12 @@ package com.example.documentmanagement;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,11 +17,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+
 @Controller
 public class UploadingController {
 
     @Autowired
     private AdministratorService administratorService;
+    @Autowired
+    private InsolvencyProcessService insolvencyProcessService;
 
     @Autowired
     private TemplateService templateService;
@@ -33,24 +34,18 @@ public class UploadingController {
         return "files";
     }
 
-    @PostMapping("/upload")
-    public String uploadExcelFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
+    @PostMapping("/process-documents/{id}")
+    public String uploadExcelFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes, @PathVariable Long id) {
         if (file.isEmpty()) {
             attributes.addFlashAttribute("message", "Please select a file to upload.");
-            return "redirect:/upload";
+            return "redirect:/?message=UPLOADING_FAILED";
         }
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        System.out.println(fileName + " " + id);
         try {
             InputStream stream = file.getInputStream();
-            Workbook workbook = WorkbookFactory.create(stream);
-
-            Sheet datatypeSheet = workbook.getSheetAt(0);
-            System.out.println(fileName);
-            System.out.println(datatypeSheet.getSheetName());
-            System.out.println(datatypeSheet.getRow(0).getCell(1));
-
+            templateService.handleAssetsUpload(stream, id);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,13 +53,13 @@ public class UploadingController {
 
         attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
 
-        return "redirect:/files";
+        return "redirect:/process-documents/{id}";
     }
 
     @GetMapping("/download-blank")
     public void downloadBlank(Model model, HttpServletResponse response) throws IOException {
 
-        TemplateService templateFirst = new TemplateService(administratorService);
+        TemplateService templateFirst = new TemplateService(administratorService, insolvencyProcessService);
 
         byte[] xwpfDocumentBytes = templateFirst.exportBlankDoc().toByteArray();
 
@@ -97,16 +92,16 @@ public class UploadingController {
 
     }
 
-    @GetMapping("/download-tables")
-    public void downloadTables(Model model, HttpServletResponse response) throws IOException {
+    @GetMapping("/download-tables/{id}")
+    public void downloadTables(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
-        TemplateService templateService = new TemplateService(administratorService);
+        TemplateService templateService = new TemplateService(administratorService, insolvencyProcessService);
 
-        byte[] xwpfDocumentBytes = templateService.exportTableDoc().toByteArray();
+        byte[] xwpfDocumentBytes = templateService.exportTableDoc(id).toByteArray();
 
         response.setContentType("application/msword");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + "tables";
+        String headerValue = "attachment; filename = " + "tables.doc";
         response.setHeader(headerKey, headerValue);
 
         ServletOutputStream outputStream = response.getOutputStream();

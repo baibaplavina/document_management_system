@@ -32,5 +32,8 @@ public class InsolvencyProcess {
     @ManyToOne
     @JoinColumn(name="adminId", nullable=false)
     private Administrator admin;
+    private String assetsList;
+    private String assetsListCosts;
+    private String assetsTotalCosts;
 
 }
