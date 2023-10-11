@@ -37,6 +37,7 @@ public class Administrator {
     private Timestamp createdAt;
     @OneToMany
     private List<InsolvencyProcess> listOfProcesses;
-
+    @Column(name = "place")
+    private String place;
 
 }
