@@ -17,7 +17,7 @@ public class InsolvencyProcessService {
 
     }
     public InsolvencyProcess createInsolvencyProcess(InsolvencyProcess insolvencyProcess) throws Exception {
-        if (insolvencyProcess.getRegistrationNumber()==0 ||
+        if (insolvencyProcess.getRegistrationNumber().isEmpty() ||
                 insolvencyProcess.getCompanyName().isEmpty()
                 || insolvencyProcess.getCompanyAddress().isEmpty()
                 || insolvencyProcess.getCourtName().isEmpty()

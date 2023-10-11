@@ -10,15 +10,26 @@
 <body>
 
 
-<header th:replace="~{fragments/headers.html::header-process-documents}"
-        class="container-fluid text-center bg-success text-white"></header>
+<header th:replace="~{fragments/headers.html::header-process-documents}"></header>
 <main >
-    <!--<h2 th:each="process:${processList}" th:text="${'Company ' + process.getCompanyName() + ' profile'}"></h2>-->
+    <!----------------------->
+    <section class="border border-success m-5 text-left text-dark mt-2 mb-2 p-5">
+        <h4> Company's profile:</h4>
+        <h4 class="company-name text-danger"th:text="${process.getCompanyName() +', reg. nr. ' + process.getRegistrationNumber() + ', ' + process.getCompanyAddress() }"></h4>
+
+    </section>
+    <!----------------------->
     <section class="border border-success m-5 text-left text-black mt-2 mb-2 p-5">
+
         <h3> Push the button of the document you want to create:</h3>
         <div class="container mt-2 mb-2">
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot maksātnespējīgās sabiedrības  veidlapu (Create Company Blank)</button>
+                <a th:href="${'/download-admin-blank/' + process.getId()}">
+                <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
+            </a>
+                <a th:href="${'/download-company-blank/' + process.getId()}">
+                    <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot maksātnespējīgās sabiedrības  veidlapu (Create Company Blank)</button>
+            </a>
+
         </div>
     </section>
     <section class="border border-success m-5 text-left text-black p-5">
@@ -49,7 +60,7 @@
                 </form>
 
             <label for="formFileDisabled" class="form-label">1. Upload Cost List</label>
-            <input class="form-control" type="file" id="formFileDisabled">
+            <input class="form-control col-xs-3" type="file" id="formFileDisabled">
             <label for="formFileDisabled" class="form-label">2. Upload Assets List</label>
             <input class="form-control" type="file" id="formFileDisabled1">
             <label for="formFileDisabled" class="form-label">3. Upload Other documents</label>

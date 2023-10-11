@@ -109,5 +109,40 @@ public class UploadingController {
         outputStream.close();
 
     }
+//    --------------------------------------------------------------------------
+    @GetMapping("/download-company-blank/{id}")
+    public void downloadCompanyBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
+
+    TemplateService companyBlank = new TemplateService(administratorService, insolvencyProcessService);
+
+    byte[] xwpfDocumentBytes = companyBlank.exportCompanyBlank(id).toByteArray();
+
+    response.setContentType("application/msword");
+    String headerKey = "Content-Disposition";
+    String headerValue = "attachment; filename = " + "companyBlank.doc";
+    response.setHeader(headerKey, headerValue);
+
+    ServletOutputStream outputStream = response.getOutputStream();
+    outputStream.write(xwpfDocumentBytes);
+    outputStream.close();
+
+}
+    @GetMapping("/download-admin-blank/{id}")
+    public void downloadAdminBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
+
+        TemplateService templateAdmin = new TemplateService(administratorService, insolvencyProcessService);
+
+        byte[] xwpfDocumentBytes = templateAdmin.exportAdminBlank(id).toByteArray();
+
+        response.setContentType("application/msword");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + "adminBlank.doc";
+        response.setHeader(headerKey, headerValue);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(xwpfDocumentBytes);
+        outputStream.close();
+
+    }
 
 }

@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 import java.util.Date;
+
 
 
 @NoArgsConstructor
@@ -18,7 +20,8 @@ public class InsolvencyProcess {
     @Id
     @GeneratedValue()
     private Long id;
-    private int registrationNumber;
+
+    private String registrationNumber;
     private String companyName;
     private String companyAddress;
     private String courtName;
