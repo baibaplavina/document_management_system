@@ -1,9 +1,7 @@
 package com.example.documentmanagement;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
-import org.apache.xmlbeans.XmlCursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +26,7 @@ public class TemplateService {
 
     public ByteArrayOutputStream exportBlankDoc() throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
+        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
@@ -325,5 +323,60 @@ public class TemplateService {
 
         }
     }
+    /*------------------------------------------------*////
+
+    public ByteArrayOutputStream exportAdminBlank(Long id) throws IOException {
+
+        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
+        XWPFDocument adminBlank = new XWPFDocument(inputStream);
+
+        try {
+
+            this.replaceHeaderText(adminBlank);
+            replaceText(adminBlank, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+            replaceText(adminBlank, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
+            replaceText(adminBlank, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
+            replaceText(adminBlank, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        adminBlank.write(out);
+        out.close();
+        adminBlank.close();
+
+        return out;
+    }
+
+    public ByteArrayOutputStream exportCompanyBlank(Long id) throws IOException {
+
+        InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
+        XWPFDocument doc = new XWPFDocument(inputStream);
+
+        try {
+
+            replaceHeaderText(doc);
+            replaceText(doc, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
+            replaceText(doc, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
+            replaceText(doc, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        doc.write(out);
+        out.close();
+        doc.close();
+
+        return out;
+    }
+
 
 }
