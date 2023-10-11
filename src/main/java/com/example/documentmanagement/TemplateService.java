@@ -3,6 +3,7 @@ package com.example.documentmanagement;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.XmlCursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -112,11 +113,12 @@ public class TemplateService {
         try {
 
             replaceHeaderText(doc);
+
             create1_1table(doc, processId);
             //   create1_2table(doc);
             //  create3table(doc);
-
             //  replaceText(doc, "iecelta/iecelts", "Inserted_text");
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -132,14 +134,17 @@ public class TemplateService {
 
     private void create1_1table(XWPFDocument doc, Long processId) throws Exception {
 
-        XWPFRun run = doc.createParagraph().createRun();
+        List<XWPFParagraph> paragraphs = doc.getParagraphs();
+        XWPFRun run = doc.getParagraphs().get(25).insertNewRun(0);
+
         run.setFontFamily("Times New Roman");
         run.setFontSize(12);
         run.setBold(true);
-        run.setText("Process id:  " + processId);
         run.setText(" 1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā ");
 
-        XWPFTable createdTable = doc.createTable();
+        XWPFParagraph p = doc.insertNewParagraph(paragraphs.get(26).getCTP().newCursor());
+        XWPFTable createdTable = p.getBody().insertNewTbl(paragraphs.get(26).getCTP().newCursor());
+
 
         int headerSize = 2;
 
@@ -154,8 +159,8 @@ public class TemplateService {
         String assetList = insolvencyProcess.getAssetsList();
         String sums = insolvencyProcess.getAssetsListCosts();
 
-        List<String> listOfAssets = new ArrayList<>(Arrays.asList(assetList.split(",")));
-        List<String> listOfSums = new ArrayList<>(Arrays.asList(sums.split(",")));
+        List<String> listOfAssets = new ArrayList<>(Arrays.asList(assetList.split(";")));
+        List<String> listOfSums = new ArrayList<>(Arrays.asList(sums.split(";")));
 
 
         for (int i = 0; i < listOfAssets.size(); i++) {
@@ -290,7 +295,7 @@ public class TemplateService {
         if (colNumMpaRiciba > -1 && colNumApmers > -1) {
             StringBuilder sbMpa = new StringBuilder();
             StringBuilder sbSums = new StringBuilder();
-            char separator = ',';
+            char separator = ';';
 
             for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
                 if (dataSheet.getRow(i).getCell(colNumMpaRiciba) != null && !dataSheet.getRow(i).getCell(colNumMpaRiciba).toString().isEmpty()) {
