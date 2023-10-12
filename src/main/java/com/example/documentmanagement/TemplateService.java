@@ -1,5 +1,6 @@
 package com.example.documentmanagement;
 
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,17 +107,41 @@ public class TemplateService {
 
     public ByteArrayOutputStream exportTableDoc(Long processId) throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
+        InputStream inputStream = getClass().getResourceAsStream("/template_tables.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
 
             replaceHeaderText(doc);
 
-            create1_1table(doc, processId);
-            //   create1_2table(doc);
-            //  create3table(doc);
-            //  replaceText(doc, "iecelta/iecelts", "Inserted_text");
+            doc.getTables().get(2).getRow(1).getCell(2).
+                    setText(String.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getNeikilataMantaSum()).replace('.', ','));
+            doc.getTables().get(2).getRow(2).getCell(2).
+                    setText(String.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getProcessMoney()));
+            doc.getTables().get(2).getRow(3).getCell(2).
+                    setText(String.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getTotalExpenses()).replace('.', ','));
+            doc.getTables().get(2).getRow(4).getCell(2).
+                    setText(String.format("%1.2f", insolvencyProcessService.findInsolvencyProcessById(processId).getAdminSalary()));
+
+
+            Double lineNumber5Value =
+                    insolvencyProcessService.findInsolvencyProcessById(processId).getNeikilataMantaSum() +
+                            Double.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getProcessMoney().replace(',', '.'))
+                    -insolvencyProcessService.findInsolvencyProcessById(processId).getTotalExpenses()-
+                            insolvencyProcessService.findInsolvencyProcessById(processId).getAdminSalary();
+
+            Double lineNumber6Value = lineNumber5Value * 0.1;
+            Double lineNumber7Value = lineNumber5Value-lineNumber6Value;
+
+            doc.getTables().get(2).getRow(5).getCell(2).
+                    setText(String.format("%1.2f", lineNumber5Value).replace('.', ','));
+            doc.getTables().get(2).getRow(6).getCell(2).
+                    setText(String.format("%1.2f", lineNumber6Value).replace('.', ','));
+            doc.getTables().get(2).getRow(7).getCell(2).
+                    setText(String.format("%1.2f", lineNumber7Value).replace('.', ','));
+
+             create1_1table(doc, processId);
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -133,15 +159,15 @@ public class TemplateService {
     private void create1_1table(XWPFDocument doc, Long processId) throws Exception {
 
         List<XWPFParagraph> paragraphs = doc.getParagraphs();
-        XWPFRun run = doc.getParagraphs().get(25).insertNewRun(0);
+     //   XWPFRun run = doc.getParagraphs().get(25).insertNewRun(0);
 
-        run.setFontFamily("Times New Roman");
-        run.setFontSize(12);
-        run.setBold(true);
-        run.setText(" 1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā ");
+      //  run.setFontFamily("Times New Roman");
+      //  run.setFontSize(12);
+      //  run.setBold(true);
+      //  run.setText(" 1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā ");
 
-        XWPFParagraph p = doc.insertNewParagraph(paragraphs.get(26).getCTP().newCursor());
-        XWPFTable createdTable = p.getBody().insertNewTbl(paragraphs.get(26).getCTP().newCursor());
+        XWPFParagraph p = doc.insertNewParagraph(paragraphs.get(43).getCTP().newCursor());
+        XWPFTable createdTable = p.getBody().insertNewTbl(paragraphs.get(43).getCTP().newCursor());
 
 
         int headerSize = 2;
@@ -206,54 +232,6 @@ public class TemplateService {
         createdTable.createRow();
 
         doc.createParagraph();
-    }
-
-    private void create3table(XWPFDocument doc) {
-
-        XWPFRun run = doc.createParagraph().createRun();
-        run.setFontFamily("Times New Roman");
-        run.setFontSize(12);
-        run.setBold(true);
-        run.setText(" 3. ... maksātnespējas procesa neieķīlātās mantas ienākumu-izmaksu kopsavilkums ");
-
-        XWPFTable createdTable = doc.createTable();
-
-        int headerSize = 3;
-
-        for (int i = 1; i < (headerSize); i++) {
-            createdTable.getRow(0).addNewTableCell();
-        }
-
-        styleCell(createdTable.getRow(0).getCell(1), "Pamatojums");
-        styleCell(createdTable.getRow(0).getCell(2), "Summa, EUR");
-
-        for (int i = 0; i < 8; i++) {
-            createdTable.createRow();
-        }
-
-        styleCell(createdTable.getRow(1).getCell(0), "1.");
-        styleCell(createdTable.getRow(1).getCell(1), "Maksātnespējas procesā iegūtie naudas līdzekļi (neķīlātā manta)");
-
-        styleCell(createdTable.getRow(2).getCell(0), "2.");
-        styleCell(createdTable.getRow(2).getCell(1), "Norēķinu kontā esošie līdzekļi uz maksātnespējas procesa pasludināšanas brīdi");
-
-        styleCell(createdTable.getRow(3).getCell(0), "3.");
-        styleCell(createdTable.getRow(3).getCell(1), "Maksātnespējas procesa izdevumi");
-
-        styleCell(createdTable.getRow(4).getCell(0), "4.");
-        styleCell(createdTable.getRow(4).getCell(1), "Administratora atlīdzība saskaņā ar Maksātnespējas likuma 169. panta otrās daļas 1. punktu  ");
-
-        styleCell(createdTable.getRow(5).getCell(0), "5.");
-        styleCell(createdTable.getRow(5).getCell(1), "Kreditoriem izmaksai paredzētā summa");
-
-        styleCell(createdTable.getRow(6).getCell(0), "6.");
-        styleCell(createdTable.getRow(6).getCell(1), "Administratora atlīdzība saskaņā ar Maksātnespējas likuma 169. panta otrās daļas 2. punktu ");
-
-        styleCell(createdTable.getRow(7).getCell(0), "7.");
-        styleCell(createdTable.getRow(7).getCell(1), "Pievienotās vērtības nodoklis administratora atlīdzībai (Maksātnespējas likuma 169. panta septītā daļa  )");
-
-        styleCell(createdTable.getRow(8).getCell(0), "8.");
-        styleCell(createdTable.getRow(8).getCell(1), "Faktiski kreditoriem izmaksājamā summa");
     }
 
 
@@ -378,5 +356,150 @@ public class TemplateService {
         return out;
     }
 
+    public void handleCostsUpload(InputStream stream, Long processId) throws Exception {
+        Workbook workbook = WorkbookFactory.create(stream);
 
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colIegutieNaudas = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Iegūtie naudas līdzekļi no".equals(cellValue1)) {
+                colIegutieNaudas = i;
+                break;
+            }
+        }
+
+        int colSumma = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Summa".equals(cellValue1)) {
+                colSumma = i;
+                break;
+            }
+        }
+        double neikilataMantaSum = 0;
+        if (colIegutieNaudas > -1 && colSumma > -1) {
+
+            for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+                Cell cell = dataSheet.getRow(i).getCell(colIegutieNaudas);
+                String stringCostValue = dataSheet.getRow(i).getCell(colSumma).getStringCellValue();
+                if (cell.getStringCellValue().equals("Neieķīlātā manta")) {
+                    double value = Double.parseDouble(stringCostValue.replace(',', '.'));
+                    neikilataMantaSum = neikilataMantaSum + value;
+                }
+
+            }
+
+        }
+
+        InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+        insolvencyProcess.setId(processId);
+        insolvencyProcess.setNeikilataMantaSum(neikilataMantaSum);
+
+        insolvencyProcessService.editInsolvencyProcessCosts(insolvencyProcess);
+        System.out.println(neikilataMantaSum);
+
+    }
+
+
+    public void handleMoneyUpload(InputStream stream, Long processId) throws Exception {
+
+        Workbook workbook = WorkbookFactory.create(stream);
+
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colNaudasLidzekli = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Naudas līdzekļi kontā perioda sākumā (EUR)".equals(cellValue1)) {
+                colNaudasLidzekli = i;
+                break;
+            }
+        }
+        String cellNaudasLidzekli = "";
+
+        if (colNaudasLidzekli > -1) {
+
+           cellNaudasLidzekli = dataSheet.getRow(dataSheet.getLastRowNum()).getCell(colNaudasLidzekli).getStringCellValue();
+
+        }
+        InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+        insolvencyProcess.setId(processId);
+        insolvencyProcess.setProcessMoney(cellNaudasLidzekli);
+
+        insolvencyProcessService.editInsolvencyProcessMoney(insolvencyProcess);
+        System.out.println(cellNaudasLidzekli);
+
+    }
+
+    public void handleExpensesUpload(InputStream stream, Long processId) throws Exception {
+
+        Workbook workbook = WorkbookFactory.create(stream);
+
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colIzmaksasRadusasNo = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Izmaksas radušās no".equals(cellValue1)) {
+                colIzmaksasRadusasNo = i;
+                break;
+            }
+        }
+
+        int colPozicijas = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Pozīcijas nosaukums".equals(cellValue1)) {
+                colPozicijas = i;
+                break;
+            }
+        }
+
+        int colIzmaksuSum = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Izmaksu summa".equals(cellValue1)) {
+                colIzmaksuSum = i;
+                break;
+            }
+        }
+        double izmaksasTotal = 0;
+        double administratorSalary = 0;
+        if (colIzmaksasRadusasNo > -1 && colPozicijas > -1 && colIzmaksuSum > -1) {
+
+            for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+                String cellIsmaksasRadusas = dataSheet.getRow(i).getCell(colIzmaksasRadusasNo).getStringCellValue();
+                String cellPozicijas = dataSheet.getRow(i).getCell(colPozicijas).getStringCellValue();
+                String stringExpensesValue = dataSheet.getRow(i).getCell(colIzmaksuSum).getStringCellValue();
+
+
+                if (cellIsmaksasRadusas.equals("Neieķīlātā manta") && !cellPozicijas.contains("Administratora") ) {
+                    double izmaksasTotalDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
+                    izmaksasTotal = izmaksasTotal + izmaksasTotalDouble;
+                }
+
+                if (cellPozicijas.equals("Administratora atlīdzība par pienākumu pildīšanu maksātnespējas procesā")) {
+                    double administratorSalaryDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
+                    administratorSalary = administratorSalary + administratorSalaryDouble;
+                }
+
+            }
+
+        }
+
+        InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+        insolvencyProcess.setId(processId);
+        insolvencyProcess.setTotalExpenses(izmaksasTotal);
+        insolvencyProcess.setAdminSalary(administratorSalary);
+
+        insolvencyProcessService.editInsolvencyProcessExpenses(insolvencyProcess);
+        System.out.println(izmaksasTotal);
+        System.out.println(administratorSalary);
+
+    }
 }

@@ -34,8 +34,8 @@ public class UploadingController {
         return "files";
     }
 
-    @PostMapping("/process-documents/{id}")
-    public String uploadExcelFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes, @PathVariable Long id) {
+    @PostMapping("/process-documents/{id}/documents/{uploadTypeId}")
+    public String uploadExcelFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes, @PathVariable Long id, @PathVariable Long uploadTypeId) {
         if (file.isEmpty()) {
             attributes.addFlashAttribute("message", "Please select a file to upload.");
             return "redirect:/?message=UPLOADING_FAILED";
@@ -45,7 +45,19 @@ public class UploadingController {
         System.out.println(fileName + " " + id);
         try {
             InputStream stream = file.getInputStream();
-            templateService.handleAssetsUpload(stream, id);
+            if(uploadTypeId == 1) {
+            templateService.handleAssetsUpload(stream, id);}
+            else if(uploadTypeId == 2) {
+                templateService.handleCostsUpload(stream, id);
+            }
+            else if(uploadTypeId == 3) {
+                templateService.handleMoneyUpload(stream, id);
+            }
+            else if(uploadTypeId == 4) {
+                templateService.handleExpensesUpload(stream, id);
+            }
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +113,7 @@ public class UploadingController {
 
         response.setContentType("application/msword");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + "tables.doc";
+        String headerValue = "attachment; filename = " + "SegsanasPlans.doc";
         response.setHeader(headerKey, headerValue);
 
         ServletOutputStream outputStream = response.getOutputStream();

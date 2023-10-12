@@ -65,6 +65,44 @@ public class InsolvencyProcessService {
 
     }
 
+    public InsolvencyProcess editInsolvencyProcessCosts(InsolvencyProcess process) throws Exception {
+        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
+
+            if (currentProcess.getId().equals(process.getId())) {
+                currentProcess.setNeikilataMantaSum(process.getNeikilataMantaSum());
+                insolvencyProcessRepository.save(currentProcess);
+                return currentProcess;
+            }
+        }
+
+        throw new Exception("process not found by id!");
+    }
 
 
+    public InsolvencyProcess editInsolvencyProcessMoney(InsolvencyProcess process) throws Exception {
+        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
+
+            if (currentProcess.getId().equals(process.getId())) {
+                currentProcess.setProcessMoney(process.getProcessMoney());
+                insolvencyProcessRepository.save(currentProcess);
+                return currentProcess;
+            }
+        }
+
+        throw new Exception("process not found by id!");
+    }
+
+    public InsolvencyProcess editInsolvencyProcessExpenses(InsolvencyProcess process) throws Exception {
+        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
+
+            if (currentProcess.getId().equals(process.getId())) {
+                currentProcess.setTotalExpenses(process.getTotalExpenses());
+                currentProcess.setAdminSalary(process.getAdminSalary());
+                insolvencyProcessRepository.save(currentProcess);
+                return currentProcess;
+            }
+        }
+
+        throw new Exception("process not found by id!");
+    }
 }
