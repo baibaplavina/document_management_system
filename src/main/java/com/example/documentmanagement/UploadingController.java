@@ -56,16 +56,16 @@ public class UploadingController {
         return "redirect:/process-documents/{id}";
     }
 
-    @GetMapping("/download-blank")
+    @GetMapping("/download-admin-blank")
     public void downloadBlank(Model model, HttpServletResponse response) throws IOException {
 
-        TemplateService templateFirst = new TemplateService(administratorService, insolvencyProcessService);
+        TemplateService templateAdmin = new TemplateService(administratorService, insolvencyProcessService);
 
-        byte[] xwpfDocumentBytes = templateFirst.exportBlankDoc().toByteArray();
+        byte[] xwpfDocumentBytes = templateAdmin.exportBlankDoc().toByteArray();
 
         response.setContentType("application/msword");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + "blank.doc";
+        String headerValue = "attachment; filename = " + "adminBlank.doc";
         response.setHeader(headerKey, headerValue);
 
         ServletOutputStream outputStream = response.getOutputStream();
@@ -74,10 +74,26 @@ public class UploadingController {
 
     }
 
-    @GetMapping("/download-filled")
+    @GetMapping("/download-company-blank/{id}")
+    public void downloadCompanyBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
+
+        TemplateService templateService = new TemplateService(administratorService, insolvencyProcessService);
+
+        byte[] xwpfDocumentBytes = templateService.exportCompanyBlankDoc(id).toByteArray();
+
+        response.setContentType("application/msword");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + "companyBlank.doc";
+        response.setHeader(headerKey, headerValue);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(xwpfDocumentBytes);
+        outputStream.close();
+
+    }
+   /*
+  @GetMapping("/download-filled")
     public void downloadFilledFile(Model model, HttpServletResponse response) throws IOException {
-
-
 
         byte[] xwpfDocumentBytes = templateService.exportWordDoc().toByteArray();
 
@@ -91,7 +107,7 @@ public class UploadingController {
         outputStream.close();
 
     }
-
+ * */
     @GetMapping("/download-tables/{id}")
     public void downloadTables(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 

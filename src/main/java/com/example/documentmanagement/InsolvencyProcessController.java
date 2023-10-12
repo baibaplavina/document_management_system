@@ -58,7 +58,7 @@ public class InsolvencyProcessController {
         model.addAttribute("processList", insolvencyProcessService.findAll());
         return "viewProcessesList";
     }
- /*   @GetMapping("/process-documents")
+ @GetMapping("/process-documents")
     public String displayProcessDocumentPage(@RequestParam(required = false) String message,
                                       @RequestParam(required = false) String error,
                                       Model model) {
@@ -66,7 +66,7 @@ public class InsolvencyProcessController {
         model.addAttribute("error", error);
         model.addAttribute("processList", insolvencyProcessService.findAll());
         return "processDocumentPage";
-    } */
+    }
 
     @GetMapping("/process-documents/{id}")
     public String displayProcessDocumentPage(@PathVariable() Long id, Model model) {

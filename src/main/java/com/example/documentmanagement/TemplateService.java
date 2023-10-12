@@ -1,9 +1,7 @@
 package com.example.documentmanagement;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
-import org.apache.xmlbeans.XmlCursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +26,7 @@ public class TemplateService {
 
     public ByteArrayOutputStream exportBlankDoc() throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
+        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
@@ -61,16 +59,26 @@ public class TemplateService {
                         ", e-Adrese: " + administratorService.findAdministratorById(1L).getAdminE_address());
     }
 
-    public ByteArrayOutputStream exportWordDoc() throws IOException {
+    private void replaceCompanyHeaderText(XWPFDocument doc, Long id) throws Exception {
+        replaceText(doc,"Maksātnespējīgā companyName",
+                "Maksātnespējīgā " +
+                        insolvencyProcessService.findInsolvencyProcessById(1L).getCompanyName());
 
-        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
+        replaceText(doc, "vienotais reģistrācijas Nr. registrationNumber",
+                "vienotais reģistrācijas numurs " + " " +
+                        insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
+
+    }
+
+       public ByteArrayOutputStream exportWordDoc(Long id) throws IOException {
+
+        InputStream inputStream = getClass().getResourceAsStream("/companyBlanc.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
-
             replaceHeaderText(doc);
-
-            replaceText(doc, "iecelta/iecelts", "Inserted_text");
+            replaceCompanyHeaderText(doc, id);
+           // replaceText(doc, "iecelta/iecelts", "Inserted_text");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -131,6 +139,28 @@ public class TemplateService {
         return out;
     }
 
+    public ByteArrayOutputStream exportCompanyBlankDoc(Long id) throws IOException {
+
+        InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
+        XWPFDocument doc = new XWPFDocument(inputStream);
+
+        try {
+            replaceHeaderText(doc);
+            replaceCompanyHeaderText(doc,id);
+
+          //  replaceText(doc, "iecelta/iecelts", "Inserted_text");
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        doc.write(out);
+        out.close();
+        doc.close();
+
+        return out;
+    }
 
     private void create1_1table(XWPFDocument doc, Long processId) throws Exception {
 

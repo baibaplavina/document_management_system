@@ -16,8 +16,10 @@
     <section class="border border-success m-5 text-left text-black mt-2 mb-2 p-5">
         <h3> Push the button of the document you want to create:</h3>
         <div class="container mt-2 mb-2">
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot maksātnespējīgās sabiedrības  veidlapu (Create Company Blank)</button>
+            <a th:href="${'/download-admin-blank'}">
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button></a>
+            <a th:href="${'/download-company-blank/' + process.getId()}">
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot maksātnespējīgās sabiedrības  veidlapu (Create Company Blank)</button></a>
         </div>
     </section>
     <section class="border border-success m-5 text-left text-black p-5">
