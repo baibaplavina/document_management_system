@@ -49,6 +49,21 @@ public class InsolvencyProcessController {
 
     }
 
+    @GetMapping("/edit/{id}")
+    public String showEditProcess(@PathVariable Long id, Model model) {
+        try {
+            InsolvencyProcess selectedProcess = insolvencyProcessService.findInsolvencyProcessById(id);
+            model.addAttribute("productItem", selectedProcess);
+            return "editProcess";
+        } catch (Exception exception) {
+            return "redirect:/?message=PROCESS_EDIT_FAILED&error=" + exception.getMessage();
+        }
+    }
+
+
+
+
+
     @GetMapping("/view-processes")
     public String displayProcessesList(@RequestParam(required = false) String message,
                                       @RequestParam(required = false) String error,

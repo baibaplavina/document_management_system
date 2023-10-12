@@ -56,8 +56,8 @@ public class UploadingController {
         return "redirect:/process-documents/{id}";
     }
 
-    @GetMapping("/download-admin-blank")
-    public void downloadBlank(Model model, HttpServletResponse response) throws IOException {
+    @GetMapping("/download-admin-blank/{id}")
+    public void downloadBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
         TemplateService templateAdmin = new TemplateService(administratorService, insolvencyProcessService);
 

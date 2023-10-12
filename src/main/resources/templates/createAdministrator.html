@@ -26,7 +26,7 @@
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Sertifikāta numurs (Number of sertificate) </label>
-        <input class="form-control" name="certificateNumber" type="number">
+        <input class="form-control" name="certificateNumber" type="text">
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Prakses vietas adrese (Adrress) </label>
@@ -42,7 +42,7 @@
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Telefons ( Phone number) </label>
-        <input class="form-control" name="adminPhoneNumber" type="number">
+        <input class="form-control" name="adminPhoneNumber" type="text">
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Dokumentu sagatavošanas vieta (Place) </label>
@@ -64,7 +64,7 @@
   </section>
 
   <section class="container">
-    <a th:href="@{|/download-admin-blank|}">
+    <a th:href="${'/download-admin-blank/{id}'}">
       <button type="button" class="btn btn-outline-success mt-2 mb-2"> Izveidot Administratora veidlapu (Create Admin Blank) </button>
     </a>
   </section>

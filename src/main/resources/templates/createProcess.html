@@ -14,11 +14,11 @@
 <main class="border border-success text-start m-5 row p-2">
     <section class="container">
         <h3>New Process Registration Form</h3>
-        <form class="form-inline " id="creatProcessForm" action="/create-process" method="post" th:object="${process}">
+        <form class="form-inline col-md-6" id="creatProcessForm" action="/create-process" method="post" th:object="${process}">
                 <div class="input-group mt-2" >
                     <select th:field="*{admin}" class="form-control" required>
                            <th:block th:each="admin:${adminList}" >
-                        <option th:text="${admin.adminName}" th:value="${admin.adminId}"></option>
+                        <option th:text="${admin.adminName+ ' ' + admin.adminSurname}" th:value="${admin.adminId}"></option>
                            </th:block>
                     </select>
                 </div>

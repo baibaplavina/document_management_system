@@ -1,5 +1,6 @@
 package com.example.documentmanagement;
 
+import org.apache.poi.ss.formula.functions.Today;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,13 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -30,7 +36,9 @@ public class TemplateService {
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
-            replaceHeaderText(doc);
+           replaceHeaderText(doc);
+           replacePlaceDateText(doc, 1L);
+           replaceAdminNameSurnameText(doc);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -57,12 +65,26 @@ public class TemplateService {
                         administratorService.findAdministratorById(1L).getAdminPhoneNumber() +
                         ", e-pasts: " + administratorService.findAdministratorById(1L).getAdminEmail() +
                         ", e-Adrese: " + administratorService.findAdministratorById(1L).getAdminE_address());
+
+    }
+
+    private void replaceAdminNameSurnameText(XWPFDocument doc) throws Exception {
+        replaceText(doc, "administratorName administratorSurname",
+                administratorService.findAdministratorById(1L).getAdminName() + " " +
+                        administratorService.findAdministratorById(1L).getAdminSurname());
+
+    }
+    private void replacePlaceDateText(XWPFDocument doc, Long id) throws Exception {
+      LocalDate date = LocalDate.now();
+
+        replaceText(doc,"Place, Date.",
+                administratorService.findAdministratorById(id).getPlace() + ", " + date);
     }
 
     private void replaceCompanyHeaderText(XWPFDocument doc, Long id) throws Exception {
         replaceText(doc,"Maksātnespējīgā companyName",
                 "Maksātnespējīgā " +
-                        insolvencyProcessService.findInsolvencyProcessById(1L).getCompanyName());
+                        insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
 
         replaceText(doc, "vienotais reģistrācijas Nr. registrationNumber",
                 "vienotais reģistrācijas numurs " + " " +
@@ -78,6 +100,7 @@ public class TemplateService {
         try {
             replaceHeaderText(doc);
             replaceCompanyHeaderText(doc, id);
+            replacePlaceDateText(doc, id);
            // replaceText(doc, "iecelta/iecelts", "Inserted_text");
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -147,6 +170,8 @@ public class TemplateService {
         try {
             replaceHeaderText(doc);
             replaceCompanyHeaderText(doc,id);
+            replacePlaceDateText(doc, id);
+            replaceAdminNameSurnameText(doc);
 
           //  replaceText(doc, "iecelta/iecelts", "Inserted_text");
 
