@@ -16,9 +16,10 @@
         <h3>New Process Registration Form</h3>
         <form class="form-inline col-md-6" id="creatProcessForm" action="/create-process" method="post" th:object="${process}">
                 <div class="input-group mt-2" >
-                    <select th:field="*{admin}" class="form-control" required>
+                    <label class="input-group-text"  >Select Administrator:</label>
+                    <select  th:field="*{admin}" class="form-control" required>
                            <th:block th:each="admin:${adminList}" >
-                        <option th:text="${admin.adminName+ ' ' + admin.adminSurname}" th:value="${admin.adminId}"></option>
+                    <option th:text="${admin.adminName + ' ' + admin.adminSurname}" th:value="${admin.adminId} " ></option>
                            </th:block>
                     </select>
                 </div>
@@ -50,9 +51,9 @@
                     <label class="input-group-text">E-Adrese (EAdress) </label>
                     <input class="form-control" placeholder="e-address" name="e_address" type="text">
                 </div >
-                <div class="mt-2">
-                <button class="btn btn-dark text-white p-3" type="submit">Saglabāt (save) </button>
-                <button class="btn btn-dark text-white p-3" type="submit">Labot profilu (edit profile) </button>
+                <div class="mt-2 ">
+                <button class="btn btn-success text-white p-3" type="submit">Saglabāt (save) </button>
+                <button class="btn btn-dark text-white p-3" type="submit" href="/create-process-edit">Labot profilu (edit profile) </button>
                 </div>
         </form>
 

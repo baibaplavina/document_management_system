@@ -1,6 +1,5 @@
 package com.example.documentmanagement;
 
-import org.apache.poi.ss.formula.functions.Today;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +8,8 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -36,9 +30,7 @@ public class TemplateService {
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
-           replaceHeaderText(doc);
-           replacePlaceDateText(doc, 1L);
-           replaceAdminNameSurnameText(doc);
+            replaceHeaderText(doc);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -65,43 +57,18 @@ public class TemplateService {
                         administratorService.findAdministratorById(1L).getAdminPhoneNumber() +
                         ", e-pasts: " + administratorService.findAdministratorById(1L).getAdminEmail() +
                         ", e-Adrese: " + administratorService.findAdministratorById(1L).getAdminE_address());
-
     }
 
-    private void replaceAdminNameSurnameText(XWPFDocument doc) throws Exception {
-        replaceText(doc, "administratorName administratorSurname",
-                administratorService.findAdministratorById(1L).getAdminName() + " " +
-                        administratorService.findAdministratorById(1L).getAdminSurname());
+    public ByteArrayOutputStream exportWordDoc() throws IOException {
 
-    }
-    private void replacePlaceDateText(XWPFDocument doc, Long id) throws Exception {
-      LocalDate date = LocalDate.now();
-
-        replaceText(doc,"Place, Date.",
-                administratorService.findAdministratorById(id).getPlace() + ", " + date);
-    }
-
-    private void replaceCompanyHeaderText(XWPFDocument doc, Long id) throws Exception {
-        replaceText(doc,"Maksātnespējīgā companyName",
-                "Maksātnespējīgā " +
-                        insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
-
-        replaceText(doc, "vienotais reģistrācijas Nr. registrationNumber",
-                "vienotais reģistrācijas numurs " + " " +
-                        insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
-
-    }
-
-       public ByteArrayOutputStream exportWordDoc(Long id) throws IOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/companyBlanc.docx");
+        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
+
             replaceHeaderText(doc);
-            replaceCompanyHeaderText(doc, id);
-            replacePlaceDateText(doc, id);
-           // replaceText(doc, "iecelta/iecelts", "Inserted_text");
+
+            replaceText(doc, "iecelta/iecelts", "Inserted_text");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -162,30 +129,6 @@ public class TemplateService {
         return out;
     }
 
-    public ByteArrayOutputStream exportCompanyBlankDoc(Long id) throws IOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
-
-        try {
-            replaceHeaderText(doc);
-            replaceCompanyHeaderText(doc,id);
-            replacePlaceDateText(doc, id);
-            replaceAdminNameSurnameText(doc);
-
-          //  replaceText(doc, "iecelta/iecelts", "Inserted_text");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }
 
     private void create1_1table(XWPFDocument doc, Long processId) throws Exception {
 
@@ -380,5 +323,57 @@ public class TemplateService {
 
         }
     }
+
+    public ByteArrayOutputStream exportAdminBlank(Long id) throws IOException {
+
+        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
+        XWPFDocument adminBlank = new XWPFDocument(inputStream);
+
+        try {
+
+            this.replaceHeaderText(adminBlank);
+            replaceText(adminBlank, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+            replaceText(adminBlank, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
+            replaceText(adminBlank, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
+            replaceText(adminBlank, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        adminBlank.write(out);
+        out.close();
+        adminBlank.close();
+
+        return out;
+    }
+
+    public ByteArrayOutputStream exportCompanyBlank(Long id) throws IOException {
+
+        InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
+        XWPFDocument doc = new XWPFDocument(inputStream);
+
+        try {
+
+            replaceHeaderText(doc);
+            replaceText(doc, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
+            replaceText(doc, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
+            replaceText(doc, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        doc.write(out);
+        out.close();
+        doc.close();
+
+        return out;
+    }
+
 
 }
