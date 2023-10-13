@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 import java.util.Date;
-
 
 
 @NoArgsConstructor
@@ -33,10 +31,14 @@ public class InsolvencyProcess {
     private Timestamp createdAt;
     private Timestamp updatedAt;
     @ManyToOne
-    @JoinColumn(name="adminId", nullable=false)
+    @JoinColumn(name = "adminId", nullable = false)
     private Administrator admin;
     private String assetsList;
     private String assetsListCosts;
     private String assetsTotalCosts;
+    private double neikilataMantaSum;
+    private String processMoney;
+    private double totalExpenses;
+    private double adminSalary;
 
 }

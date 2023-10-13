@@ -1,5 +1,6 @@
 package com.example.documentmanagement;
 
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +33,7 @@ public class TemplateService {
 
         try {
             replaceHeaderText(doc);
+            replacePlaceDateText(doc);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,19 +49,24 @@ public class TemplateService {
     private void replaceHeaderText(XWPFDocument doc) throws Exception {
         replaceText(doc, "Maksātnespējas procesa administrators /administratorName AdministratorSurname/ (amata apliecības Nr. /sertificateNumber/)",
                 "Maksātnespējas procesa administrators" + " " +
-                        administratorService.findAdministratorById(1L).getAdminName() + " " +
-                        administratorService.findAdministratorById(1L).getAdminSurname() +
-                        " (amata apliecības Nr. " + administratorService.findAdministratorById(1L).getCertificateNumber() + ")");
+                        administratorService.findAdministratorById(2L).getAdminName() + " " +
+                        administratorService.findAdministratorById(2L).getAdminSurname() +
+                        " (amata apliecības Nr. " + administratorService.findAdministratorById(2L).getCertificateNumber() + ")");
 
 
         replaceText(doc, "Adrese: /administratorAddress/, telefons: /administratorPhoneNumber/,  e-pasts: /adminisratorEmail/, e-Adrese:/administratorEAddress/",
                 "Adrese: " + " " +
-                        administratorService.findAdministratorById(1L).getAdminAddress() + ", telefons: " +
-                        administratorService.findAdministratorById(1L).getAdminPhoneNumber() +
-                        ", e-pasts: " + administratorService.findAdministratorById(1L).getAdminEmail() +
-                        ", e-Adrese: " + administratorService.findAdministratorById(1L).getAdminE_address());
+                        administratorService.findAdministratorById(2L).getAdminAddress() + ", telefons: " +
+                        administratorService.findAdministratorById(2L).getAdminPhoneNumber() +
+                        ", e-pasts: " + administratorService.findAdministratorById(2L).getAdminEmail() +
+                        ", e-Adrese: " + administratorService.findAdministratorById(2L).getAdminE_address());
     }
 
+    private void replacePlaceDateText(XWPFDocument doc) throws Exception {
+        LocalDate date = LocalDate.now();
+        replaceText(doc,"Place, Date.",
+                administratorService.findAdministratorById(2L).getPlace() + ", " + date);
+    }
     public ByteArrayOutputStream exportWordDoc() throws IOException {
 
         InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
@@ -67,8 +75,8 @@ public class TemplateService {
         try {
 
             replaceHeaderText(doc);
+            replacePlaceDateText(doc);
 
-            replaceText(doc, "iecelta/iecelts", "Inserted_text");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -105,17 +113,41 @@ public class TemplateService {
 
     public ByteArrayOutputStream exportTableDoc(Long processId) throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
+        InputStream inputStream = getClass().getResourceAsStream("/template_tables.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
 
             replaceHeaderText(doc);
 
+            doc.getTables().get(2).getRow(1).getCell(2).
+                    setText(String.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getNeikilataMantaSum()).replace('.', ','));
+            doc.getTables().get(2).getRow(2).getCell(2).
+                    setText(String.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getProcessMoney()));
+            doc.getTables().get(2).getRow(3).getCell(2).
+                    setText(String.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getTotalExpenses()).replace('.', ','));
+            doc.getTables().get(2).getRow(4).getCell(2).
+                    setText(String.format("%1.2f", insolvencyProcessService.findInsolvencyProcessById(processId).getAdminSalary()));
+
+
+            Double lineNumber5Value =
+                    insolvencyProcessService.findInsolvencyProcessById(processId).getNeikilataMantaSum() +
+                            Double.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getProcessMoney().replace(',', '.'))
+                            -insolvencyProcessService.findInsolvencyProcessById(processId).getTotalExpenses()-
+                            insolvencyProcessService.findInsolvencyProcessById(processId).getAdminSalary();
+
+            Double lineNumber6Value = lineNumber5Value * 0.1;
+            Double lineNumber7Value = lineNumber5Value-lineNumber6Value;
+
+            doc.getTables().get(2).getRow(5).getCell(2).
+                    setText(String.format("%1.2f", lineNumber5Value).replace('.', ','));
+            doc.getTables().get(2).getRow(6).getCell(2).
+                    setText(String.format("%1.2f", lineNumber6Value).replace('.', ','));
+            doc.getTables().get(2).getRow(7).getCell(2).
+                    setText(String.format("%1.2f", lineNumber7Value).replace('.', ','));
+
             create1_1table(doc, processId);
-            //   create1_2table(doc);
-            //  create3table(doc);
-            //  replaceText(doc, "iecelta/iecelts", "Inserted_text");
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -133,15 +165,15 @@ public class TemplateService {
     private void create1_1table(XWPFDocument doc, Long processId) throws Exception {
 
         List<XWPFParagraph> paragraphs = doc.getParagraphs();
-        XWPFRun run = doc.getParagraphs().get(25).insertNewRun(0);
+        //   XWPFRun run = doc.getParagraphs().get(25).insertNewRun(0);
 
-        run.setFontFamily("Times New Roman");
-        run.setFontSize(12);
-        run.setBold(true);
-        run.setText(" 1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā ");
+        //  run.setFontFamily("Times New Roman");
+        //  run.setFontSize(12);
+        //  run.setBold(true);
+        //  run.setText(" 1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā ");
 
-        XWPFParagraph p = doc.insertNewParagraph(paragraphs.get(26).getCTP().newCursor());
-        XWPFTable createdTable = p.getBody().insertNewTbl(paragraphs.get(26).getCTP().newCursor());
+        XWPFParagraph p = doc.insertNewParagraph(paragraphs.get(43).getCTP().newCursor());
+        XWPFTable createdTable = p.getBody().insertNewTbl(paragraphs.get(43).getCTP().newCursor());
 
 
         int headerSize = 2;
@@ -206,54 +238,6 @@ public class TemplateService {
         createdTable.createRow();
 
         doc.createParagraph();
-    }
-
-    private void create3table(XWPFDocument doc) {
-
-        XWPFRun run = doc.createParagraph().createRun();
-        run.setFontFamily("Times New Roman");
-        run.setFontSize(12);
-        run.setBold(true);
-        run.setText(" 3. ... maksātnespējas procesa neieķīlātās mantas ienākumu-izmaksu kopsavilkums ");
-
-        XWPFTable createdTable = doc.createTable();
-
-        int headerSize = 3;
-
-        for (int i = 1; i < (headerSize); i++) {
-            createdTable.getRow(0).addNewTableCell();
-        }
-
-        styleCell(createdTable.getRow(0).getCell(1), "Pamatojums");
-        styleCell(createdTable.getRow(0).getCell(2), "Summa, EUR");
-
-        for (int i = 0; i < 8; i++) {
-            createdTable.createRow();
-        }
-
-        styleCell(createdTable.getRow(1).getCell(0), "1.");
-        styleCell(createdTable.getRow(1).getCell(1), "Maksātnespējas procesā iegūtie naudas līdzekļi (neķīlātā manta)");
-
-        styleCell(createdTable.getRow(2).getCell(0), "2.");
-        styleCell(createdTable.getRow(2).getCell(1), "Norēķinu kontā esošie līdzekļi uz maksātnespējas procesa pasludināšanas brīdi");
-
-        styleCell(createdTable.getRow(3).getCell(0), "3.");
-        styleCell(createdTable.getRow(3).getCell(1), "Maksātnespējas procesa izdevumi");
-
-        styleCell(createdTable.getRow(4).getCell(0), "4.");
-        styleCell(createdTable.getRow(4).getCell(1), "Administratora atlīdzība saskaņā ar Maksātnespējas likuma 169. panta otrās daļas 1. punktu  ");
-
-        styleCell(createdTable.getRow(5).getCell(0), "5.");
-        styleCell(createdTable.getRow(5).getCell(1), "Kreditoriem izmaksai paredzētā summa");
-
-        styleCell(createdTable.getRow(6).getCell(0), "6.");
-        styleCell(createdTable.getRow(6).getCell(1), "Administratora atlīdzība saskaņā ar Maksātnespējas likuma 169. panta otrās daļas 2. punktu ");
-
-        styleCell(createdTable.getRow(7).getCell(0), "7.");
-        styleCell(createdTable.getRow(7).getCell(1), "Pievienotās vērtības nodoklis administratora atlīdzībai (Maksātnespējas likuma 169. panta septītā daļa  )");
-
-        styleCell(createdTable.getRow(8).getCell(0), "8.");
-        styleCell(createdTable.getRow(8).getCell(1), "Faktiski kreditoriem izmaksājamā summa");
     }
 
 
@@ -323,6 +307,7 @@ public class TemplateService {
 
         }
     }
+    /*------------------------------------------------*////
 
     public ByteArrayOutputStream exportAdminBlank(Long id) throws IOException {
 
@@ -332,10 +317,12 @@ public class TemplateService {
         try {
 
             this.replaceHeaderText(adminBlank);
-            replaceText(adminBlank, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+            replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
             replaceText(adminBlank, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
             replaceText(adminBlank, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
-            replaceText(adminBlank, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
+            replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
+
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -357,11 +344,9 @@ public class TemplateService {
         try {
 
             replaceHeaderText(doc);
-            replaceText(doc, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
-            replaceText(doc, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
-            replaceText(doc, "Place", administratorService.findAdministratorById(1L).getAdminAddress());
-
-
+            replaceCompanyParagraphText(doc, id);
+            replaceIeceltaIeceltsParagraphText(doc,id);
+           replacePlaceDateText(doc);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -375,5 +360,334 @@ public class TemplateService {
         return out;
     }
 
+    public void handleCostsUpload(InputStream stream, Long processId) throws Exception {
+        Workbook workbook = WorkbookFactory.create(stream);
+
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colIegutieNaudas = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Iegūtie naudas līdzekļi no".equals(cellValue1)) {
+                colIegutieNaudas = i;
+                break;
+            }
+        }
+
+        int colSumma = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Summa".equals(cellValue1)) {
+                colSumma = i;
+                break;
+            }
+        }
+        double neikilataMantaSum = 0;
+        if (colIegutieNaudas > -1 && colSumma > -1) {
+
+            for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+                Cell cell = dataSheet.getRow(i).getCell(colIegutieNaudas);
+                String stringCostValue = dataSheet.getRow(i).getCell(colSumma).getStringCellValue();
+                if (cell.getStringCellValue().equals("Neieķīlātā manta")) {
+                    double value = Double.parseDouble(stringCostValue.replace(',', '.'));
+                    neikilataMantaSum = neikilataMantaSum + value;
+                }
+
+            }
+
+        }
+
+        InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+        insolvencyProcess.setId(processId);
+        insolvencyProcess.setNeikilataMantaSum(neikilataMantaSum);
+
+        insolvencyProcessService.editInsolvencyProcessCosts(insolvencyProcess);
+        System.out.println(neikilataMantaSum);
+
+    }
+
+
+    public void handleMoneyUpload(InputStream stream, Long processId) throws Exception {
+
+        Workbook workbook = WorkbookFactory.create(stream);
+
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colNaudasLidzekli = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Naudas līdzekļi kontā perioda sākumā (EUR)".equals(cellValue1)) {
+                colNaudasLidzekli = i;
+                break;
+            }
+        }
+        String cellNaudasLidzekli = "";
+
+        if (colNaudasLidzekli > -1) {
+
+            cellNaudasLidzekli = dataSheet.getRow(dataSheet.getLastRowNum()).getCell(colNaudasLidzekli).getStringCellValue();
+
+        }
+        InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+        insolvencyProcess.setId(processId);
+        insolvencyProcess.setProcessMoney(cellNaudasLidzekli);
+
+        insolvencyProcessService.editInsolvencyProcessMoney(insolvencyProcess);
+        System.out.println(cellNaudasLidzekli);
+
+    }
+
+    public void handleExpensesUpload(InputStream stream, Long processId) throws Exception {
+
+        Workbook workbook = WorkbookFactory.create(stream);
+
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colIzmaksasRadusasNo = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Izmaksas radušās no".equals(cellValue1)) {
+                colIzmaksasRadusasNo = i;
+                break;
+            }
+        }
+
+        int colPozicijas = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Pozīcijas nosaukums".equals(cellValue1)) {
+                colPozicijas = i;
+                break;
+            }
+        }
+
+        int colIzmaksuSum = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Izmaksu summa".equals(cellValue1)) {
+                colIzmaksuSum = i;
+                break;
+            }
+        }
+        double izmaksasTotal = 0;
+        double administratorSalary = 0;
+        if (colIzmaksasRadusasNo > -1 && colPozicijas > -1 && colIzmaksuSum > -1) {
+
+            for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+                String cellIsmaksasRadusas = dataSheet.getRow(i).getCell(colIzmaksasRadusasNo).getStringCellValue();
+                String cellPozicijas = dataSheet.getRow(i).getCell(colPozicijas).getStringCellValue();
+                String stringExpensesValue = dataSheet.getRow(i).getCell(colIzmaksuSum).getStringCellValue();
+
+
+                if (cellIsmaksasRadusas.equals("Neieķīlātā manta") && !cellPozicijas.contains("Administratora") ) {
+                    double izmaksasTotalDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
+                    izmaksasTotal = izmaksasTotal + izmaksasTotalDouble;
+                }
+
+                if (cellPozicijas.equals("Administratora atlīdzība par pienākumu pildīšanu maksātnespējas procesā")) {
+                    double administratorSalaryDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
+                    administratorSalary = administratorSalary + administratorSalaryDouble;
+                }
+
+            }
+
+        }
+
+        InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+        insolvencyProcess.setId(processId);
+        insolvencyProcess.setTotalExpenses(izmaksasTotal);
+        insolvencyProcess.setAdminSalary(administratorSalary);
+
+        insolvencyProcessService.editInsolvencyProcessExpenses(insolvencyProcess);
+        System.out.println(izmaksasTotal);
+        System.out.println(administratorSalary);
+
+    }
+
+   public ByteArrayOutputStream exportAuthorityBlank(Long id, int number) throws IOException {
+       InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
+       XWPFDocument doc = new XWPFDocument(inputStream);
+
+       try {
+           replaceHeaderText(doc);
+           replaceCompanyParagraphText(doc, id);
+           replacePlaceDateText(doc);
+           replaceIeceltaIeceltsParagraphText(doc,id);
+           replaceAuthorityDocNameText(doc);
+
+           switch (number){
+               case 1:
+                   replaceAuthorityMainText1(doc);
+                   break;
+               case 2:
+                   replaceAuthorityMainText2(doc);
+                   break;
+               case 3:
+                   replaceAuthorityMainText3(doc, id);
+                   break;
+               case 4:
+                   replaceAuthorityMainText4(doc, id);
+                   break;
+               case 5:
+                   replaceAuthorityMainText5(doc, id);
+                   break;
+               case 6:
+                   replaceAuthorityMainText6(doc, id);
+                   break;
+               default:
+                   break;
+           }
+
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
+
+       ByteArrayOutputStream out = new ByteArrayOutputStream();
+       doc.write(out);
+       out.close();
+       doc.close();
+
+       return out;
+   }
+
+    private void replaceCompanyParagraphText(XWPFDocument doc, Long id) throws Exception{
+        replaceText(doc,"companyName",
+                      ""+ insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
+        replaceText(doc,"registrationNumber",
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
+        replaceText(doc,"courtName",
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getCourtName());
+        replaceText(doc,"administratorName administratorSurname",
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getAdminName() + " " +
+                insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getAdminSurname());
+        replaceText(doc,"courtDesitionDate",
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getCourtDecisionDate() + " ");
+        replaceText(doc,"courtCaseNumber",
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getCourtCaseNumber() + " ");
+        replaceText(doc,"certificateNumber",
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getCertificateNumber() + " ");
+        replaceText(doc,"administratorAdress",
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getAdminAddress());
+                }
+
+
+
+    private void replaceIeceltaIeceltsParagraphText(XWPFDocument doc, Long id) throws Exception {
+        InsolvencyProcess process = insolvencyProcessService.findInsolvencyProcessById(id);
+
+             boolean isFemale = process.getAdmin().getAdminGender().equals(Gender.FEMALE);
+        if (isFemale){
+        replaceText(doc,"iecelta/iecelts",
+                        "iecelta");
+    } else if (process.getAdmin().getAdminGender().equals(Gender.MALE)){
+        replaceText(doc, "iecelta/iecelts",
+                "iecelts");
+    }
+
+    }
+
+    private void replaceAuthorityDocNameText (XWPFDocument doc) throws Exception {
+        replaceText(doc, "Document Name (Dokumenta nosaukums)",
+                "Informācijas pieprasījums");
+    }
+
+  private void replaceAuthorityMainText1 (XWPFDocument doc) throws Exception{
+
+      replaceText(doc,"Nosaukums (recipientName)",
+              "Uzņēmumu reģistrs, ");
+      replaceText(doc,"Reģistrācijas Nr.(Registration No)",
+              "");
+      replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
+              "e-pasts: info@ur.gov.lv");
+      replaceText(doc,"TEXT",
+                    "Lūdzu sniegt : 1) aktuālo   informāciju   par   Sabiedrības  dalībniekiem   un   valdi" +
+                            "(Standartizēta izziņa no visiem Uzņēmumu reģistra reģistriem)."+"\n" +
+                            "2) aktuālo   un   vēsturisko   informāciju   par   Sabiedrības,\n" +
+                            "kura satur atbildes uz sekojošiem jautājumiem:\n" +
+                            "2.1. Kas ir/ ir bijuši Sabiedrības valdes locekļi?\n" +
+                            "2.2. Kas ir/ ir bijuši Sabiedrības dalībnieki?\n" +
+                            "2.3. Vai Sabiedrībai ir/ ir bijuši reģistrēti prokūristi un ja ir tad kādi?\n" +
+                            "2.4. Vai Sabiedrībai ir/ ir bijušas piederējušas vai pieder kapitāla daļas\n" +
+                            "citā juridiskā personā un ja ir tad kādā?\n" +
+                            "2.5. Vai Sabiedrībai ir/ ir bijuši reģistrētas komercķīlas, komercķīlu akti\n" +
+                            "un ja ir tad kādas?\n" +
+                            "2.6. Vai   Sabiedrībai   ir/   ir   bijuši   reģistrēti   nodrošinājuma   līdzekļi?   Vai\n" +
+                            "Sabiedrībai ir/ ir bijuši reģistrēti aizliegumi un ja ir tad kādi?\n" +
+                            "2.7. Vai Sabiedrībai ir/ ir bijušas reģistrētas filiāles un ja ir tad kāda?\n" );
+     }
+
+    private void replaceAuthorityMainText2 (XWPFDocument doc) throws Exception{
+
+        replaceText(doc,"Nosaukums (recipientName)",
+                "VAS “Latvijas Jūras administrācija” kuģu reģistrs ");
+        replaceText(doc,"Reģistrācijas Nr.(Registration No)",
+                "");
+        replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
+                "e-pasts: lja@lja.lv");
+        replaceText(doc,"TEXT",
+                "lūdzu sniegt Jūsu rīcībā esošo informāciju par Sabiedrību, -kādi kuģi, " +
+                        "tajā skaitā zvejas laivas, atpūtas kuģi - buru jahtas, motorjahtas un peldošās " +
+                        "konstrukcijas (peldošie doki, peldošās darbnīcas, peldošās degvielas uzpildes stacijas, " +
+                        "debarkaderi, kravas pontoni), šobrīd ir un vai ir bijuši reģistrēti Sabiedrībai, no kura " +
+                        "līdz kuram brīdim reģistrēti, un kādi liegumi - hipotēkas un apgrūtinājumi šobrīd ir vai ir bijuši reģistrēti.");
+    }
+
+    private void replaceAuthorityMainText3 (XWPFDocument doc, Long id) throws Exception{
+
+        replaceText(doc,"Nosaukums (recipientName)",
+                "Lauksaimniecības datu centrs");
+        replaceText(doc,"Reģistrācijas Nr.(Registration No)",
+                "");
+        replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
+                "e-pasts: ldc@ldc.gov.lv");
+        String text = String.valueOf(replaceText(doc, "TEXT",
+                "lūdzu sniegt informāciju par lauksaimniecības un citiem dzīvniekiem, kas ir reģistrēti un ir " +
+                        "bijuši reģistrēti, kā arī tie kuri atrodas " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
+                        ", vienotais reģistrācijas numurs " + insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber() +
+                        " īpašumā un/vai valdījumā"));
+    }
+    private void replaceAuthorityMainText4 (XWPFDocument doc, Long id) throws Exception{
+
+        replaceText(doc,"Nosaukums (recipientName)",
+                "Valsts tehniskās uzraudzības aģentūra");
+        replaceText(doc,"Reģistrācijas Nr.(Registration No)",
+                "");
+        replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
+                "vtua@vtua.gov.lv");
+        String text = String.valueOf(replaceText(doc, "TEXT",
+                "lūdzu sniegt Jūsu rīcībā esošo informāciju kāda traktortehnika un tās piekabes šobrīd ir un / vai ir " +
+                        "bijuši reģistrēti uz Sabiedrības vārda un kādi liegumi šobrīd ir vai ir bijuši reģistrēti."));
+    }
+
+
+    private void replaceAuthorityMainText5 (XWPFDocument doc, Long id) throws Exception{
+        replaceText(doc,"Nosaukums (recipientName)",
+                "Valsts Zemes dienests ");
+        replaceText(doc,"Reģistrācijas Nr.(Registration No)",
+                "");
+        replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
+                "kac.riga@vzd.gov.lv");
+        replaceText(doc,"TEXT",
+                "lūdzu sniegt sekojošu aktuālo un vēsturisko informāciju par " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
+                        insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber()+ "īpašumā esošajiem " +
+                        "un bijušajiem reģistrētajiem nekustamajiem īpašumiem, kā arī par reģistrētajiem īpašuma apgrūtinājumiem.");
+    }
+
+    private void replaceAuthorityMainText6 (XWPFDocument doc, Long id) throws Exception{
+        replaceText(doc,"TEXT",
+                "Saskaņā ar Maksātnespējas likuma 65.pantu Administratora pienākumi pēc juridiskās personas maksātnespējas " +
+                        "procesa pasludināšanas – pirmās daļas 12. punktu - pēc juridiskās personas maksātnespējas procesa " +
+                        "pasludināšanas administrators iesniedz tiesu izpildītājam pieteikumu par izpildu lietvedības izbeigšanu " +
+                        "lietās par piespriesto, bet no parādnieka nepiedzīto summu piedziņu un lietās par saistību izpildīšanu " +
+                        "tiesas ceļā.\n" +
+                        "Maksātnespējas likuma 63. panta Juridiskās personas maksātnespējas procesa pasludināšanas sekas otrā " +
+                        "daļa nosaka, ka, ja sprieduma izpildes lietvedība uzsākta pirms juridiskās personas maksātnespējas " +
+                        "procesa pasludināšanas, tā ir izbeidzama Civilprocesa likumā noteiktajā kārtībā. Pēc juridiskās personas " +
+                        "maksātnespējas procesa pasludināšanas kreditori piesaka prasījumus administratoram šajā likumā noteiktajā " +
+                        "kārtībā .....\n");
+    }
 
 }
