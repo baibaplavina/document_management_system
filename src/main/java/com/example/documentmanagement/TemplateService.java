@@ -62,6 +62,20 @@ public class TemplateService {
                         ", e-Adrese: " + administratorService.findAdministratorById(2L).getAdminE_address());
     }
 
+    private void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) throws Exception {
+       InsolvencyProcess process = insolvencyProcessService.findInsolvencyProcessById(id);
+        replaceText(doc, "Maksātnespējas procesa administrators /administratorName AdministratorSurname/ (amata apliecības Nr. /sertificateNumber/)",
+                "Maksātnespējas procesa administrators" + " " + process.getAdmin().getAdminName()+ " " + process.getAdmin().getAdminSurname() +
+                        " (amata apliecības Nr. " + process.getAdmin().getCertificateNumber() + ")");
+
+
+        replaceText(doc, "Adrese: /administratorAddress/, telefons: /administratorPhoneNumber/,  e-pasts: /adminisratorEmail/, e-Adrese:/administratorEAddress/",
+                "Adrese: " + " " +
+                        process.getAdmin().getAdminAddress() + ", telefons: " +
+                        process.getAdmin().getAdminPhoneNumber() +
+                        ", e-pasts: " + process.getAdmin().getAdminEmail() +
+                        ", e-Adrese: " + process.getAdmin().getAdminE_address());
+    }
     private void replacePlaceDateText(XWPFDocument doc) throws Exception {
         LocalDate date = LocalDate.now();
         replaceText(doc,"Place, Date.",
@@ -343,7 +357,7 @@ public class TemplateService {
 
         try {
 
-            replaceHeaderText(doc);
+            replaceCompanyAdminHeaderText(doc, id);
             replaceCompanyParagraphText(doc, id);
             replaceIeceltaIeceltsParagraphText(doc,id);
            replacePlaceDateText(doc);
@@ -512,7 +526,7 @@ public class TemplateService {
        XWPFDocument doc = new XWPFDocument(inputStream);
 
        try {
-           replaceHeaderText(doc);
+           replaceCompanyAdminHeaderText(doc,id);
            replaceCompanyParagraphText(doc, id);
            replacePlaceDateText(doc);
            replaceIeceltaIeceltsParagraphText(doc,id);
