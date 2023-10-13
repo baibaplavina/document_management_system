@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 
 
 @NoArgsConstructor
@@ -41,5 +40,6 @@ public class InsolvencyProcess {
     private String processMoney;
     private double totalExpenses;
     private double adminSalary;
+    private String creditorsList;
 
 }

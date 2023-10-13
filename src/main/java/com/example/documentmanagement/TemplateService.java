@@ -3,6 +3,7 @@ package com.example.documentmanagement;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.XmlCursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -131,8 +132,29 @@ public class TemplateService {
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
+            String creditors = insolvencyProcessService.findInsolvencyProcessById(processId).getCreditorsList();
+            List<String> listOfCreditors = new ArrayList<>(Arrays.asList(creditors.split(";")));
+            int position = 0;
+            for (int i = 0; i<doc.getParagraphs().size(); i++) {
+                if(doc.getParagraphs().get(i).getText().equals("Kreditori:")){
+                    position = i;
+                    break;
+                }
+            }
+
+            for (int j = listOfCreditors.size()-1; j>=0; j--) {
+                XmlCursor cursor = doc.getParagraphs().get(position+1).getCTP().newCursor();
+                XWPFParagraph new_par = doc.insertNewParagraph(cursor);
+                new_par.setAlignment(ParagraphAlignment.RIGHT);
+                new_par.createRun().setText(listOfCreditors.get(j));
+
+            }
 
             replaceHeaderText(doc);
+            replaceText(doc, "InsolvencyCompanyName",
+                    insolvencyProcessService.findInsolvencyProcessById(processId).getCompanyName());
+            replaceText(doc, "vienotais reģistrācijas Nr. ", " vienotais reģistrācijas Nr. " +
+                    insolvencyProcessService.findInsolvencyProcessById(processId).getRegistrationNumber());
 
             doc.getTables().get(2).getRow(1).getCell(2).
                     setText(String.valueOf(insolvencyProcessService.findInsolvencyProcessById(processId).getNeikilataMantaSum()).replace('.', ','));
@@ -705,5 +727,44 @@ public class TemplateService {
                         "6.\tAtsūtīt sprieduma un/vai izpildu raksta kopiju, uz kura pamata uzsākta izpildu lietvedība pret /Insolvent company name/, vienotais reģistrācijas numurs /company number/.\n" +
                         "7.\tNorādīt vai šobrīd ir piedziņas procesā saņemtie Piedzinējam neizmaksāti naudas līdzekļi? Ja ir, tad tos lūdzu neizmaksāt Piedzinējam, bet pārskaitīt uz maksātnespējas procesam atvērto norēķinu kontu – /private String accountNo/ , izmaksai maksātnespējas procesā kreditoriem Maksātnespējas procesa noteiktajā kārtībā. \n");
     }
+
+    public void handleCreditorsUpload(InputStream stream, Long processId) throws Exception {
+
+        Workbook workbook = WorkbookFactory.create(stream);
+
+        Sheet dataSheet = workbook.getSheetAt(0);
+        int colKreditors = -1;
+        for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
+            Cell cell1 = dataSheet.getRow(0).getCell(i);
+            String cellValue1 = cell1.getStringCellValue();
+            if ("Kreditors".equals(cellValue1)) {
+                colKreditors = i;
+                break;
+            }
+        }
+        if (colKreditors > -1 ) {
+            StringBuilder sbCreditors = new StringBuilder();
+
+            char separator = ';';
+
+            for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+                if (dataSheet.getRow(i).getCell(colKreditors) != null && !dataSheet.getRow(i).getCell(colKreditors).toString().isEmpty()) {
+                    sbCreditors.append(dataSheet.getRow(i).getCell(colKreditors).getStringCellValue());
+
+                    sbCreditors.append(separator);
+                }
+            }
+
+            String sbCreditors_1 = sbCreditors.substring(0, sbCreditors.length() - 1);
+
+            InsolvencyProcess insolvencyProcess = new InsolvencyProcess();
+            insolvencyProcess.setId(processId);
+            insolvencyProcess.setCreditorsList(sbCreditors_1);
+
+            insolvencyProcessService.editInsolvencyProcessCreditors(insolvencyProcess);
+
+        }
+    }
+
 
 }
