@@ -56,7 +56,9 @@ public class UploadingController {
             else if(uploadTypeId == 4) {
                 templateService.handleExpensesUpload(stream, id);
             }
-
+            else if(uploadTypeId == 5) {
+                templateService.handleCreditorsUpload(stream, id);
+            }
 
 
         } catch (Exception e) {

@@ -111,4 +111,19 @@ public class InsolvencyProcessService {
 
         throw new Exception("process not found by id!");
     }
+
+    public InsolvencyProcess editInsolvencyProcessCreditors(InsolvencyProcess process) throws Exception {
+        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
+
+            if (currentProcess.getId().equals(process.getId())) {
+                currentProcess.setCreditorsList(process.getCreditorsList());
+
+                insolvencyProcessRepository.save(currentProcess);
+                return currentProcess;
+            }
+        }
+
+        throw new Exception("process not found by id!");
+    }
+
 }

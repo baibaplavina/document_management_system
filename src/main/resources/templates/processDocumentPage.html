@@ -49,8 +49,9 @@
                 <a th:href="${'/download-authority-blank/' + process.getId()+'/6'}">
                     <button type="button" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button></a>
             <a th:href="${'/download-tables/' + process.getId()}">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2"> Test button get Asset table </button>
+                <button type="button" class="btn btn-outline-success mt-2 mb-2"> Costs of insolvency proceedings </button>
             </a>
+
 
         </div>
     </section>
@@ -87,6 +88,13 @@
                 <button type="submit" class="btn btn-default">Upload File</button>
 
             </form>
+
+            <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 5}" enctype="multipart/form-data">
+                <label for="formFileDisabled" class="form-label">3. Upload Creditors ('Kreditoru prasījumu saraksts')</label>
+                <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
+                <button type="submit" class="btn btn-default">Upload File</button>
+            </form>
+
 
             <label for="formFileDisabled" class="form-label">1. Upload Cost List</label>
             <input class="form-control col-xs-3" type="file" id="formFileDisabled">
