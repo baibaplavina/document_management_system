@@ -35,5 +35,4 @@ public class WebsiteController {
             return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_FAILED&error=" + exception.getMessage();
         }
     }
-
 }

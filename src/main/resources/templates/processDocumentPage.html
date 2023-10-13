@@ -10,19 +10,20 @@
 <body>
 
 
-<header th:replace="~{fragments/headers.html::header-process-documents}"></header>
+<header th:replace="~{fragments/headers.html::header-process-documents}"
+        class="container-fluid text-center bg-success text-white"></header>
 <main >
-    <!----------------------->
-    <section class="border border-success m-5 text-left text-dark mt-2 mb-2 p-5">
+
+      <section class="border border-success m-5 text-left text-dark mt-2 mb-2 p-5">
         <h4> Company's profile:</h4>
         <h4 class="company-name text-danger"th:text="${process.getCompanyName() +', reg. nr. ' + process.getRegistrationNumber() + ', ' + process.getCompanyAddress() }"></h4>
 
     </section>
-    <!----------------------->
     <section class="border border-success m-5 text-left text-black mt-2 mb-2 p-5">
 
         <h3> Push the button of the document you want to create:</h3>
         <div class="container mt-2 mb-2">
+
                 <a th:href="@{|/download-blank|}">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
             </a>
@@ -35,12 +36,18 @@
     <section class="border border-success m-5 text-left text-black p-5">
         <h3> Create request to public authorities - press button:</h3>
         <div  >
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Uzņēmumu reģistrs (Company Register)</button>
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Kuģu reģistrs (Ship)</button>
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Lauksaimniecības datu centrs (Agric)</button>
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Tehniskās uzraudzības aģentūra (State tech)</button>
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Valsts zemes dienests (Land)</button>
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button>
+            <a th:href="${'/download-authority-blank/' + process.getId()+'/1'}">
+            <button type="button" class="btn btn-outline-success mt-2 mb-2">Uzņēmumu reģistrs (Company Register)</button> </a>
+            <a th:href="${'/download-authority-blank/' + process.getId()+'/2'}">
+                <button type="button" class="btn btn-outline-success mt-2 mb-2">Kuģu reģistrs (Ship)</button></a>
+                <a th:href="${'/download-authority-blank/' + process.getId()+'/3'}">
+                    <button type="button" class="btn btn-outline-success mt-2 mb-2">Lauksaimniecības datu centrs (Agric)</button></a>
+                    <a th:href="${'/download-authority-blank/' + process.getId()+'/4'}">
+                        <button type="button" class="btn btn-outline-success mt-2 mb-2">Tehniskās uzraudzības aģentūra (State tech)</button></a>
+            <a th:href="${'/download-authority-blank/' + process.getId()+'/5'}">
+                <button type="button" class="btn btn-outline-success mt-2 mb-2">Valsts zemes dienests (Land)</button></a>
+                <a th:href="${'/download-authority-blank/' + process.getId()+'/6'}">
+                    <button type="button" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button></a>
             <a th:href="${'/download-tables/' + process.getId()}">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2"> Test button get Asset table </button>
             </a>
@@ -93,5 +100,6 @@
     </section>
 </main>
 <footer th:replace="~{fragments/footer.html::footer}"></footer>
+
 </body>
 </html>

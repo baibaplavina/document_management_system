@@ -19,7 +19,7 @@
                     <label class="input-group-text"  >Select Administrator:</label>
                     <select  th:field="*{admin}" class="form-control" required>
                            <th:block th:each="admin:${adminList}" >
-                        <option  th:text="${admin.adminName + ' ' + admin.adminSurname}" th:value="${admin.adminId} " ></option>
+                    <option th:text="${admin.adminName + ' ' + admin.adminSurname}" th:value="${admin.adminId} " ></option>
                            </th:block>
                     </select>
                 </div>

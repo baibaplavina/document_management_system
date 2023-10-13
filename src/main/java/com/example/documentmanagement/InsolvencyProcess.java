@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -25,7 +26,7 @@ public class InsolvencyProcess {
     private String courtName;
     private String courtCaseNumber;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private Date courtDecisionDate;
+    private LocalDate courtDecisionDate;
     private String e_address;
     @DateTimeFormat(pattern = "mm/dd/yyyy")
     private Timestamp createdAt;

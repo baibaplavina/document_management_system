@@ -45,6 +45,10 @@
         <input class="form-control" name="adminPhoneNumber" type="text">
       </div>
       <div class="input-group mt-2">
+        <label class="input-group-text">Dokumentu sagatavošanas vieta (Place) </label>
+        <input class="form-control" name="place" type="text">
+      </div>
+      <div class="input-group mt-2">
         <label class="input-group-text">Gender</label>
         <select class="form-control" name = "adminGender">
           <option value="FEMALE">Sieviete (Female)</option>
@@ -60,7 +64,7 @@
   </section>
 
   <section class="container">
-    <a th:href="@{|/download-blank|}">
+    <a th:href="${'/download-admin-blank/{id}'}">
       <button type="button" class="btn btn-outline-success mt-2 mb-2"> Izveidot Administratora veidlapu (Create Admin Blank) </button>
     </a>
   </section>

@@ -121,23 +121,39 @@ public class UploadingController {
         outputStream.close();
 
     }
-//    --------------------------------------------------------------------------
+    //    --------------------------------------------------------------------------
     @GetMapping("/download-company-blank/{id}")
     public void downloadCompanyBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
-    TemplateService companyBlank = new TemplateService(administratorService, insolvencyProcessService);
+        TemplateService companyBlank = new TemplateService(administratorService, insolvencyProcessService);
 
-    byte[] xwpfDocumentBytes = companyBlank.exportCompanyBlank(id).toByteArray();
+        byte[] xwpfDocumentBytes = companyBlank.exportCompanyBlank(id).toByteArray();
 
-    response.setContentType("application/msword");
-    String headerKey = "Content-Disposition";
-    String headerValue = "attachment; filename = " + "companyBlank.doc";
-    response.setHeader(headerKey, headerValue);
+        response.setContentType("application/msword");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + "companyBlank.doc";
+        response.setHeader(headerKey, headerValue);
 
-    ServletOutputStream outputStream = response.getOutputStream();
-    outputStream.write(xwpfDocumentBytes);
-    outputStream.close();
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(xwpfDocumentBytes);
+        outputStream.close();
 
-}
+    }
 
+  @GetMapping("/download-authority-blank/{id}/{number}")
+    public void downloadAuthorityBlank(@PathVariable Long id, @PathVariable int number,Model model, HttpServletResponse response) throws IOException {
+
+        TemplateService authorityBlank = new TemplateService(administratorService, insolvencyProcessService);
+
+        byte[] xwpfDocumentBytes = authorityBlank.exportAuthorityBlank(id, number).toByteArray();
+
+        response.setContentType("application/msword");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + "authorityBlank.doc";
+        response.setHeader(headerKey, headerValue);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(xwpfDocumentBytes);
+        outputStream.close();
+    }
 }

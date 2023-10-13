@@ -8,9 +8,15 @@ import java.util.List;
 @Service
 public class InsolvencyProcessService {
     @Autowired
-    public InsolvencyProcessRepository insolvencyProcessRepository;
+    private InsolvencyProcessRepository insolvencyProcessRepository;
     @Autowired
-    public AdministratorRepository administratorRepository;
+    private AdministratorRepository administratorRepository;
+
+    @Autowired
+    public InsolvencyProcessService(InsolvencyProcessRepository insolvencyProcessRepository, AdministratorRepository administratorRepository) {
+        this.insolvencyProcessRepository=insolvencyProcessRepository;
+        this.administratorRepository=administratorRepository;
+    }
 
     List<InsolvencyProcess> findAll() {
         return insolvencyProcessRepository.findAll();
