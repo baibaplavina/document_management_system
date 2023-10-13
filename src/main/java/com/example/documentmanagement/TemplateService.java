@@ -678,16 +678,18 @@ public class TemplateService {
 
     private void replaceAuthorityMainText6 (XWPFDocument doc, Long id) throws Exception{
         replaceText(doc,"TEXT",
-                "Saskaņā ar Maksātnespējas likuma 65.pantu Administratora pienākumi pēc juridiskās personas maksātnespējas " +
-                        "procesa pasludināšanas – pirmās daļas 12. punktu - pēc juridiskās personas maksātnespējas procesa " +
-                        "pasludināšanas administrators iesniedz tiesu izpildītājam pieteikumu par izpildu lietvedības izbeigšanu " +
-                        "lietās par piespriesto, bet no parādnieka nepiedzīto summu piedziņu un lietās par saistību izpildīšanu " +
-                        "tiesas ceļā.\n" +
-                        "Maksātnespējas likuma 63. panta Juridiskās personas maksātnespējas procesa pasludināšanas sekas otrā " +
-                        "daļa nosaka, ka, ja sprieduma izpildes lietvedība uzsākta pirms juridiskās personas maksātnespējas " +
-                        "procesa pasludināšanas, tā ir izbeidzama Civilprocesa likumā noteiktajā kārtībā. Pēc juridiskās personas " +
-                        "maksātnespējas procesa pasludināšanas kreditori piesaka prasījumus administratoram šajā likumā noteiktajā " +
-                        "kārtībā .....\n");
+                "TEXT: Saskaņā ar Maksātnespējas likuma 65.pantu Administratora pienākumi pēc juridiskās personas maksātnespējas procesa pasludināšanas – pirmās daļas 12. punktu - pēc juridiskās personas maksātnespējas procesa pasludināšanas administrators iesniedz tiesu izpildītājam pieteikumu par izpildu lietvedības izbeigšanu lietās par piespriesto, bet no parādnieka nepiedzīto summu piedziņu un lietās par saistību izpildīšanu tiesas ceļā.\n" +
+                        "Maksātnespējas likuma 63. panta Juridiskās personas maksātnespējas procesa pasludināšanas sekas otrā daļa nosaka, ka, ja sprieduma izpildes lietvedība uzsākta pirms juridiskās personas maksātnespējas procesa pasludināšanas, tā ir izbeidzama Civilprocesa likumā noteiktajā kārtībā. Pēc juridiskās personas maksātnespējas procesa pasludināšanas kreditori piesaka prasījumus administratoram šajā likumā noteiktajā kārtībā.\n" +
+                        "Saskaņā ar Civilprocesa likuma 563.panta Izpildu lietvedības izbeigšana otro daļu (2) Izpildu lietvedība par piespriesto naudas summu piedziņu no juridiskajām personām, personālsabiedrībām, individuālajiem komersantiem, ārvalstī reģistrētām personām, kas veic pastāvīgu saimniecisko darbību Latvijā, un lauksaimniecības produktu ražotājiem izbeidzama pēc administratora pieteikuma, ja parādniekam likumā noteiktajā kārtībā pasludināta maksātnespēja. Šajā gadījumā tiesu izpildītājs pabeidz uzsākto mantas pārdošanu, ja tā jau ir izsludināta vai manta nodota tirdzniecības uzņēmumam pārdošanai, ja vien administrators nav pieprasījis atcelt izsludinātās izsoles, lai nodrošinātu mantas pārdošanu lietu kopības sastāvā. No pārdošanā saņemtās naudas tiesu izpildītājs ietur sprieduma izpildes izdevumus, bet pārējo naudu nodod administratoram kreditoru prasījumu segšanai atbilstoši Maksātnespējas likumā noteiktajai kārtībai, ievērojot nodrošinātā kreditora tiesības. Tiesu izpildītājs paziņo mantas glabātājam par pienākumu nodot administratoram mantu, kuras pārdošana nav uzsākta.\n" +
+                        "\n" +
+                        "Ņemot vērā iepriekš minēto, lūdzu:\n" +
+                        "1.\tIzbeigt visas uzsāktās izpildu lietvedības pret /Insolvent company name/, vienotais reģistrācijas numurs /company number/.\n" +
+                        "2.\tAtcelt visus uzliktos liegumus, atzīmes, kā arī cita veida aizliegumus, kas uzlikti /Insolvent company name/, vienotais reģistrācijas numurs /company number/, mantai un norēķinu kontiem.\n" +
+                        "3.\tAtcelt pieņemtos piespiedu izpildes līdzekļus.\n" +
+                        "4.\tSniegt informāciju vai izpildu lietu ietvaros ir saņemti naudas līdzekļi, cik, kādā veidā un kādā apmērā; \n" +
+                        "5.\tSniegt informāciju kādā apmērā un kad segts piedzinēja prasījums?\n" +
+                        "6.\tAtsūtīt sprieduma un/vai izpildu raksta kopiju, uz kura pamata uzsākta izpildu lietvedība pret /Insolvent company name/, vienotais reģistrācijas numurs /company number/.\n" +
+                        "7.\tNorādīt vai šobrīd ir piedziņas procesā saņemtie Piedzinējam neizmaksāti naudas līdzekļi? Ja ir, tad tos lūdzu neizmaksāt Piedzinējam, bet pārskaitīt uz maksātnespējas procesam atvērto norēķinu kontu – /private String accountNo/ , izmaksai maksātnespējas procesā kreditoriem Maksātnespējas procesa noteiktajā kārtībā. \n");
     }
 
 }
