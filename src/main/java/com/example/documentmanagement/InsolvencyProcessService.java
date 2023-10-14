@@ -51,6 +51,7 @@ public class InsolvencyProcessService {
                 currentProcess.setAssetsList(process.getAssetsList());
                 currentProcess.setAssetsListCosts(process.getAssetsListCosts());
                 currentProcess.setAssetsTotalCosts(process.getAssetsTotalCosts());
+                currentProcess.setSecuredAssets(process.getSecuredAssets());
 
                 insolvencyProcessRepository.save(currentProcess);
                 return currentProcess;

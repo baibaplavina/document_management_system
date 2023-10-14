@@ -41,5 +41,6 @@ public class InsolvencyProcess {
     private double totalExpenses;
     private double adminSalary;
     private String creditorsList;
+    private Boolean SecuredAssets;
 
 }
