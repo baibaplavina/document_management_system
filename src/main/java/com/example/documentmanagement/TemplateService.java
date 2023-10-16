@@ -65,10 +65,9 @@ public class TemplateService {
 
     private void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) throws Exception {
        InsolvencyProcess process = insolvencyProcessService.findInsolvencyProcessById(id);
-        replaceText(doc, "Maksātnespējas procesa administrators /administratorName AdministratorSurname/ (amata apliecības Nr. /sertificateNumber/)",
-                "Maksātnespējas procesa administrators" + " " + process.getAdmin().getAdminName()+ " " + process.getAdmin().getAdminSurname() +
-                        " (amata apliecības Nr. " + process.getAdmin().getCertificateNumber() + ")");
-
+        replaceText(doc, "Maksātnespējas procesa administrators administratorName AdministratorSurname (amata apliecības Nr. sertificateNumber))",
+                "Maksātnespējas procesa administrators " + process.getAdmin().getAdminName()+ " " + process.getAdmin().getAdminSurname() +
+                        " (amata apliecības Nr. " + process.getAdmin().getCertificateNumber());
 
         replaceText(doc, "Adrese: /administratorAddress/, telefons: /administratorPhoneNumber/,  e-pasts: /adminisratorEmail/, e-Adrese:/administratorEAddress/",
                 "Adrese: " + " " +
@@ -378,11 +377,10 @@ public class TemplateService {
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
-
             replaceCompanyAdminHeaderText(doc, id);
             replaceCompanyParagraphText(doc, id);
             replaceIeceltaIeceltsParagraphText(doc,id);
-           replacePlaceDateText(doc);
+            replacePlaceDateText(doc);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -548,7 +546,7 @@ public class TemplateService {
        XWPFDocument doc = new XWPFDocument(inputStream);
 
        try {
-           replaceCompanyAdminHeaderText(doc,id);
+          replaceCompanyAdminHeaderText(doc,id);
            replaceCompanyParagraphText(doc, id);
            replacePlaceDateText(doc);
            replaceIeceltaIeceltsParagraphText(doc,id);
@@ -600,7 +598,7 @@ public class TemplateService {
                 "" + insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getAdminName() + " " +
                 insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getAdminSurname());
         replaceText(doc,"courtDesitionDate",
-                "" + insolvencyProcessService.findInsolvencyProcessById(id).getCourtDecisionDate() + " ");
+                "" + insolvencyProcessService.findInsolvencyProcessById(id).getCourtDecisionDate());
         replaceText(doc,"courtCaseNumber",
                 "" + insolvencyProcessService.findInsolvencyProcessById(id).getCourtCaseNumber() + " ");
         replaceText(doc,"certificateNumber",
@@ -635,14 +633,14 @@ public class TemplateService {
       replaceText(doc,"Nosaukums (recipientName)",
               "Uzņēmumu reģistrs, ");
       replaceText(doc,"Reģistrācijas Nr.(Registration No)",
-              "");
+              "Reģistrācijas numurs 90000270634,");
       replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
-              "e-pasts: info@ur.gov.lv");
+              "E-pasts: info@ur.gov.lv");
       replaceText(doc,"TEXT",
-                    "Lūdzu sniegt : 1) aktuālo   informāciju   par   Sabiedrības  dalībniekiem   un   valdi" +
-                            "(Standartizēta izziņa no visiem Uzņēmumu reģistra reģistriem)."+"\n" +
-                            "2) aktuālo   un   vēsturisko   informāciju   par   Sabiedrības,\n" +
-                            "kura satur atbildes uz sekojošiem jautājumiem:\n" +
+                    "Lūdzu sniegt : <br/>  1) aktuālo   informāciju   par   Sabiedrības  dalībniekiem   un   valdi" +
+                            "(Standartizēta izziņa no visiem Uzņēmumu reģistra reģistriem).\r" +
+                            "2) aktuālo   un   vēsturisko   informāciju   par   Sabiedrības," +
+                            "kura satur atbildes uz sekojošiem jautājumiem:\r\n" +
                             "2.1. Kas ir/ ir bijuši Sabiedrības valdes locekļi?\n" +
                             "2.2. Kas ir/ ir bijuši Sabiedrības dalībnieki?\n" +
                             "2.3. Vai Sabiedrībai ir/ ir bijuši reģistrēti prokūristi un ja ir tad kādi?\n" +
@@ -652,19 +650,19 @@ public class TemplateService {
                             "un ja ir tad kādas?\n" +
                             "2.6. Vai   Sabiedrībai   ir/   ir   bijuši   reģistrēti   nodrošinājuma   līdzekļi?   Vai\n" +
                             "Sabiedrībai ir/ ir bijuši reģistrēti aizliegumi un ja ir tad kādi?\n" +
-                            "2.7. Vai Sabiedrībai ir/ ir bijušas reģistrētas filiāles un ja ir tad kāda?\n" );
+                            "2.7. Vai Sabiedrībai ir/ ir bijušas reģistrētas filiāles un ja ir tad kāda?\n");
      }
 
     private void replaceAuthorityMainText2 (XWPFDocument doc) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
-                "VAS “Latvijas Jūras administrācija” kuģu reģistrs ");
+                "VAS “Latvijas Jūras administrācija” kuģu reģistrs, ");
         replaceText(doc,"Reģistrācijas Nr.(Registration No)",
-                "");
+                "Reģistrācijas numurs: 40003022705,");
         replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
-                "e-pasts: lja@lja.lv");
+                "E-pasts: lja@lja.lv");
         replaceText(doc,"TEXT",
-                "lūdzu sniegt Jūsu rīcībā esošo informāciju par Sabiedrību, -kādi kuģi, " +
+                "Lūdzu sniegt Jūsu rīcībā esošo informāciju par Sabiedrību, -kādi kuģi, " +
                         "tajā skaitā zvejas laivas, atpūtas kuģi - buru jahtas, motorjahtas un peldošās " +
                         "konstrukcijas (peldošie doki, peldošās darbnīcas, peldošās degvielas uzpildes stacijas, " +
                         "debarkaderi, kravas pontoni), šobrīd ir un vai ir bijuši reģistrēti Sabiedrībai, no kura " +
@@ -674,13 +672,13 @@ public class TemplateService {
     private void replaceAuthorityMainText3 (XWPFDocument doc, Long id) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
-                "Lauksaimniecības datu centrs");
+                "Lauksaimniecības datu centrs,");
         replaceText(doc,"Reģistrācijas Nr.(Registration No)",
-                "");
+                "Reģistrācijas numurs: 90001840100,");
         replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
-                "e-pasts: ldc@ldc.gov.lv");
+                "E-pasts: ldc@ldc.gov.lv");
         String text = String.valueOf(replaceText(doc, "TEXT",
-                "lūdzu sniegt informāciju par lauksaimniecības un citiem dzīvniekiem, kas ir reģistrēti un ir " +
+                "Lūdzu sniegt informāciju par lauksaimniecības un citiem dzīvniekiem, kas ir reģistrēti un ir " +
                         "bijuši reģistrēti, kā arī tie kuri atrodas " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
                         ", vienotais reģistrācijas numurs " + insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber() +
                         " īpašumā un/vai valdījumā"));
@@ -688,31 +686,37 @@ public class TemplateService {
     private void replaceAuthorityMainText4 (XWPFDocument doc, Long id) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
-                "Valsts tehniskās uzraudzības aģentūra");
+                "Valsts tehniskās uzraudzības aģentūra,");
         replaceText(doc,"Reģistrācijas Nr.(Registration No)",
-                "");
+                "Reģistrācijas numurs: 90001834941,");
         replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
-                "vtua@vtua.gov.lv");
+                "E-pasts: vtua@vtua.gov.lv");
         String text = String.valueOf(replaceText(doc, "TEXT",
-                "lūdzu sniegt Jūsu rīcībā esošo informāciju kāda traktortehnika un tās piekabes šobrīd ir un / vai ir " +
+                "Lūdzu sniegt Jūsu rīcībā esošo informāciju kāda traktortehnika un tās piekabes šobrīd ir un / vai ir " +
                         "bijuši reģistrēti uz Sabiedrības vārda un kādi liegumi šobrīd ir vai ir bijuši reģistrēti."));
     }
 
 
     private void replaceAuthorityMainText5 (XWPFDocument doc, Long id) throws Exception{
         replaceText(doc,"Nosaukums (recipientName)",
-                "Valsts Zemes dienests ");
+                "Valsts Zemes dienests, ");
         replaceText(doc,"Reģistrācijas Nr.(Registration No)",
-                "");
+                "Reģistrācijas numurs: 90000030432, ");
         replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
-                "kac.riga@vzd.gov.lv");
+                "E-pasts: kac.riga@vzd.gov.lv");
         replaceText(doc,"TEXT",
-                "lūdzu sniegt sekojošu aktuālo un vēsturisko informāciju par " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
+                "Lūdzu sniegt sekojošu aktuālo un vēsturisko informāciju par " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
                         insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber()+ "īpašumā esošajiem " +
                         "un bijušajiem reģistrētajiem nekustamajiem īpašumiem, kā arī par reģistrētajiem īpašuma apgrūtinājumiem.");
     }
 
     private void replaceAuthorityMainText6 (XWPFDocument doc, Long id) throws Exception{
+        replaceText(doc,"Nosaukums (recipientName)",
+                "Zvērinātam tiesu izpildītājam _______________, ");
+        replaceText(doc,"Reģistrācijas Nr.(Registration No)",
+                "Reģistrācijas numurs: ___________________, ");
+        replaceText(doc,"Adrese/ E-pasts/ E-Adrese:",
+                "E-pasts: _____________________");
         replaceText(doc,"TEXT",
                 "TEXT: Saskaņā ar Maksātnespējas likuma 65.pantu Administratora pienākumi pēc juridiskās personas maksātnespējas procesa pasludināšanas – pirmās daļas 12. punktu - pēc juridiskās personas maksātnespējas procesa pasludināšanas administrators iesniedz tiesu izpildītājam pieteikumu par izpildu lietvedības izbeigšanu lietās par piespriesto, bet no parādnieka nepiedzīto summu piedziņu un lietās par saistību izpildīšanu tiesas ceļā.\n" +
                         "Maksātnespējas likuma 63. panta Juridiskās personas maksātnespējas procesa pasludināšanas sekas otrā daļa nosaka, ka, ja sprieduma izpildes lietvedība uzsākta pirms juridiskās personas maksātnespējas procesa pasludināšanas, tā ir izbeidzama Civilprocesa likumā noteiktajā kārtībā. Pēc juridiskās personas maksātnespējas procesa pasludināšanas kreditori piesaka prasījumus administratoram šajā likumā noteiktajā kārtībā.\n" +

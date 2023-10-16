@@ -91,8 +91,6 @@ public class UploadingController {
     @GetMapping("/download-filled")
     public void downloadFilledFile(Model model, HttpServletResponse response) throws IOException {
 
-
-
         byte[] xwpfDocumentBytes = templateService.exportWordDoc().toByteArray();
 
         response.setContentType("application/msword");
