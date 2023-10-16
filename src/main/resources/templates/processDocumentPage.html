@@ -56,7 +56,7 @@
         </div>
     </section>
     <section class="border border-success m-5 text-left text-black p-5">
-        <h3> Document list to upload:</h3>
+        <h3 id = "listHeader"> Document list to upload:</h3>
         <div class="container col-xs-3">
             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
                 <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 1}" enctype="multipart/form-data">

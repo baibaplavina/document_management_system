@@ -1,9 +1,6 @@
 package com.example.documentmanagement;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -259,7 +256,7 @@ public class UploadService {
                         sbSums.append("-");
                     }
                     Cell cell = dataSheet.getRow(i).getCell(colNumApmers);
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    cell.setCellType(CellType.STRING);
 
                     sbSums.append(cell.getStringCellValue());
                     sbMpa.append(separator);

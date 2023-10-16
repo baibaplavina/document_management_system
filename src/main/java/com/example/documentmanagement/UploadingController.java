@@ -70,7 +70,7 @@ public class UploadingController {
 
         attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
 
-        return "redirect:/process-documents/{id}";
+        return "redirect:/process-documents/{id}#listHeader";
     }
 
     @GetMapping("/download-blank")
