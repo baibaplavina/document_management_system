@@ -56,25 +56,25 @@
         </div>
     </section>
     <section class="border border-success m-5 text-left text-black p-5">
-        <h3> Document list to upload:</h3>
+        <h3 id = "listHeader"> Document list to upload:</h3>
         <div class="container col-xs-3">
             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
                 <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 1}" enctype="multipart/form-data">
-                    <label for="formFileDisabled" class="form-label">1. Upload Assets List ('Mantas saraksts')</label>
+                    <label class="form-label">1. Upload Assets List ('Mantas saraksts')</label>
                         <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
                     <button type="submit" class="btn btn-default">Upload File</button>
 
                 </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 2}" enctype="multipart/form-data">
-                <label for="formFileDisabled" class="form-label">2. Upload Costs ('Iegūtie naudas līdzekļi')</label>
+                <label class="form-label">2. Upload Costs ('Iegūtie naudas līdzekļi')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
                 <button type="submit" class="btn btn-default">Upload File</button>
 
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 3}" enctype="multipart/form-data">
-                <label for="formFileDisabled" class="form-label">3. Upload Costs ('Naudas plusma')</label>
+                <label class="form-label">3. Upload Cash flow ('Naudas plūsma')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
 
                 <button type="submit" class="btn btn-default">Upload File</button>
@@ -82,7 +82,7 @@
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 4}" enctype="multipart/form-data">
-                <label for="formFileDisabled" class="form-label">3. Upload Costs ('Izmaksas')</label>
+                <label class="form-label">4. Upload Expenses ('Izmaksas')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
 
                 <button type="submit" class="btn btn-default">Upload File</button>
@@ -90,18 +90,13 @@
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 5}" enctype="multipart/form-data">
-                <label for="formFileDisabled" class="form-label">3. Upload Creditors ('Kreditoru prasījumu saraksts')</label>
+                <label class="form-label">5. Upload Creditors ('Kreditoru prasījumu saraksts')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
                 <button type="submit" class="btn btn-default">Upload File</button>
             </form>
 
 
-            <label for="formFileDisabled" class="form-label">1. Upload Cost List</label>
-            <input class="form-control col-xs-3" type="file" id="formFileDisabled">
-            <label for="formFileDisabled" class="form-label">2. Upload Assets List</label>
-            <input class="form-control" type="file" id="formFileDisabled1">
-            <label for="formFileDisabled" class="form-label">3. Upload Other documents</label>
-            <input class="form-control" type="file" id="formFileDisabled2">
+
             <!--       https://getbootstrap.com/docs/5.3/forms/input-group/
             Custom file input-->
         </div>

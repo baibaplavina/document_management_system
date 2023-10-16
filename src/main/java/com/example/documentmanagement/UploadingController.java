@@ -29,6 +29,9 @@ public class UploadingController {
     @Autowired
     private TemplateService templateService;
 
+    @Autowired
+    private UploadService uploadService;
+
     @GetMapping("/files")
     public String homepage() {
         return "files";
@@ -46,18 +49,18 @@ public class UploadingController {
         try {
             InputStream stream = file.getInputStream();
             if(uploadTypeId == 1) {
-            templateService.handleAssetsUpload(stream, id);}
+            uploadService.handleAssetsUpload(stream, id);}
             else if(uploadTypeId == 2) {
-                templateService.handleCostsUpload(stream, id);
+                uploadService.handleCostsUpload(stream, id);
             }
             else if(uploadTypeId == 3) {
-                templateService.handleMoneyUpload(stream, id);
+                uploadService.handleMoneyUpload(stream, id);
             }
             else if(uploadTypeId == 4) {
-                templateService.handleExpensesUpload(stream, id);
+                uploadService.handleExpensesUpload(stream, id);
             }
             else if(uploadTypeId == 5) {
-                templateService.handleCreditorsUpload(stream, id);
+                uploadService.handleCreditorsUpload(stream, id);
             }
 
 
@@ -67,7 +70,7 @@ public class UploadingController {
 
         attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
 
-        return "redirect:/process-documents/{id}";
+        return "redirect:/process-documents/{id}#listHeader";
     }
 
     @GetMapping("/download-blank")
@@ -109,8 +112,8 @@ public class UploadingController {
 
         TemplateService templateService = new TemplateService(administratorService, insolvencyProcessService);
 
-        byte[] xwpfDocumentBytes = templateService.exportTableDoc(id).toByteArray();
-
+      //  byte[] xwpfDocumentBytes = templateService.exportTableDoc(id).toByteArray();
+        byte[] xwpfDocumentBytes = templateService.exportCostsOfInsolvencyProceedings(id).toByteArray();
         response.setContentType("application/msword");
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename = " + "SegsanasPlans.doc";
