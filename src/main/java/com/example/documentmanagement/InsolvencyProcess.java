@@ -18,11 +18,13 @@ public class InsolvencyProcess {
     @Id
     @GeneratedValue()
     private Long id;
+    @Column(length=11)
 
     private String registrationNumber;
     private String companyName;
     private String companyAddress;
     private String courtName;
+    @Column(length = 9)
     private String courtCaseNumber;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate courtDecisionDate;
@@ -42,5 +44,17 @@ public class InsolvencyProcess {
     private double adminSalary;
     private String creditorsList;
     private Boolean securedAssets;
+    private LocalDate caseClosingDate;
+
+    @PrePersist
+    public void beforeSave() {
+
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
+    @PostUpdate
+    public void updating(){
+        this.updatedAt= new Timestamp(System.currentTimeMillis());
+    }
+
 
 }

@@ -19,20 +19,5 @@ public class WebsiteController {
         return"index";
     }
 
-    @GetMapping("/create-administrator")
-    public String displayCreateAdminPage(){
-        return "createAdministrator";
-    }
 
-
-    @PostMapping("/create-administrator")
-    public String handleAdministratorRegistration(Administrator administrator){
-        System.out.println(administrator);
-        try {
-           administratorService.createAdministrator(administrator);
-            return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_SUCCESS";
-        } catch (Exception exception) {
-            return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_FAILED&error=" + exception.getMessage();
-        }
-    }
 }
