@@ -13,7 +13,8 @@
             <th> Court Name</th>
             <th> Court Case Number</th>
             <th> Company E-address</th>
-            <th> Open</th>
+            <th> Open </th>
+            <th> Edit </th>
         </tr>
         </thead>
         <tbody>
@@ -27,10 +28,60 @@
                 <td class="details" th:text="${process.getE_address()}"></td>
 
                 <td>
-                    <!--
-                    <a class="btn btn-success" href="/process-documents" type="submit"> Open </a> -->
                     <a th:href="${'/process-documents/' + process.getId()}" class="btn btn-success" role="button" type="submit">Open </a>
+                </td>
+                <td>
+                    <a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit">Edit </a>
+                </td>
 
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</section>
+<section th:fragment="section-editAdmin" class="container">
+    <br>
+    <br>
+    <h3>Administrator's details:</h3>
+    <br>
+    <br>
+    <table class="table table-bordered text-center">
+        <thead class="table-header-dark">
+        <tr>
+            <th> Id </th>
+            <th> Certificate Number</th>
+            <th> Name</th>
+            <th> Surname</th>
+            <th> Address</th>
+            <th> Email</th>
+            <th> E-address</th>
+            <th> Phone </th>
+            <th> Gender </th>
+            <th> Place </th>
+            <th> Edit </th>
+            <th> Delete </th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="admin: ${adminList}">
+            <tr>
+                <td class="fw-bold" th:text="${admin.getAdminId()}"></td>
+                <td class="deails" th:text="${admin.getCertificateNumber()}"></td>
+                <td class="fw-bold" th:text="${admin.getAdminName()}"></td>
+                <td class="fw-bold" th:text="${admin.getAdminSurname()}"></td>
+                <td class="details" th:text="${admin.getAdminAddress()}"></td>
+                <td class="details" th:text="${admin.getAdminEmail()}"></td>
+                <td class="details" th:text="${admin.getAdminE_address()}"></td>
+                <td class="details" th:text="${admin.getAdminPhoneNumber()}"></td>
+                <td class="details" th:text="${admin.getAdminGender()}"></td>
+                <td class="details" th:text="${admin.getPlace()}"></td>
+
+                <td class = "mt-2">
+                    <a th:href="${'/edit-administrator/' + admin.getAdminId()}" class="btn btn-dark text-white p-3" role="button" type="submit">Labot profilu (edit) </a>
+                </td>
+                <td class = "mt-2">
+                    <a th:href="${'/delete-administrator/' + admin.getAdminId()}" class="btn btn-warning text-white p-3" role="button">Dzēst profilu (delete) </a>
+                    <!--<a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit">Edit </a>-->
                 </td>
 
             </tr>
