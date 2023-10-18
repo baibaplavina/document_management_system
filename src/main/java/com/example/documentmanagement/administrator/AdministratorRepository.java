@@ -1,4 +1,4 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.administrator;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

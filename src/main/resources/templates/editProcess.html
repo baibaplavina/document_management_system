@@ -1,12 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-
     <meta charset="UTF-8">
-    <title>Edit Process</title>
+    <title>Edit process</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet"  href="styles/header.css">
 
 </head>
 <body>
-<h1> Edit process</h1>
+<header th:replace="~{fragments/headers.html::process-creator}"></header>
+
+<main class="border border-success text-start m-5 row p-2">
+    <section class="container">
+        <h3>Edit Insolvency Process Information</h3>
+        <form class="form-inline col-md-6" id="creatProcessForm" th:action="${'/edit-process/' + process.getId()} " method="post" th:object="${process}">
+            <div class="input-group mt-2" >
+                <label class="input-group-text"  >Select Administrator:</label>
+
+                <select  th:field="*{admin}" class="form-control" required>
+                    <th:block th:each="currentAdmin:${admin}" >
+                        <option th:text="${currentAdmin.adminName + ' ' + currentAdmin.adminSurname}" th:value="${currentAdmin.adminId} " ></option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="input-group mt-2" >
+                <label class="input-group-text">Insolvency Company Registration Number:</label>
+                <input class="form-control" type="text" placeholder="registration number" name="registrationNumber" th:value="${process.getRegistrationNumber()}">
+            </div>
+            <div class="input-group mt-2">
+                <label class="input-group-text">Insolvency Company Name: </label>
+                <input class="form-control"type="text" placeholder="company name" name="companyName" th:value="${process.getCompanyName()}">
+            </div>
+            <div class="input-group mt-2">
+                <label class="input-group-text">Insolvency Company Address:</label>
+                <input class="form-control"type="text" placeholder="address" name="companyAddress" th:value="${process.getCompanyAddress()}">
+            </div>
+            <div class="input-group mt-2">
+                <label class="input-group-text">Court Name:</label>
+                <input class="form-control"type="text" placeholder="court name" name="courtName"th:value="${process.getCourtName()}">
+            </div>
+            <div class="input-group mt-2">
+                <label class="input-group-text">Court Case number:</label>
+                <input class="form-control"type="text" placeholder="case number" name="courtCaseNumber" th:value="${process.getCourtCaseNumber()}">
+            </div>
+            <div class="input-group  mt-2 ">
+                <label class="input-group-text">Court Decision Date:</label>
+                <input class="col-xs-3 " type="date" placeholder="court decision date" name="courtDecisionDate" th:value="${process.getCourtDecisionDate()}">
+            </div>
+            <div class="input-group mt-2">
+                <label class="input-group-text">E-Adrese (EAdress) </label>
+                <input class="form-control" placeholder="e-address" name="e_address" type="text" th:value="${process.getE_address()}">
+            </div >
+            <div class="input-group mt-2">
+                <label class="input-group-text">Process Closing Date </label>
+                <input class="col-xs-3 " type="date" placeholder="court decision date" name="caseClosingDate" th:value="${process.getCaseClosingDate()}">
+            </div >
+            <div class="mt-2 ">
+                <button class="btn btn-success text-white p-3" type="submit">Saglabāt (save) </button>
+                <!--<button class="btn btn-dark text-white p-3" type="submit" href="/create-process-edit">Labot profilu (edit profile) </button>-->
+            </div>
+        </form>
+
+    </section>
+
+</main>
+<footer th:replace="~{fragments/footer.html::footer}"></footer>
+
 </body>
 </html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DMS Administrator  Profile Editor </title>
+    <link rel="stylesheet"  href="styles/header.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+<body>
+<header th:replace="~{fragments/headers.html::header-administrator}"></header>
+    <main class="border border-success text-start m-5 row p-2">
+        <section class="container">
+            <h3> Izveidot administratora profilu (Edit administrator's profile) </h3>
+            <form class="form-inline" id="createAdministrator" th:action="${'/edit-administrator/'+ admin.getAdminId()} " method="post" th:object="${admin}">
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Vārds (Name)</label>
+                    <input class="form-control" name="adminName" type="text" th:value="${admin.getAdminName()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Uzvārds (Surname)</label>
+                    <input class="form-control" name="adminSurname" type="text" th:value="${admin.getAdminSurname()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Sertifikāta numurs (Number of sertificate) </label>
+                    <input class="form-control" name="certificateNumber" type="text" th:value="${admin.getCertificateNumber()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Prakses vietas adrese (Adrress) </label>
+                    <input class="form-control" name="adminAddress" type="text" th:value="${admin.getAdminAddress()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">E-pasts (Email) </label>
+                    <input class="form-control" name="adminEmail" type="email" th:value="${admin.getAdminEmail()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">E-Adrese (EAdress) </label>
+                    <input class="form-control" name="adminE_address" type="text" th:value="${admin.getAdminE_address()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Telefons ( Phone number) </label>
+                    <input class="form-control" name="adminPhoneNumber" type="text" th:value="${admin.getAdminPhoneNumber()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Dokumentu sagatavošanas vieta (Place) </label>
+                    <input class="form-control" name="place" type="text" th:value="${admin.getPlace()}">
+                </div>
+                <div class="input-group mt-2">
+                    <label class="input-group-text">Gender</label>
+                    <select class="form-control" name = "adminGender" th:value="${admin.getAdminGender().toString()}">
+                        <option value="FEMALE">Sieviete (Female)</option>
+                        <option value="MALE">Vīrietis(Male)</option>
+                    </select>
+                </div>
+                <div class = "mt-2">
+                    <button class="btn btn-success text-white p-3" type="submit">Saglabāt (save) </button>
+                </div>
+            </form>
+
+        </section>
+        <section th:replace="~{fragments/sections.html :: section-editAdmin}"></section>
+
+</main>
+<footer th:replace="~{fragments/footer.html::footer}"></footer>
+
+</body>
+</html>

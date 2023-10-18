@@ -1,4 +1,4 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.recipient;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,5 +1,7 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.recipient;
 
+import com.example.documentmanagement.recipient.Recipient;
+import com.example.documentmanagement.recipient.RecipientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

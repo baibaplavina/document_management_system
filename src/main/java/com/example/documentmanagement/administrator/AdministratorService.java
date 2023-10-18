@@ -1,5 +1,7 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.administrator;
 
+import com.example.documentmanagement.administrator.Administrator;
+import com.example.documentmanagement.administrator.AdministratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +48,27 @@ public class AdministratorService {
 
     }
 
+    public Administrator editAdministrator(Administrator administrator) throws Exception {
+        for (Administrator currentAdmin : administratorRepository.findAll()) {
+            if (currentAdmin.getAdminId().equals(administrator.getAdminId())) {
+                currentAdmin.setCertificateNumber(administrator.getCertificateNumber());
+                currentAdmin.setAdminName(administrator.getAdminName());
+                currentAdmin.setAdminSurname(administrator.getAdminAddress());
+                currentAdmin.setAdminAddress(administrator.getAdminSurname());
+                currentAdmin.setAdminEmail(administrator.getAdminEmail());
+                currentAdmin.setAdminE_address(administrator.getAdminE_address());
+                currentAdmin.setAdminPhoneNumber(administrator.getAdminPhoneNumber());
+                currentAdmin.setAdminGender(administrator.getAdminGender());
+                currentAdmin.setPlace(administrator.getPlace());
+                administratorRepository.saveAndFlush(currentAdmin);
+                return currentAdmin;
+            }
+        }
+        throw new Exception("Administrator not found, please check Id");
 
+
+    }
+    public void deleteAdministrator(Long id){
+        administratorRepository.deleteById(id);
+    }
 }

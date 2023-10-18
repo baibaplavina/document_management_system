@@ -1,5 +1,6 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.administrator;
 
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,5 +40,15 @@ public class Administrator {
     private List<InsolvencyProcess> listOfProcesses;
     @Column(name = "place")
     private String place;
+    @PrePersist
+    public void beforeSave() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+
+
+    }
+    @PostPersist
+    public void upDating(){
+        this.lastUpdated= new Timestamp(System.currentTimeMillis());
+    }
 
 }

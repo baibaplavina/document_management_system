@@ -7,13 +7,30 @@
     <table class="table table-bordered text-center">
         <thead class="table-header-dark">
         <tr>
-            <th> Process ID</th>
-            <th> Company Name</th>
-            <th> Registration Number</th>
-            <th> Court Name</th>
-            <th> Court Case Number</th>
-            <th> Company E-address</th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDirection}}">Process ID</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=companyName&sortDir=' + ${reverseSortDirection}}">Company
+                    Name</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=registrationNumber&sortDir=' + ${reverseSortDirection}}">Registration </a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courtName&sortDir=' + ${reverseSortDirection}}">Court
+                    Name</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courtCaseNumber&sortDir=' + ${reverseSortDirection}}">Court
+                    Case Number</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=caseClosingDate&sortDir=' + ${reverseSortDirection}}">Process
+                    status ACTIVE/COMPLETED</a>
+            </th>
             <th> Open</th>
+            <th> Edit</th>
         </tr>
         </thead>
         <tbody>
@@ -24,17 +41,134 @@
                 <td class="details" th:text="${process.getRegistrationNumber()}"></td>
                 <td class="details" th:text="${process.getCourtName()}"></td>
                 <td class="details" th:text="${process.getCourtCaseNumber()}"></td>
-                <td class="details" th:text="${process.getE_address()}"></td>
+                <td class="details"
+                    th:text="${process.getCaseClosingDate()!= null} ? ${'completed: ' + process.getCaseClosingDate()} : 'active'">
+                    Process status</span>
+                    <!--<span th:unless="${process.getCaseClosingDate()!=null}" th:text="${process.getCaseClosingDate().toString()} "></span>-->
+                </td>
 
                 <td>
-                    <!--
-                    <a class="btn btn-success" href="/process-documents" type="submit"> Open </a> -->
-                    <a th:href="${'/process-documents/' + process.getId()}" class="btn btn-success" role="button" type="submit">Open </a>
+                    <a th:href="${'/process-documents/' + process.getId()}" class="btn btn-success" role="button"
+                       type="submit">Open </a>
+                </td>
+                <td>
+                    <a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit">Edit </a>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
 
+    <section>
+        <div th:if="${totalPages>1}">
+            <div class=" row col-sm-10">
+                <div class="col-sm-2">
+                    Total Rows: [[${totalItems}]]
+                </div>
+                <div class="col-sm-1">
+                    <span th:each="i : ${#numbers.sequence(1,totalPages)}">
+                         <a th:if="${currentPage!=i}"
+                            th:href="@{'/page/' + ${i} +'?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                        <span th:unless="${currentPage!=i}">[[${i}]]</span>
+                    </span>
+                </div>
+                <div class="col-sm-1">
+                    <a th:if="${currentPage<totalPages}"
+                       th:href="@{'/page/'+ ${currentPage+1} + '?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">Next</a>
+                    <span th:unless="${currentPage<totalPages}">Next</span>
+                </div>
+                <div class="col-sm-1">
+                    <a th:if="${currentPage<totalPages}"
+                       th:href="@{'/page/'+ ${totalPages} + '?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">Last</a>
+                    <span th:unless="${currentPage<totalPages}">Last</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</section>
+
+<section th:fragment="section-editAdmin" class="container">
+    <br>
+    <br>
+    <h3>Administrator's details:</h3>
+    <br>
+    <br>
+    <table class="table table-bordered text-center">
+        <thead class="table-header-dark">
+        <tr>
+            <th> Id
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=certificateNumber&sortDir=' + ${reverseSortDirection}}">Certificate Number </a>
+            </th>
+            <th> Name</th>
+            <th> Surname</th>
+            <th> Address</th>
+            <th> Email</th>
+            <th> E-address</th>
+            <th> Phone</th>
+            <th> Gender</th>
+            <th> Place</th>
+            <th> Edit</th>
+            <th> Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="admin: ${adminList}">
+            <tr>
+                <td class="fw-bold" th:text="${admin.getAdminId()}"></td>
+                <td class="details" th:text="${admin.getCertificateNumber()}"></td>
+                <td class="fw-bold" th:text="${admin.getAdminName()}"></td>
+                <td class="fw-bold" th:text="${admin.getAdminSurname()}"></td>
+                <td class="details" th:text="${admin.getAdminAddress()}"></td>
+                <td class="details" th:text="${admin.getAdminEmail()}"></td>
+                <td class="details" th:text="${admin.getAdminE_address()}"></td>
+                <td class="details" th:text="${admin.getAdminPhoneNumber()}"></td>
+                <td class="details" th:text="${admin.getAdminGender()}"></td>
+                <td class="details" th:text="${admin.getPlace()}"></td>
+
+                <td class="mt-2">
+                    <a th:href="${'/edit-administrator/' + admin.getAdminId()}" class="btn btn-dark text-white p-3"
+                       role="button" type="submit">Labot profilu (edit) </a>
+                </td>
+                <td class="mt-2">
+                    <a th:href="${'/delete-administrator/' + admin.getAdminId()}" class="btn btn-warning text-white p-3"
+                       role="button">Dzēst profilu (delete) </a>
+                    <!--<a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit">Edit </a>-->
                 </td>
 
             </tr>
         </th:block>
         </tbody>
     </table>
+    <section>
+        <div th:if="${totalPages>1}">
+            <div class=" row col-sm-10">
+                <div class="col-sm-2">
+                    Total Rows: [[${totalItems}]]
+                </div>
+                <div class="col-sm-1">
+                    <span th:each="i : ${#numbers.sequence(1,totalPages)}">
+                         <a th:if="${currentPage!=i}"
+                            th:href="@{'/page/' + ${i} +'?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                        <span th:unless="${currentPage!=i}">[[${i}]]</span>
+                    </span>
+                </div>
+                <div class="col-sm-1">
+                    <a th:if="${currentPage<totalPages}"
+                       th:href="@{'/page/'+ ${currentPage+1} + '?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">Next</a>
+                    <span th:unless="${currentPage<totalPages}">Next</span>
+                </div>
+                <div class="col-sm-1">
+                    <a th:if="${currentPage<totalPages}"
+                       th:href="@{'/page/'+ ${totalPages} + '?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">Last</a>
+                    <span th:unless="${currentPage<totalPages}">Last</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
 </section>
