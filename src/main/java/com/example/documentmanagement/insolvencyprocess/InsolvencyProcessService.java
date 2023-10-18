@@ -4,6 +4,10 @@ import com.example.documentmanagement.administrator.AdministratorRepository;
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,14 +22,15 @@ public class InsolvencyProcessService {
 
     @Autowired
     public InsolvencyProcessService(InsolvencyProcessRepository insolvencyProcessRepository, AdministratorRepository administratorRepository) {
-        this.insolvencyProcessRepository=insolvencyProcessRepository;
-        this.administratorRepository=administratorRepository;
+        this.insolvencyProcessRepository = insolvencyProcessRepository;
+        this.administratorRepository = administratorRepository;
     }
 
     List<InsolvencyProcess> findAll() {
         return insolvencyProcessRepository.findAll();
 
     }
+
     public InsolvencyProcess createInsolvencyProcess(InsolvencyProcess insolvencyProcess) throws Exception {
         if (insolvencyProcess.getRegistrationNumber().isEmpty() ||
                 insolvencyProcess.getCompanyName().isEmpty()
@@ -35,7 +40,7 @@ public class InsolvencyProcessService {
                 || insolvencyProcess.getE_address().isEmpty())
             throw new Exception("Some information is missing, please re-fill the form");
 
-        else{
+        else {
             insolvencyProcessRepository.saveAndFlush(insolvencyProcess);
             System.out.println(insolvencyProcess);
 
@@ -43,15 +48,11 @@ public class InsolvencyProcessService {
 
         return insolvencyProcess;
     }
-    public List<InsolvencyProcess> findByCaseClosingDate(LocalDate closingDate){
-        List<InsolvencyProcess> listInactiveProcesses = insolvencyProcessRepository.findInsolvencyProcessByCaseClosingDate(closingDate);
 
-        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findInsolvencyProcessByCaseClosingDate(closingDate)) {
-            if(currentProcess.getCaseClosingDate()!=null){
-                listInactiveProcesses.add(currentProcess);
-            }
-        }       return listInactiveProcesses;
-
+    Page<InsolvencyProcess> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return insolvencyProcessRepository.findAll(pageable);
     }
 
 
@@ -59,6 +60,7 @@ public class InsolvencyProcessService {
 
         insolvencyProcessRepository.deleteById(id);
     }
+
     public InsolvencyProcess editInsolvencyProcess(InsolvencyProcess process) throws Exception {
 
         for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
@@ -79,9 +81,9 @@ public class InsolvencyProcessService {
             }
         }
 
-            throw new Exception("process not found by id!");
+        throw new Exception("process not found by id!");
 
-        }
+    }
 
     public InsolvencyProcess findInsolvencyProcessById(Long id) throws Exception {
 
