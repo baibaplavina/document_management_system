@@ -29,7 +29,7 @@ public class DownloadingController {
     @Autowired
     private OtherExpensesService otherExpensesService;
 
-    @GetMapping("/download-blank")
+  /*  @GetMapping("/download-blank")
     public void downloadBlank(Model model, HttpServletResponse response) throws IOException {
 
         DownloadService templateFirst = new DownloadService(administratorService, insolvencyProcessService, otherExpensesService, templateService);
@@ -46,10 +46,12 @@ public class DownloadingController {
         outputStream.write(xwpfDocumentBytes);
         outputStream.close();
 
-    }
+    }*/
 
     @GetMapping("/download-filled")
     public void downloadFilledFile(Model model, HttpServletResponse response) throws IOException {
+
+       // byte[] xwpfDocumentBytes = templateService.exportWordDoc().toByteArray();
 
         byte[] xwpfDocumentBytes = downloadService.exportWordDoc().toByteArray();
 

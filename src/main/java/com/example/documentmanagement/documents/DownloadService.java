@@ -27,6 +27,7 @@ public class DownloadService {
         this.templateService = templateService;
     }
 
+
     public ByteArrayOutputStream exportBlankDoc() throws IOException {
 
         InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
