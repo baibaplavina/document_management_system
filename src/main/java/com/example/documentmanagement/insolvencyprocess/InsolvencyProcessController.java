@@ -4,6 +4,8 @@ import com.example.documentmanagement.administrator.Administrator;
 import com.example.documentmanagement.administrator.AdministratorRepository;
 import com.example.documentmanagement.administrator.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +38,7 @@ public class InsolvencyProcessController {
         model.addAttribute("process", new InsolvencyProcess());
         model.addAttribute("processList", insolvencyProcessService.findAll());
         model.addAttribute("adminList", adminList);
-
+        model.addAttribute("page",findPaginated(1, "id", "asc", model));
         return "createProcess";
     }
 
@@ -44,6 +46,7 @@ public class InsolvencyProcessController {
     public String createProcessPage(InsolvencyProcess insolvencyProcess) {
         try {
             insolvencyProcessRepository.save(insolvencyProcess);
+
 
             return "redirect:/create-process?message=INSOLVENCY_PROCESS_CREATED_SUCCESSFULLY";
         } catch (Exception exception) {
@@ -78,30 +81,15 @@ public class InsolvencyProcessController {
         }
     }
 
-    @GetMapping("/view-processes/active")
-    public String displayFilteredProcesses(@RequestParam(required = false) String message,
-                                           @RequestParam(required = false) String error,
-                                           LocalDate closingDate,
+    @GetMapping(path="/search")
+    public String search(@RequestParam(required = false) String message,
+                         @RequestParam(required = false) String error,
+                                           InsolvencyProcess insolvencyProcess,
+                                           LocalDate localDate,
                                            Model model) {
-        List<InsolvencyProcess> activeProcessList = insolvencyProcessService.findByCaseClosingDate(closingDate);
-        List<InsolvencyProcess> inactiveProcessList = insolvencyProcessService.findByCaseClosingDate(closingDate);
+        model.addAttribute("search", insolvencyProcessRepository.findByCaseClosingDate(localDate));
+        return "/viewProcessesList";
 
-        for (InsolvencyProcess currentProcess : insolvencyProcessService.findByCaseClosingDate(closingDate)) {
-            if (currentProcess.getCaseClosingDate() == null) {
-                activeProcessList.add(currentProcess);
-                System.out.println("Active cases" + activeProcessList + "\n");
-            } else {
-                inactiveProcessList.add(currentProcess);
-                System.out.println("Inactive cases" + inactiveProcessList);
-            }
-            model.addAttribute("active", activeProcessList);
-            model.addAttribute("inactive", activeProcessList);
-            model.addAttribute("message", message);
-            model.addAttribute("error", error);
-
-        }
-        return "viewProcessesActive";
-    }
 //    @GetMapping( "/view-processes/inactive")
 //    public String displayFilteredProcessesInactive(@RequestParam(required = false) String message,
 //                                           @RequestParam(required = false) String error,
@@ -114,16 +102,17 @@ public class InsolvencyProcessController {
 //        model.addAttribute("error", error);
 //        return "viewProcessesInactive";
 //
-
+    }
 
     @GetMapping("/view-processes")
     public String displayProcessesList(@RequestParam(required = false) String message,
                                        @RequestParam(required = false) String error,
                                        Model model) {
+
         model.addAttribute("message", message);
         model.addAttribute("error", error);
         model.addAttribute("processList", insolvencyProcessService.findAll());
-        return "viewProcessesList";
+        return findPaginated(1, "id", "asc", model);
     }
 
     @GetMapping("/process-documents")
@@ -159,4 +148,25 @@ public class InsolvencyProcessController {
             return "redirect:/view-processes?message=PROCESS_DELETE_FAILED&error="+ ex.getMessage();
         }
     }
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(@PathVariable(value="pageNo") int pageNo,
+                                @RequestParam("sortField") String sortField,
+                                @RequestParam("sortDir") String sortDir, Model model ){
+        int pageSize = 5;
+        Page<InsolvencyProcess> page = insolvencyProcessService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        List<InsolvencyProcess> processList = page.getContent();
+
+        model.addAttribute("currentPage",pageNo );
+        model.addAttribute("totalPages",page.getTotalPages());
+        model.addAttribute("totalItems",page.getTotalElements());
+
+        model.addAttribute("sortField",sortField);
+        model.addAttribute("sortDir",sortDir);
+        model.addAttribute("reverseSortDirection",sortDir.equals("asc") ? "desc" : "asc");
+
+        model.addAttribute("processList", processList);
+
+        return "viewProcessesList";
+    }
+
 }
