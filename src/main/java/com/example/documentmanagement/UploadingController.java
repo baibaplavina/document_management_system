@@ -73,7 +73,7 @@ public class UploadingController {
         return "redirect:/process-documents/{id}#listHeader";
     }
 
-    @GetMapping("/download-blank")
+  /*  @GetMapping("/download-blank")
     public void downloadBlank(Model model, HttpServletResponse response) throws IOException {
 
         TemplateService templateFirst = new TemplateService(administratorService, insolvencyProcessService);
@@ -89,7 +89,7 @@ public class UploadingController {
         outputStream.write(xwpfDocumentBytes);
         outputStream.close();
 
-    }
+    }*/
 
     @GetMapping("/download-filled")
     public void downloadFilledFile(Model model, HttpServletResponse response) throws IOException {
