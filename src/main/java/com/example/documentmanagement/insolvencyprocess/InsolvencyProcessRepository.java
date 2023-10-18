@@ -1,6 +1,5 @@
 package com.example.documentmanagement.insolvencyprocess;
 
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
