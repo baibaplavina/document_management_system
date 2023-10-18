@@ -1,10 +1,13 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.documents;
 
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
+import com.example.documentmanagement.otherExpenses.OtherExpensesService;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,11 +16,13 @@ import java.util.List;
 public class CostsOfInsolvencyProceedingsDoc {
 
     private final InsolvencyProcess insolvencyProcess;
+    private final OtherExpensesService otherExpensesService;
     private XWPFDocument doc;
 
-    public CostsOfInsolvencyProceedingsDoc(InsolvencyProcess insolvencyProcess) {
+    public CostsOfInsolvencyProceedingsDoc(InsolvencyProcess insolvencyProcess, OtherExpensesService otherExpensesService) {
 
         this.insolvencyProcess = insolvencyProcess;
+        this.otherExpensesService = otherExpensesService;
 
     }
 
@@ -42,38 +47,63 @@ public class CostsOfInsolvencyProceedingsDoc {
 
     private void createHeadersPart() {
         TemplateService templateService = new TemplateService();
+        templateService.replaceText(doc,"Place",
+                insolvencyProcess.getAdmin().getPlace());
+        templateService.replaceText(doc,"Document_date",
+
+                LocalDate.now().getYear() + "-" + LocalDate.now().getMonthValue() + "-"+ LocalDate.now().getDayOfMonth());
         templateService.replaceText(doc, "/administratorName AdministratorSurname/",
                 insolvencyProcess.getAdmin().getAdminName() + " " +
                         insolvencyProcess.getAdmin().getAdminSurname());
         templateService.replaceText(doc, "/sertificateNumber/",
                 insolvencyProcess.getAdmin().getCertificateNumber());
-        templateService.replaceText(doc, "administratorAddress/",
+        templateService.replaceText(doc, "/administratorAddress/",
                 insolvencyProcess.getAdmin().getAdminAddress());
         templateService.replaceText(doc, "/administratorPhoneNumber/",
                 insolvencyProcess.getAdmin().getAdminPhoneNumber());
         templateService.replaceText(doc, "/adminisratorEmail/",
                 insolvencyProcess.getAdmin().getAdminEmail());
         templateService.replaceText(doc, "/administratorEAddress/",
-                   " " + insolvencyProcess.getAdmin().getAdminE_address());
+                " " + insolvencyProcess.getAdmin().getAdminE_address());
         templateService.replaceText(doc, "InsolvencyCompanyName",
                 insolvencyProcess.getCompanyName());
         templateService.replaceText(doc, "CompanyName",
                 insolvencyProcess.getCompanyName());
+        templateService.replaceText(doc, "companyName",
+                insolvencyProcess.getCompanyName());
         templateService.replaceText(doc, "vienotais reģistrācijas Nr. ", " vienotais reģistrācijas Nr. " +
                 insolvencyProcess.getRegistrationNumber());
+
+        templateService.replaceText(doc,"courtName",
+                "" + insolvencyProcess.getCourtName());
+        templateService.replaceText(doc,"courtDesitionDate",
+                " " + insolvencyProcess.getCourtDecisionDate() + " ");
+        templateService.replaceText(doc,"courtCaseNumber",
+                "" + insolvencyProcess.getCourtCaseNumber());
+        templateService.replaceText(doc,"registrationNumber",
+                "" + insolvencyProcess.getRegistrationNumber());
+        templateService.replaceText(doc, "administratorName" ,
+                insolvencyProcess.getAdmin().getAdminName()) ;
+        templateService.replaceText(doc, "administratorSurname",
+                        insolvencyProcess.getAdmin().getAdminSurname());
+        templateService.replaceText(doc, "certificateNumber",
+                insolvencyProcess.getAdmin().getCertificateNumber());
+        templateService. replaceText(doc,"administratorAdress",
+                "" + insolvencyProcess.getAdmin().getAdminAddress());
+
     }
 
     private void createCreditorsPart() {
 
         String creditors = insolvencyProcess.getCreditorsList();
         List<String> listOfCreditors = new ArrayList<>(Arrays.asList(creditors.split(";")));
-        int creditorTextPosition = getParagraphPositionIfContainsText( "Kreditori:");
+        int creditorTextPosition = getParagraphPositionIfContainsText("Kreditori:");
         if (creditorTextPosition > -1) {
-            for (int j = listOfCreditors.size() - 1; j >= 0; j--) {
+            for (int i = listOfCreditors.size() - 1; i >= 0; i--) {
                 XmlCursor cursor = doc.getParagraphs().get(creditorTextPosition + 1).getCTP().newCursor();
                 XWPFParagraph new_par = doc.insertNewParagraph(cursor);
                 new_par.setAlignment(ParagraphAlignment.RIGHT);
-                new_par.createRun().setText(listOfCreditors.get(j));
+                new_par.createRun().setText(listOfCreditors.get(i));
             }
         }
     }
@@ -94,11 +124,14 @@ public class CostsOfInsolvencyProceedingsDoc {
             run.setBold(true);
             run.setText("1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā");
 
-            XmlCursor cursor2 = doc.getParagraphs().get(beforeAssetsTablePosition + 4).getCTP().newCursor();
+            XmlCursor cursor2 = doc.getParagraphs().get(beforeAssetsTablePosition + 3).getCTP().newCursor();
             XWPFParagraph new_paragraph1 = doc.insertNewParagraph(cursor2);
-            create_1_1_or_2_1table(new_paragraph1, insolvencyProcess.getAssetsList(), insolvencyProcess.getAssetsListCosts());
+            create_1_1_or_2_1table(new_paragraph1, insolvencyProcess.getAssetsList_iekilata(), insolvencyProcess.getAssetsListCosts_iekilata(),
+                    insolvencyProcess.getAssetsTotalCosts_iekilata());
 
             XmlCursor cursor3 = new_paragraph1.getCTP().newCursor();
+            cursor3.toNextSibling();
+
             XWPFParagraph new_paragraph3 = doc.insertNewParagraph(cursor3);
             XWPFRun run3 = new_paragraph3.createRun();
             run3.setBold(true);
@@ -106,8 +139,6 @@ public class CostsOfInsolvencyProceedingsDoc {
 
             XmlCursor cursor4 = new_paragraph3.getCTP().newCursor();
             cursor4.toNextSibling();
-            cursor4.toNextSibling();
-
             XWPFParagraph new_paragraph5 = doc.insertNewParagraph(cursor4);
 
             create1_2table(new_paragraph5);
@@ -120,7 +151,7 @@ public class CostsOfInsolvencyProceedingsDoc {
 
         XmlCursor cursor2 = doc.getParagraphs().get(table2_1_HeaderPosition + 1).getCTP().newCursor();
         XWPFParagraph new_paragraph1 = doc.insertNewParagraph(cursor2);
-        create_1_1_or_2_1table(new_paragraph1, insolvencyProcess.getAssetsList(), insolvencyProcess.getAssetsListCosts());
+        create_1_1_or_2_1table(new_paragraph1, insolvencyProcess.getAssetsList_neiekilata(), insolvencyProcess.getAssetsListCosts_neiekilata(), insolvencyProcess.getAssetsTotalCosts_neiekilata());
 
         int table2_2_HeaderPosition = getParagraphPositionIfContainsText("Izmaksas, kas saistītas ar nenodrošināto kustamo mantu");
 
@@ -141,7 +172,7 @@ public class CostsOfInsolvencyProceedingsDoc {
         return paragraphPosition;
     }
 
-    private void create_1_1_or_2_1table(XWPFParagraph p, String assetList, String sums) {
+    private void create_1_1_or_2_1table(XWPFParagraph p, String assetList, String sums, String totalCost) {
 
         XWPFTable createdTable = p.getBody().insertNewTbl(p.getCTP().newCursor());
 
@@ -168,7 +199,7 @@ public class CostsOfInsolvencyProceedingsDoc {
         }
 
         XWPFTableRow row = createdTable.createRow();
-        styleCellBold(row.getCell(0), insolvencyProcess.getAssetsTotalCosts());
+        styleCellBold(row.getCell(0), String.valueOf(totalCost).replace('.', ','));
         styleCellBold(row.getCell(1), "Kopā /Total");
 
         doc.createParagraph();
@@ -191,11 +222,23 @@ public class CostsOfInsolvencyProceedingsDoc {
         styleCell(createdTable.getRow(0).getCell(5), "Maksājuma datums");
         styleCell(createdTable.getRow(0).getCell(6), "Radušās un nav apmaksātas izmaksas EUR");
 
-        createdTable.createRow();
-        createdTable.createRow();
-        createdTable.createRow();
+       int lenght = otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess).size();
 
-        doc.createParagraph();
+        createdTable.createRow();
+       for (int j=0; j<lenght; j++) {
+           createdTable.createRow();
+
+       }
+        for (int j = 0; j<lenght; j++) {
+            styleCellMinimized(createdTable.getRow(j+2).getCell(1), otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess).get(j).getName());
+            styleCellMinimized(createdTable.getRow(j+2).getCell(2), otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess).get(j).getSanemejs());
+            styleCellMinimized(createdTable.getRow(j+2).getCell(3), otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess).get(j).getCreatingDate());
+            styleCellMinimized(createdTable.getRow(j+2).getCell(4), String.valueOf(otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess).get(j).getSum()).replace('.', ','));
+            styleCellMinimized(createdTable.getRow(j+2).getCell(5), otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess).get(j).getOtherDate());
+            styleCellMinimized(createdTable.getRow(j+2).getCell(6), String.valueOf(otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess).get(j).getUnpaid()).replace('.', ','));
+
+        }
+
     }
 
     private void create2_2table(XWPFParagraph p) {
@@ -215,10 +258,50 @@ public class CostsOfInsolvencyProceedingsDoc {
         styleCellBold(createdTable.getRow(0).getCell(6), "Radušās un nav apmaksātas izmaksas EUR");
 
         createdTable.createRow();
-        createdTable.createRow();
-        createdTable.createRow();
+        styleCellMinimized(createdTable.getRow(1).getCell(0), "Saskaņā ar Maksātnespējas procesa 169. pantu otro daļu 1. punktu");
+        styleCellMinimized(createdTable.getRow(1).getCell(1), "Administratora atlīdzība par pienākumu pildīšanu maksātnespējas procesā");
+        styleCellMinimized(createdTable.getRow(1).getCell(2), insolvencyProcess.getAdmin().getAdminName() + " " + insolvencyProcess.getAdmin().getAdminSurname());
+        styleCellMinimized(createdTable.getRow(1).getCell(3), insolvencyProcess.getIzmaksuRasanasDatumsType1());
+        styleCellMinimized(createdTable.getRow(1).getCell(4), insolvencyProcess.getSegtaSummaType1());
+        styleCellMinimized(createdTable.getRow(1).getCell(5), insolvencyProcess.getSegsanasDatumsType1());
+        styleCellMinimized(createdTable.getRow(1).getCell(6), insolvencyProcess.getNavApmaksatasType1());
 
-        doc.createParagraph();
+        createdTable.createRow();
+        styleCellMinimized(createdTable.getRow(2).getCell(0), "Saskaņā ar Maksātnespējas procesa 169. panta otro daļu 2. punkts");
+        styleCellMinimized(createdTable.getRow(2).getCell(1), "Administratora atlīdzība par neieķīlātās mantas pārdošanu");
+        styleCellMinimized(createdTable.getRow(2).getCell(2), insolvencyProcess.getAdmin().getAdminName() + " " + insolvencyProcess.getAdmin().getAdminSurname());
+        styleCellMinimized(createdTable.getRow(2).getCell(3), insolvencyProcess.getIzmaksuRasanasDatumsType2());
+        styleCellMinimized(createdTable.getRow(2).getCell(4), insolvencyProcess.getSegtaSummaType2());
+        styleCellMinimized(createdTable.getRow(2).getCell(5), insolvencyProcess.getSegsanasDatumsType2());
+        styleCellMinimized(createdTable.getRow(2).getCell(6), insolvencyProcess.getNavApmaksatasType2());
+
+        createdTable.createRow();
+        styleCellMinimized(createdTable.getRow(3).getCell(0), "Administratora atlīdzība");
+        styleCellMinimized(createdTable.getRow(3).getCell(1), "Administratora atlīdzība par neieķīlātās mantas – naudas līdzekļu atgūšanu");
+        styleCellMinimized(createdTable.getRow(3).getCell(2), insolvencyProcess.getAdmin().getAdminName() + " " + insolvencyProcess.getAdmin().getAdminSurname());
+        styleCellMinimized(createdTable.getRow(3).getCell(3), insolvencyProcess.getIzmaksuRasanasDatumsType3());
+        styleCellMinimized(createdTable.getRow(3).getCell(4), insolvencyProcess.getSegtaSummaType3());
+        styleCellMinimized(createdTable.getRow(3).getCell(5), insolvencyProcess.getSegsanasDatumsType3());
+        styleCellMinimized(createdTable.getRow(3).getCell(6), insolvencyProcess.getNavApmaksatasType3());
+
+        createdTable.createRow();
+        styleCellMinimized(createdTable.getRow(4).getCell(0), "Izdevumi");
+        int lenght = otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess).size();
+
+        createdTable.createRow();
+        for (int j=0; j<lenght; j++) {
+            createdTable.createRow();
+
+        }
+        for (int j = 0; j<lenght; j++) {
+            styleCellMinimized(createdTable.getRow(j+5).getCell(1), otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess).get(j).getName());
+            styleCellMinimized(createdTable.getRow(j+5).getCell(2), otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess).get(j).getSanemejs());
+            styleCellMinimized(createdTable.getRow(j+5).getCell(3), otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess).get(j).getCreatingDate());
+            styleCellMinimized(createdTable.getRow(j+5).getCell(4), String.valueOf(otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess).get(j).getSum()));
+            styleCellMinimized(createdTable.getRow(j+5).getCell(5), otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess).get(j).getOtherDate());
+            styleCellMinimized(createdTable.getRow(j+5).getCell(6), String.valueOf(otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess).get(j).getUnpaid()));
+
+        }
     }
 
     private void createPart3And4() {
@@ -247,8 +330,10 @@ public class CostsOfInsolvencyProceedingsDoc {
                 setText(String.format("%1.2f", lineNumber5Value).replace('.', ','));
         doc.getTables().get(indexOf3rdTable).getRow(6).getCell(2).
                 setText(String.format("%1.2f", lineNumber6Value).replace('.', ','));
-        doc.getTables().get(indexOf3rdTable).getRow(7).getCell(2).
-                setText(String.format("%1.2f", lineNumber7Value).replace('.', ','));
+        styleCellBold(doc.getTables().get(indexOf3rdTable).getRow(7).getCell(2),
+                String.format("%1.2f", lineNumber7Value).replace('.', ','));
+
+
         createPart4(lineNumber7Value);
     }
 
@@ -256,7 +341,13 @@ public class CostsOfInsolvencyProceedingsDoc {
         TemplateService templateService = new TemplateService();
         templateService.replaceText(doc, "/This document table 3 last No/",
                 String.format("%1.2f", lineNumber7Value).replace('.', ','));
+        templateService.replaceText(doc, "InsertUnsecuredAssetCostsTotal",
+                insolvencyProcess.getAssetsTotalCosts_neiekilata().replace('.', ','));
+        templateService.replaceText(doc, "prasījumu apmērs: EUR",
+                "prasījumu apmērs: "+ String.valueOf(insolvencyProcess.getCreditorsRequest()).replace('.', ',') + " EUR");
+
     }
+
 
     public void styleCell(XWPFTableCell cell, String s) {
         XWPFRun run = cell.addParagraph().createRun();
@@ -274,6 +365,15 @@ public class CostsOfInsolvencyProceedingsDoc {
         run.setFontSize(12);
         run.setText(s);
         run.setBold(true);
+        cell.removeParagraph(0);
+    }
+
+    public void styleCellMinimized(XWPFTableCell cell, String s) {
+        XWPFRun run = cell.addParagraph().createRun();
+
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(9);
+        run.setText(s);
         cell.removeParagraph(0);
     }
 }

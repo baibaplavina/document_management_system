@@ -1,5 +1,6 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.administrator;
 
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

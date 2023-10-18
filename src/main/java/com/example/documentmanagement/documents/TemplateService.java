@@ -1,13 +1,16 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.documents;
 
+
+import com.example.documentmanagement.administrator.AdministratorService;
+import com.example.documentmanagement.administrator.Gender;
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessService;
+import com.example.documentmanagement.otherExpenses.OtherExpensesService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,32 +21,16 @@ public class TemplateService {
 
     private AdministratorService administratorService;
     private InsolvencyProcessService insolvencyProcessService;
+    private OtherExpensesService otherExpensesService;
 
     @Autowired
-    public TemplateService(AdministratorService administratorService, InsolvencyProcessService insolvencyProcessService) {
+    public TemplateService(AdministratorService administratorService, InsolvencyProcessService insolvencyProcessService, OtherExpensesService otherExpensesService) {
         this.administratorService = administratorService;
         this.insolvencyProcessService = insolvencyProcessService;
+        this.otherExpensesService = otherExpensesService;
     }
 
-    public ByteArrayOutputStream exportBlankDoc() throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
-
-        try {
-            replaceHeaderText(doc);
-            replacePlaceDateText(doc);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }
 
     void replaceHeaderText(XWPFDocument doc) throws Exception {
         replaceText(doc, "Maksātnespējas procesa administrators /administratorName AdministratorSurname/ (amata apliecības Nr. /sertificateNumber/)",
@@ -61,32 +48,12 @@ public class TemplateService {
                         ", e-Adrese: " + administratorService.findAdministratorById(2L).getAdminE_address());
     }
 
-    private void replacePlaceDateText(XWPFDocument doc) throws Exception {
+    void replacePlaceDateText(XWPFDocument doc) throws Exception {
         LocalDate date = LocalDate.now();
         replaceText(doc,"Place, Date.",
                 administratorService.findAdministratorById(2L).getPlace() + ", " + date);
     }
-    public ByteArrayOutputStream exportWordDoc() throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
-
-        try {
-
-            replaceHeaderText(doc);
-            replacePlaceDateText(doc);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }
 
 
     XWPFDocument replaceText(XWPFDocument doc, String originalText, String updatedText) {
@@ -109,123 +76,9 @@ public class TemplateService {
             }
         }
     }
-    public ByteArrayOutputStream exportCostsOfInsolvencyProceedings(Long processId) {
-
-        try {
-            CostsOfInsolvencyProceedingsDoc document = new CostsOfInsolvencyProceedingsDoc(insolvencyProcessService.findInsolvencyProcessById(processId));
-            XWPFDocument doc  = document.createFilledDocument();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            doc.write(out);
-            out.close();
-            doc.close();
-            return out;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
-    /*------------------------------------------------*////
-
-    public ByteArrayOutputStream exportAdminBlank(Long id) throws IOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
-        XWPFDocument adminBlank = new XWPFDocument(inputStream);
-
-        try {
-
-            this.replaceHeaderText(adminBlank);
-            replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
-            replaceText(adminBlank, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
-            replaceText(adminBlank, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
-            replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
-
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        adminBlank.write(out);
-        out.close();
-        adminBlank.close();
-
-        return out;
-    }
-
-    public ByteArrayOutputStream exportCompanyBlank(Long id) throws IOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
-
-        try {
-
-            replaceHeaderText(doc);
-            replaceCompanyParagraphText(doc, id);
-            replaceIeceltaIeceltsParagraphText(doc,id);
-           replacePlaceDateText(doc);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }
-
-
-   public ByteArrayOutputStream exportAuthorityBlank(Long id, int number) throws IOException {
-       InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
-       XWPFDocument doc = new XWPFDocument(inputStream);
-
-       try {
-           replaceHeaderText(doc);
-           replaceCompanyParagraphText(doc, id);
-           replacePlaceDateText(doc);
-           replaceIeceltaIeceltsParagraphText(doc,id);
-           replaceAuthorityDocNameText(doc);
-
-           switch (number){
-               case 1:
-                   replaceAuthorityMainText1(doc);
-                   break;
-               case 2:
-                   replaceAuthorityMainText2(doc);
-                   break;
-               case 3:
-                   replaceAuthorityMainText3(doc, id);
-                   break;
-               case 4:
-                   replaceAuthorityMainText4(doc, id);
-                   break;
-               case 5:
-                   replaceAuthorityMainText5(doc, id);
-                   break;
-               case 6:
-                   replaceAuthorityMainText6(doc, id);
-                   break;
-               default:
-                   break;
-           }
-
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-
-       ByteArrayOutputStream out = new ByteArrayOutputStream();
-       doc.write(out);
-       out.close();
-       doc.close();
-
-       return out;
-   }
-
-    private void replaceCompanyParagraphText(XWPFDocument doc, Long id) throws Exception{
+    void replaceCompanyParagraphText(XWPFDocument doc, Long id) throws Exception{
         replaceText(doc,"companyName",
                       ""+ insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
         replaceText(doc,"registrationNumber",
@@ -247,7 +100,7 @@ public class TemplateService {
 
 
 
-    private void replaceIeceltaIeceltsParagraphText(XWPFDocument doc, Long id) throws Exception {
+    void replaceIeceltaIeceltsParagraphText(XWPFDocument doc, Long id) throws Exception {
         InsolvencyProcess process = insolvencyProcessService.findInsolvencyProcessById(id);
 
              boolean isFemale = process.getAdmin().getAdminGender().equals(Gender.FEMALE);
@@ -261,12 +114,12 @@ public class TemplateService {
 
     }
 
-    private void replaceAuthorityDocNameText (XWPFDocument doc) throws Exception {
+    void replaceAuthorityDocNameText(XWPFDocument doc) throws Exception {
         replaceText(doc, "Document Name (Dokumenta nosaukums)",
                 "Informācijas pieprasījums");
     }
 
-  private void replaceAuthorityMainText1 (XWPFDocument doc) throws Exception{
+  void replaceAuthorityMainText1(XWPFDocument doc) throws Exception{
 
       replaceText(doc,"Nosaukums (recipientName)",
               "Uzņēmumu reģistrs, ");
@@ -291,7 +144,7 @@ public class TemplateService {
                             "2.7. Vai Sabiedrībai ir/ ir bijušas reģistrētas filiāles un ja ir tad kāda?\n" );
      }
 
-    private void replaceAuthorityMainText2 (XWPFDocument doc) throws Exception{
+    void replaceAuthorityMainText2(XWPFDocument doc) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
                 "VAS “Latvijas Jūras administrācija” kuģu reģistrs ");
@@ -307,7 +160,7 @@ public class TemplateService {
                         "līdz kuram brīdim reģistrēti, un kādi liegumi - hipotēkas un apgrūtinājumi šobrīd ir vai ir bijuši reģistrēti.");
     }
 
-    private void replaceAuthorityMainText3 (XWPFDocument doc, Long id) throws Exception{
+    void replaceAuthorityMainText3(XWPFDocument doc, Long id) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
                 "Lauksaimniecības datu centrs");
@@ -321,7 +174,7 @@ public class TemplateService {
                         ", vienotais reģistrācijas numurs " + insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber() +
                         " īpašumā un/vai valdījumā"));
     }
-    private void replaceAuthorityMainText4 (XWPFDocument doc, Long id) throws Exception{
+    void replaceAuthorityMainText4(XWPFDocument doc, Long id) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
                 "Valsts tehniskās uzraudzības aģentūra");
@@ -335,7 +188,7 @@ public class TemplateService {
     }
 
 
-    private void replaceAuthorityMainText5 (XWPFDocument doc, Long id) throws Exception{
+    void replaceAuthorityMainText5(XWPFDocument doc, Long id) throws Exception{
         replaceText(doc,"Nosaukums (recipientName)",
                 "Valsts Zemes dienests ");
         replaceText(doc,"Reģistrācijas Nr.(Registration No)",
@@ -348,7 +201,7 @@ public class TemplateService {
                         "un bijušajiem reģistrētajiem nekustamajiem īpašumiem, kā arī par reģistrētajiem īpašuma apgrūtinājumiem.");
     }
 
-    private void replaceAuthorityMainText6 (XWPFDocument doc, Long id) throws Exception{
+    void replaceAuthorityMainText6(XWPFDocument doc, Long id) throws Exception{
         replaceText(doc,"TEXT",
                 "TEXT: Saskaņā ar Maksātnespējas likuma 65.pantu Administratora pienākumi pēc juridiskās personas maksātnespējas procesa pasludināšanas – pirmās daļas 12. punktu - pēc juridiskās personas maksātnespējas procesa pasludināšanas administrators iesniedz tiesu izpildītājam pieteikumu par izpildu lietvedības izbeigšanu lietās par piespriesto, bet no parādnieka nepiedzīto summu piedziņu un lietās par saistību izpildīšanu tiesas ceļā.\n" +
                         "Maksātnespējas likuma 63. panta Juridiskās personas maksātnespējas procesa pasludināšanas sekas otrā daļa nosaka, ka, ja sprieduma izpildes lietvedība uzsākta pirms juridiskās personas maksātnespējas procesa pasludināšanas, tā ir izbeidzama Civilprocesa likumā noteiktajā kārtībā. Pēc juridiskās personas maksātnespējas procesa pasludināšanas kreditori piesaka prasījumus administratoram šajā likumā noteiktajā kārtībā.\n" +

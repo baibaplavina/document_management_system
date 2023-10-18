@@ -1,12 +1,13 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.insolvencyprocess;
 
+import com.example.documentmanagement.administrator.AdministratorRepository;
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class InsolvencyProcessService {
@@ -82,27 +83,6 @@ public class InsolvencyProcessService {
 
         }
 
-    public InsolvencyProcess editInsolvencyProcessAssets(InsolvencyProcess process) throws Exception {
-
-        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
-
-            if (currentProcess.getId().equals(process.getId())) {
-
-                currentProcess.setAssetsList(process.getAssetsList());
-                currentProcess.setAssetsListCosts(process.getAssetsListCosts());
-                currentProcess.setAssetsTotalCosts(process.getAssetsTotalCosts());
-                currentProcess.setSecuredAssets(process.getSecuredAssets());
-
-                insolvencyProcessRepository.save(currentProcess);
-                return currentProcess;
-            }
-        }
-
-        throw new Exception("process not found by id!");
-
-    }
-
-
     public InsolvencyProcess findInsolvencyProcessById(Long id) throws Exception {
 
         for (InsolvencyProcess process : insolvencyProcessRepository.findAll()) {
@@ -111,61 +91,6 @@ public class InsolvencyProcessService {
         }
         throw new Exception("Insolvency process not found");
 
-    }
-
-    public InsolvencyProcess editInsolvencyProcessCosts(InsolvencyProcess process) throws Exception {
-        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
-
-            if (currentProcess.getId().equals(process.getId())) {
-                currentProcess.setNeikilataMantaSum(process.getNeikilataMantaSum());
-                insolvencyProcessRepository.save(currentProcess);
-                return currentProcess;
-            }
-        }
-
-        throw new Exception("process not found by id!");
-    }
-
-
-    public InsolvencyProcess editInsolvencyProcessMoney(InsolvencyProcess process) throws Exception {
-        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
-
-            if (currentProcess.getId().equals(process.getId())) {
-                currentProcess.setProcessMoney(process.getProcessMoney());
-                insolvencyProcessRepository.save(currentProcess);
-                return currentProcess;
-            }
-        }
-
-        throw new Exception("process not found by id!");
-    }
-
-    public InsolvencyProcess editInsolvencyProcessExpenses(InsolvencyProcess process) throws Exception {
-        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
-
-            if (currentProcess.getId().equals(process.getId())) {
-                currentProcess.setTotalExpenses(process.getTotalExpenses());
-                currentProcess.setAdminSalary(process.getAdminSalary());
-                insolvencyProcessRepository.save(currentProcess);
-                return currentProcess;
-            }
-        }
-
-        throw new Exception("process not found by id!");
-    }
-
-    public InsolvencyProcess editInsolvencyProcessCreditors(InsolvencyProcess process) throws Exception {
-        for (InsolvencyProcess currentProcess : insolvencyProcessRepository.findAll()) {
-
-            if (currentProcess.getId().equals(process.getId())) {
-                currentProcess.setCreditorsList(process.getCreditorsList());
-
-                insolvencyProcessRepository.save(currentProcess);
-                return currentProcess;
-            }
-        }
-
-        throw new Exception("process not found by id!");
     }
 
 }

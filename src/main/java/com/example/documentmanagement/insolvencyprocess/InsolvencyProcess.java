@@ -1,5 +1,7 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.insolvencyprocess;
 
+import com.example.documentmanagement.administrator.Administrator;
+import com.example.documentmanagement.otherExpenses.OtherExpenses;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -35,15 +38,36 @@ public class InsolvencyProcess {
     @ManyToOne
     @JoinColumn(name = "adminId", nullable = false)
     private Administrator admin;
-    private String assetsList;
-    private String assetsListCosts;
-    private String assetsTotalCosts;
+    @OneToMany
+    List<OtherExpenses> otherExpenses;
+    private double CreditorsRequest;
+    private String assetsList_iekilata;
+    private String assetsListCosts_iekilata;
+    private String assetsTotalCosts_iekilata;
+
+    private String assetsList_neiekilata;
+    private String assetsListCosts_neiekilata;
+    private String assetsTotalCosts_neiekilata;
+
     private double neikilataMantaSum;
     private String processMoney;
     private double totalExpenses;
     private double adminSalary;
     private String creditorsList;
     private Boolean securedAssets;
+    private String IzmaksuRasanasDatumsType1;
+    private String SegtaSummaType1;
+    private String SegsanasDatumsType1;
+    private String NavApmaksatasType1;
+    private String IzmaksuRasanasDatumsType2;
+    private String SegtaSummaType2;
+    private String SegsanasDatumsType2;
+    private String NavApmaksatasType2;
+    private String IzmaksuRasanasDatumsType3;
+    private String SegtaSummaType3;
+    private String SegsanasDatumsType3;
+    private String NavApmaksatasType3;
+
     private LocalDate caseClosingDate;
 
     @PrePersist

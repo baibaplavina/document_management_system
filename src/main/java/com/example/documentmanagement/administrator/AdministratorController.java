@@ -1,4 +1,4 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.administrator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

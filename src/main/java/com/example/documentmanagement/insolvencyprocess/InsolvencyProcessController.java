@@ -1,5 +1,8 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.insolvencyprocess;
 
+import com.example.documentmanagement.administrator.Administrator;
+import com.example.documentmanagement.administrator.AdministratorRepository;
+import com.example.documentmanagement.administrator.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

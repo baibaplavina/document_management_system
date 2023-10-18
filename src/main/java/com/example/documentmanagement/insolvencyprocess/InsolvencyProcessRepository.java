@@ -1,8 +1,6 @@
-package com.example.documentmanagement;
+package com.example.documentmanagement.insolvencyprocess;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
