@@ -39,5 +39,15 @@ public class Administrator {
     private List<InsolvencyProcess> listOfProcesses;
     @Column(name = "place")
     private String place;
+    @PrePersist
+    public void beforeSave() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+
+
+    }
+    @PostPersist
+    public void upDating(){
+        this.lastUpdated= new Timestamp(System.currentTimeMillis());
+    }
 
 }
