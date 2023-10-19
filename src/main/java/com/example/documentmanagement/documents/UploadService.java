@@ -2,6 +2,7 @@ package com.example.documentmanagement.documents;
 
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessRepository;
+import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessService;
 import com.example.documentmanagement.otherExpenses.OtherExpenses;
 import com.example.documentmanagement.otherExpenses.OtherExpensesService;
 import org.apache.poi.ss.usermodel.*;
@@ -9,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UploadService {
 
 
     private final InsolvencyProcessRepository insolvencyProcessRepository;
+
     private final OtherExpensesService otherExpensesService;
 
     @Autowired
@@ -22,6 +26,7 @@ public class UploadService {
 
         this.insolvencyProcessRepository = insolvencyProcessRepository;
         this.otherExpensesService = otherExpensesService;
+
     }
 
     public void handleCreditorsUpload(InputStream stream, Long processId) throws Exception {
@@ -146,6 +151,11 @@ public class UploadService {
         String segsanasDatumsType3 = "-";
         String navApmaksatasType3 = "-";
 
+        String izmaksuRasanasDatumsType4 = "-";
+        String segtaSummaType4 = "-";
+        String segsanasDatumsType4 = "-";
+        String navApmaksatasType4 = "-";
+
         String assetType = "";
         String expName = "";
         String sanemejs = "";
@@ -154,13 +164,19 @@ public class UploadService {
         double sum = 0;
         double unpaid = 0;
 
+        List<OtherExpenses> expensesList = new ArrayList<>();
+        InsolvencyProcess pro = insolvencyProcessRepository.findById(processId).get();
+        pro.setOtherExpenses(new ArrayList<>());
+        insolvencyProcessRepository.save(pro);
+        otherExpensesService.deleteAllByProcess(insolvencyProcessRepository.findById(processId).get());
+
         if (colIzmaksasRadusasNo > -1 && colPozicijas > -1 && colIzmaksuSum > -1) {
 
-            for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+            for (int i = 1; i <= dataSheet.getLastRowNum()-2; i++) {
                 String cellIsmaksasRadusas = dataSheet.getRow(i).getCell(colIzmaksasRadusasNo).getStringCellValue();
                 String cellPozicijas = dataSheet.getRow(i).getCell(colPozicijas).getStringCellValue();
                 String stringExpensesValue = dataSheet.getRow(i).getCell(colIzmaksuSum).getStringCellValue();
-
+                String cellSniegtaisPakalpojums = dataSheet.getRow(i).getCell(colSniegtaisPakalpojums).getStringCellValue();
 
                 if (cellIsmaksasRadusas.equals("Neieķīlātā manta") && !cellPozicijas.contains("Administratora")) {
                     double izmaksasTotalDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
@@ -215,8 +231,18 @@ public class UploadService {
                     }
                 }
 
-                OtherExpenses otherExpenses = new OtherExpenses();
+                if (cellIsmaksasRadusas.equals("Ieķīlātā manta") &&
+                        cellPozicijas.contains("MPA atlīdzība") &&
+                        cellSniegtaisPakalpojums.equals("Izsoles organizēšana MNL 169. panta trešās daļas 4. punktu")) {
 
+                    izmaksuRasanasDatumsType4 = dataSheet.getRow(i).getCell(colIzmaksuDatums).getStringCellValue();
+                    segtaSummaType4 = dataSheet.getRow(i).getCell(colSegtaSumma).getStringCellValue();
+                    segsanasDatumsType4 = dataSheet.getRow(i).getCell(colSegsanasDatums).getStringCellValue();
+                    navApmaksatasType4 = dataSheet.getRow(i).getCell(colNavApmaksatas).getStringCellValue();
+
+                }
+
+                OtherExpenses otherExpenses = new OtherExpenses();
 
                 otherExpenses.setName(expName);
                 otherExpenses.setAssetType(assetType);
@@ -226,6 +252,8 @@ public class UploadService {
                 otherExpenses.setCreatingDate(creatingDate);
                 otherExpenses.setOtherDate(otherDate);
                 otherExpenses.setInsolvencyProcess(insolvencyProcessRepository.findById(processId).get());
+
+                expensesList.add(otherExpenses);
                 otherExpensesService.createOtherExpenses(otherExpenses);
 
             }
@@ -234,28 +262,34 @@ public class UploadService {
 
         InsolvencyProcess insolvencyProcess = insolvencyProcessRepository.findById(processId).get();
 
+        insolvencyProcess.setOtherExpenses(new ArrayList<>());
+        insolvencyProcess.setOtherExpenses(expensesList);
+
         insolvencyProcess.setTotalExpenses(izmaksasTotal);
         insolvencyProcess.setAdminSalary(administratorSalary);
 
         insolvencyProcess.setIzmaksuRasanasDatumsType1(izmaksuRasanasDatumsType1);
         insolvencyProcess.setIzmaksuRasanasDatumsType2(izmaksuRasanasDatumsType2);
         insolvencyProcess.setIzmaksuRasanasDatumsType3(izmaksuRasanasDatumsType3);
-
+        insolvencyProcess.setIzmaksuRasanasDatumsType4(izmaksuRasanasDatumsType4);
 
 
         insolvencyProcess.setSegtaSummaType1(segtaSummaType1);
         insolvencyProcess.setSegtaSummaType2(segtaSummaType2);
         insolvencyProcess.setSegtaSummaType3(segtaSummaType3);
+        insolvencyProcess.setSegtaSummaType4(segtaSummaType4);
 
 
         insolvencyProcess.setSegsanasDatumsType1(segsanasDatumsType1);
         insolvencyProcess.setSegsanasDatumsType2(segsanasDatumsType2);
         insolvencyProcess.setSegsanasDatumsType3(segsanasDatumsType3);
+        insolvencyProcess.setSegsanasDatumsType4(segsanasDatumsType4);
 
 
         insolvencyProcess.setNavApmaksatasType1(navApmaksatasType1);
         insolvencyProcess.setNavApmaksatasType2(navApmaksatasType2);
         insolvencyProcess.setNavApmaksatasType3(navApmaksatasType3);
+        insolvencyProcess.setNavApmaksatasType4(navApmaksatasType4);
 
         insolvencyProcessRepository.save(insolvencyProcess);
 

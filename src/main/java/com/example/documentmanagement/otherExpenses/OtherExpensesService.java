@@ -21,4 +21,14 @@ public class OtherExpensesService {
     public List<OtherExpenses> findUnsecuredAssetsByProcess(InsolvencyProcess insolvencyProcess) {
         return otherExpensesRepository.findByInsolvencyProcessAndAssetType(insolvencyProcess, "Neieķīlātā manta");
     }
+    public void deleteAllByProcess(InsolvencyProcess insolvencyProcess) {
+        if(!otherExpensesRepository.findByInsolvencyProcess(insolvencyProcess).isEmpty()) {
+       List<OtherExpenses> otherExpenses = otherExpensesRepository.findByInsolvencyProcess(insolvencyProcess);
+       for (OtherExpenses exp : otherExpenses) {
+           if(exp.getInsolvencyProcess() == insolvencyProcess) {
+               otherExpensesRepository.delete(exp);
+           }
+       }
+       }
+    }
 }

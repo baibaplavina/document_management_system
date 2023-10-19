@@ -9,7 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -95,4 +97,12 @@ public class InsolvencyProcessService {
 
     }
 
+    public List<InsolvencyProcess> findClosedProcesses(Long id) throws Exception {
+
+       return insolvencyProcessRepository.findInsolvencyProcessesByCaseClosingDateBefore(LocalDate.now());
+    }
+    public List<InsolvencyProcess> findActiveProcesses(Long id) throws Exception {
+
+        return insolvencyProcessRepository.findInsolvencyProcessesByCaseClosingDateAfter(LocalDate.now());
+    }
 }

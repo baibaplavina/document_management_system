@@ -67,6 +67,10 @@ public class InsolvencyProcess {
     private String SegtaSummaType3;
     private String SegsanasDatumsType3;
     private String NavApmaksatasType3;
+    private String IzmaksuRasanasDatumsType4;
+    private String SegtaSummaType4;
+    private String SegsanasDatumsType4;
+    private String NavApmaksatasType4;
 
     private LocalDate caseClosingDate;
 

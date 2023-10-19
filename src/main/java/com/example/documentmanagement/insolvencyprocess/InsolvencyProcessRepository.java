@@ -10,5 +10,7 @@ import java.util.List;
 public interface InsolvencyProcessRepository extends JpaRepository<InsolvencyProcess, Long>  {
 
    List<InsolvencyProcess> findByCaseClosingDate(LocalDate date);
+   List<InsolvencyProcess> findInsolvencyProcessesByCaseClosingDateBefore(LocalDate now);
 
+   List<InsolvencyProcess> findInsolvencyProcessesByCaseClosingDateAfter(LocalDate now);
 }
