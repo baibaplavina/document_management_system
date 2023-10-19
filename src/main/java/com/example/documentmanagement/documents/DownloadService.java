@@ -28,14 +28,15 @@ public class DownloadService {
     }
 
 
-    public ByteArrayOutputStream exportBlankDoc() throws IOException {
+   /*public ByteArrayOutputStream exportBlankDoc(Long id) throws IOException {
 
         InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
-            templateService.replaceHeaderText(doc);
-            templateService.replacePlaceDateText(doc);
+            templateService.replaceCompanyAdminHeaderText(doc,id);
+            templateService.replacePlaceDateCompanyBlankText(doc,id);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,7 +47,7 @@ public class DownloadService {
         doc.close();
 
         return out;
-    }
+    }*/
 
     public ByteArrayOutputStream exportWordDoc() throws IOException {
 
@@ -85,35 +86,29 @@ public class DownloadService {
         }
     }
 
-    /*------------------------------------------------*////
-
     public ByteArrayOutputStream exportAdminBlank(Long id) throws IOException {
 
         InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
-        XWPFDocument adminBlank = new XWPFDocument(inputStream);
+        XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
 
-            templateService.replaceHeaderText(adminBlank);
-            templateService.replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
-            templateService.replaceText(adminBlank, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
-            templateService.replaceText(adminBlank, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
-            templateService.replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
-
-
+            templateService.replaceCompanyAdminHeaderText(doc,id);
+            templateService.replaceCompanyParagraphText(doc, id);
+          //  templateService.replaceIeceltaIeceltsParagraphText(doc,id);
+            templateService.replacePlaceDateCompanyBlankText(doc, id);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        adminBlank.write(out);
+        doc.write(out);
         out.close();
-        adminBlank.close();
+        doc.close();
 
         return out;
     }
-
     public ByteArrayOutputStream exportCompanyBlank(Long id) throws IOException {
 
         InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
@@ -121,10 +116,10 @@ public class DownloadService {
 
         try {
 
-            templateService.replaceHeaderText(doc);
+            templateService.replaceCompanyAdminHeaderText(doc,id);
             templateService.replaceCompanyParagraphText(doc, id);
             templateService.replaceIeceltaIeceltsParagraphText(doc,id);
-            templateService.replacePlaceDateText(doc);
+            templateService.replacePlaceDateCompanyBlankText(doc, id);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -144,14 +139,15 @@ public class DownloadService {
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
-            templateService.replaceHeaderText(doc);
+            templateService.replaceCompanyAdminHeaderText(doc,id);
             templateService.replaceCompanyParagraphText(doc, id);
-            templateService.replacePlaceDateText(doc);
+            templateService.replacePlaceDateCompanyBlankText(doc, id);
             templateService.replaceIeceltaIeceltsParagraphText(doc,id);
             templateService.replaceAuthorityDocNameText(doc);
 
             switch (number){
                 case 1:
+                    templateService.replaceAuthorityRecipientText1(doc);
                     templateService.replaceAuthorityMainText1(doc);
                     break;
                 case 2:
@@ -167,6 +163,7 @@ public class DownloadService {
                     templateService.replaceAuthorityMainText5(doc, id);
                     break;
                 case 6:
+                    templateService.replaceAuthorityRecipientText6(doc, id);
                     templateService.replaceAuthorityMainText6(doc, id);
                     break;
                 default:
