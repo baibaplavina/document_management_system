@@ -39,29 +39,6 @@ public class TemplateService {
         this.otherExpensesService = otherExpensesService;
     }
 
-// Vai tas vairāk nav jaunajā versijā? <<<<<<< HEAD:src/main/java/com/example/documentmanagement/TemplateService.java
-
-    public ByteArrayOutputStream exportBlankDoc() throws IOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
-
-        try {
-            replaceHeaderText(doc);
-            replacePlaceDateText(doc);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }
-
-// Manā doc tas nokomentēts. >>>>>>> 491efbe46be57641a1afda847d3aa45fb013887b:src/main/java/com/example/documentmanagement/documents/TemplateService.java
 
   void replaceHeaderText(XWPFDocument doc) throws Exception {
         replaceText(doc, "administratorName administratorSurname/ (amata apliecības Nr. /sertificateNumber/)",
@@ -79,12 +56,13 @@ public class TemplateService {
                         ", e-Adrese: " + administratorService.findAdministratorById(2L).getAdminE_address());
     }
 
-// Todo: why no usages?
-   private void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) throws Exception {
+
+   void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) throws Exception {
        InsolvencyProcess insolvencyProcess = insolvencyProcessService.findInsolvencyProcessById(id);
-       replaceText(doc,"administratorName administratorSurname",
-               "" + insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getAdminName() + " " +
-                       insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getAdminSurname());
+       replaceText(doc,"administratorName",
+               insolvencyProcess.getAdmin().getAdminName());
+       replaceText(doc,"administratorSurname",
+               insolvencyProcess.getAdmin().getAdminSurname());
          replaceText(doc, "certificateNumber",
                insolvencyProcess.getAdmin().getCertificateNumber());
         replaceText(doc, "administratorAddress",
@@ -95,16 +73,13 @@ public class TemplateService {
             insolvencyProcess.getAdmin().getAdminEmail());
         replaceText(doc, "administratorEAddress",
             " " + insolvencyProcess.getAdmin().getAdminE_address());
-     /*  replaceText(doc, "InsolvencyCompanyName",
-            insolvencyProcess.getCompanyName());*/
         replaceText(doc, "companyName",
             insolvencyProcess.getCompanyName());
        replaceText(doc, "registrationNumber",
             insolvencyProcess.getRegistrationNumber());
 }
 
-    // Todo: why no usages?
-    private void replacePlaceDateCompanyBlankText(XWPFDocument doc, Long id) throws Exception {
+       void replacePlaceDateCompanyBlankText(XWPFDocument doc, Long id) throws Exception {
         InsolvencyProcess insolvencyProcess = insolvencyProcessService.findInsolvencyProcessById(id);
        replaceText(doc,"Place",
                 "" + insolvencyProcessService.findInsolvencyProcessById(id).getAdmin().getPlace());
@@ -118,27 +93,7 @@ public class TemplateService {
                 insolvencyProcessService.findInsolvencyProcessById(2L).getAdmin().getPlace() + ", " + date);
     }
 
-    //Disappear method : public ByteArrayOutputStream exportWordDoc() throws IOException {
-// <<<<<<< HEAD:src/main/java/com/example/documentmanagement/TemplateService.java
-      /*  InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
 
-        try {
-
-          //  replaceHeaderText(doc);
-            replacePlaceDateText(doc);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }*/
 
     XWPFDocument replaceText(XWPFDocument doc, String originalText, String updatedText) {
         replaceTextInParagraphs(doc.getParagraphs(), originalText, updatedText);
@@ -161,112 +116,13 @@ public class TemplateService {
         }
     }
 
-// Todo This is not in my doc in this place
-  /*  public ByteArrayOutputStream exportAdminBlank(Long id) throws IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/adminBlank.docx");
-        XWPFDocument adminBlank = new XWPFDocument(inputStream);
+       void replaceCompanyParagraphText(XWPFDocument doc, Long id) throws Exception{
 
-        try {
-
-        //    this.replaceHeaderText(adminBlank);
-            replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
-            replaceText(adminBlank, "Maksātnespējīgā companyName", "Maksātnespējīgā " +  insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
-            replaceText(adminBlank, "vienotais reģistrācijas Nr. registrationNumber", "vienotais reģistrācijas Nr. " +  insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
-            replaceText(adminBlank, "Place", administratorService.findAdministratorById(2L).getAdminAddress());
-
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        adminBlank.write(out);
-        out.close();
-        adminBlank.close();
-
-        return out;
-    }*/
-
-    //Todo Why not usages?
-    public ByteArrayOutputStream exportCompanyBlank(Long id) throws IOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
-
-        try {
-           replaceCompanyAdminHeaderText(doc, id);
-            replaceCompanyParagraphText(doc, id);
-            replaceIeceltaIeceltsParagraphText(doc,id);
-            replacePlaceDateCompanyBlankText(doc, id);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }
-
-   public ByteArrayOutputStream exportAuthorityBlank(Long id, int number) throws IOException {
-       InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
-       XWPFDocument doc = new XWPFDocument(inputStream);
-
-       try {
-         replaceCompanyAdminHeaderText(doc,id);
-          replaceCompanyParagraphText(doc, id);
-          replacePlaceDateCompanyBlankText(doc, id);
-          replaceIeceltaIeceltsParagraphText(doc,id);
-          replaceAuthorityDocNameText(doc);
-
-           switch (number){
-               case 1:
-                   replaceAuthorityRecipientText1(doc);
-                   replaceAuthorityMainText1(doc);
-                   break;
-               case 2:
-                   replaceAuthorityMainText2(doc);
-                   break;
-               case 3:
-                   replaceAuthorityMainText3(doc, id);
-                   break;
-               case 4:
-                   replaceAuthorityMainText4(doc, id);
-                   break;
-               case 5:
-                   replaceAuthorityMainText5(doc, id);
-                   break;
-               case 6:
-                   replaceAuthorityRecipientText6(doc, id);
-                   replaceAuthorityMainText6(doc, id);
-                   break;
-               default:
-                   break;
-           }
-
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-
-       ByteArrayOutputStream out = new ByteArrayOutputStream();
-       doc.write(out);
-       out.close();
-       doc.close();
-
-       return out;
-   }
-
-    void replaceCompanyParagraphText(XWPFDocument doc, Long id) throws Exception{
-
-        replaceText(doc,"companyName",
+       /* replaceText(doc,"companyName",
         ""+insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
         replaceText(doc,"registrationNumber",
-        ""+insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());
+        ""+insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());*/
         replaceText(doc,"courtName",
         ""+insolvencyProcessService.findInsolvencyProcessById(id).getCourtName());
         replaceText(doc,"courtDesitionDate",
@@ -304,7 +160,7 @@ public class TemplateService {
         return paragraphPosition;
     }
 
-        private void replaceAuthorityRecipientText1 (XWPFDocument doc) throws Exception {
+        void replaceAuthorityRecipientText1(XWPFDocument doc) throws Exception {
 
            replaceText(doc, "Nosaukums (recipientName)",
                    "Uzņēmumu reģistrs, ");
@@ -395,11 +251,11 @@ public class TemplateService {
                 "E-pasts: kac.riga@vzd.gov.lv");
         replaceText(doc,"TEXT",
                 "Lūdzu sniegt sekojošu aktuālo un vēsturisko informāciju par " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
-                        insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber()+ "īpašumā esošajiem " +
-                        "un bijušajiem reģistrētajiem nekustamajiem īpašumiem, kā arī par reģistrētajiem īpašuma apgrūtinājumiem.");
+                       ", reģistrācijas numurs: " + insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber()+ "īpašumā esošajiem " +
+                        " un bijušajiem reģistrētajiem nekustamajiem īpašumiem, kā arī par reģistrētajiem īpašuma apgrūtinājumiem.");
     }
 
-    private void replaceAuthorityRecipientText6 (XWPFDocument doc, Long id) throws Exception {
+    void replaceAuthorityRecipientText6(XWPFDocument doc, Long id) throws Exception {
         replaceText(doc, "Nosaukums (recipientName)",
                 "Zvērinātam tiesu izpildītājam _______________, ");
         replaceText(doc, "Reģistrācijas Nr.(Registration No)",
@@ -430,18 +286,17 @@ public class TemplateService {
             mantas glabātājam par pienākumu nodot administratoram mantu, kuras pārdošana nav uzsākta.;
                     
             Ņemot vērā iepriekš minēto, lūdzu:;
-            1.\tIzbeigt visas uzsāktās izpildu lietvedības pret /Insolvent company name/, vienotais reģistrācijas numurs 
-            /company number/.;
-            2.\tAtcelt visus uzliktos liegumus, atzīmes, kā arī cita veida aizliegumus, kas uzlikti /Insolvent company name/, 
-            vienotais reģistrācijas numurs /company number/, mantai un norēķinu kontiem.;
+            1.\tIzbeigt visas uzsāktās izpildu lietvedības pret companyName, vienotais reģistrācijas numurs:   
+            registrationNumber.;
+            2.\tAtcelt visus uzliktos liegumus, atzīmes, kā arī cita veida aizliegumus, kas uzlikti companyName, vienotais reģistrācijas numurs:   
+            registrationNumber, mantai un norēķinu kontiem.;
             3.\tAtcelt pieņemtos piespiedu izpildes līdzekļus.;
             4.\tSniegt informāciju vai izpildu lietu ietvaros ir saņemti naudas līdzekļi, cik, kādā veidā un kādā apmērā;
             5.\tSniegt informāciju kādā apmērā un kad segts piedzinēja prasījums?;
-            6.\tAtsūtīt sprieduma un/vai izpildu raksta kopiju, uz kura pamata uzsākta izpildu lietvedība pret /Insolvent 
-            company name/, vienotais reģistrācijas numurs /company number/.;
+            6.\tAtsūtīt sprieduma un/vai izpildu raksta kopiju, uz kura pamata uzsākta izpildu lietvedība pret companyName, vienotais reģistrācijas numurs:   
+            registrationNumber.;
             7.\tNorādīt vai šobrīd ir piedziņas procesā saņemtie Piedzinējam neizmaksāti naudas līdzekļi? Ja ir, tad tos 
-            lūdzu neizmaksāt Piedzinējam, bet pārskaitīt uz maksātnespējas procesam atvērto norēķinu kontu – /private String 
-            accountNo/ , izmaksai maksātnespējas procesā kreditoriem Maksātnespējas procesa noteiktajā kārtībā.
+            lūdzu neizmaksāt Piedzinējam, bet sniegt informāciju par summas apmēru ar mērķi atgūt tos un veltīt izmaksai maksātnespējas procesā kreditoriem Maksātnespējas procesa noteiktajā kārtībā.
                """;
 
        List<String> ZTItextList = Arrays.asList(ZTItextContent.split(";"));
@@ -460,7 +315,6 @@ public class TemplateService {
         replaceText(doc, "TEXT", "");
 
     }
-
 
    public void styleReplacedText(XWPFParagraph new_par, XWPFRun run) {
         run.setFontFamily("Times New Roman");

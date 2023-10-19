@@ -26,7 +26,7 @@
         <h3> Push the button of the document you want to create:</h3>
         <div class="container mt-2 mb-2">
 
-                <a th:href="@{|/download-blank|}">
+                <a th:href="${'/download-blank/' + process.getId()}">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
             </a>
                 <a th:href="${'/download-company-blank/' + process.getId()}">

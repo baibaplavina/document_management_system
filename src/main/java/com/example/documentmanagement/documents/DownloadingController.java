@@ -5,6 +5,8 @@ import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessService
 import com.example.documentmanagement.otherExpenses.OtherExpensesService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.HWPFDocumentCore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,22 +22,19 @@ public class DownloadingController {
     private AdministratorService administratorService;
     @Autowired
     private InsolvencyProcessService insolvencyProcessService;
-
     @Autowired
     private TemplateService templateService;
     @Autowired
     private DownloadService downloadService;
-
     @Autowired
     private OtherExpensesService otherExpensesService;
 
-  /*  @GetMapping("/download-blank")
-    public void downloadBlank(Model model, HttpServletResponse response) throws IOException {
+  @GetMapping("/download-blank/{id}")
+    public void downloadAdminBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
-        DownloadService templateFirst = new DownloadService(administratorService, insolvencyProcessService, otherExpensesService, templateService);
+        DownloadService adminBlank = new DownloadService(administratorService, insolvencyProcessService, otherExpensesService, templateService);
 
-        byte[] xwpfDocumentBytes = templateFirst.exportBlankDoc().toByteArray();
-
+        byte[] xwpfDocumentBytes = adminBlank.exportAdminBlank(id).toByteArray();
 
         response.setContentType("application/msword");
         String headerKey = "Content-Disposition";
@@ -46,9 +45,10 @@ public class DownloadingController {
         outputStream.write(xwpfDocumentBytes);
         outputStream.close();
 
-    }*/
+    }
 
-    @GetMapping("/download-filled")
+    //Do we need this?
+  /*  @GetMapping("/download-filled")
     public void downloadFilledFile(Model model, HttpServletResponse response) throws IOException {
 
        // byte[] xwpfDocumentBytes = templateService.exportWordDoc().toByteArray();
@@ -64,7 +64,7 @@ public class DownloadingController {
         outputStream.write(xwpfDocumentBytes);
         outputStream.close();
 
-    }
+    }*/
 
     @GetMapping("/download-tables/{id}")
     public void downloadTables(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
@@ -83,7 +83,7 @@ public class DownloadingController {
         outputStream.close();
 
     }
-    //    --------------------------------------------------------------------------
+
     @GetMapping("/download-company-blank/{id}")
     public void downloadCompanyBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
