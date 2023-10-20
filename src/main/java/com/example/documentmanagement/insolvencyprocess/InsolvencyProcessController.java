@@ -84,31 +84,14 @@ public class InsolvencyProcessController {
                                @RequestParam(required = false) String error,
                                @PathVariable String status,
                                Model model) throws Exception {
-        if(status.equals("completed")){
 
-            List<InsolvencyProcess>processes=insolvencyProcessService.findAll().stream()
-                    .filter(process -> process.getCaseClosingDate() != null)
-                    .collect(Collectors.toList());
-            System.out.println(processes);
-
-            model.addAttribute("processList", processes);
-        } else if (status.equals("active")){
-
-            List<InsolvencyProcess>processes=insolvencyProcessService.findAll().stream()
-                    .filter(process -> process.getCaseClosingDate() == null)
-                    .collect(Collectors.toList());
-            System.out.println(processes);
-            model.addAttribute("processList", processes);
-        } else{
-
-            model.addAttribute("processList", insolvencyProcessService.findAll());
-
-        }
+        model.addAttribute("status",status);
         model.addAttribute("message", message);
         model.addAttribute("error", error);
-        return "viewProcessesList";
+        //return "viewProcessesList";
+        return findPaginated(1, "id", "asc", model);
 
-//        return findPaginated(1, "id", "asc", model);
+
     }
 
 
@@ -161,9 +144,25 @@ public class InsolvencyProcessController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDirection", sortDir.equals("asc") ? "desc" : "asc");
+        String status = model.getAttribute("status") == null ?
+                "all" :
+                (String) model.getAttribute("status");
 
-        model.addAttribute("processList", processList);
+        if(status.equals("completed")){
+            List<InsolvencyProcess>processes=insolvencyProcessService.findAll().stream()
+                    .filter(process -> process.getCaseClosingDate() != null)
+                    .collect(Collectors.toList());
+            System.out.println(processes);
 
+            model.addAttribute("processList", processes);
+        } else if (status.equals("active")) {
+
+            model.addAttribute("processList", processList.stream()
+                    .filter(process -> process.getCaseClosingDate() == null)
+                    .collect(Collectors.toList()));
+        } else{
+            model.addAttribute("processList", processList);
+        }
         return "viewProcessesList";
     }
 
