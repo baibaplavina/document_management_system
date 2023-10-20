@@ -32,3 +32,10 @@ h1 {
     0 10px 10px rgba(0,0,0,.2),
     0 20px 20px rgba(0,0,0,.3);
 }
+body{
+    background-color: whitesmoke;
+
+}
+#date{
+    text-align: right;
+}

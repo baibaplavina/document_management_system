@@ -3,6 +3,7 @@ package com.example.documentmanagement.insolvencyprocess;
 import com.example.documentmanagement.administrator.AdministratorRepository;
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -97,12 +98,13 @@ public class InsolvencyProcessService {
 
     }
 
-    public List<InsolvencyProcess> findClosedProcesses(Long id) throws Exception {
+    public List<InsolvencyProcess> findClosedProcesses() throws Exception {
 
        return insolvencyProcessRepository.findInsolvencyProcessesByCaseClosingDateBefore(LocalDate.now());
     }
-    public List<InsolvencyProcess> findActiveProcesses(Long id) throws Exception {
+    public List<InsolvencyProcess> findActiveProcesses() throws Exception {
 
-        return insolvencyProcessRepository.findInsolvencyProcessesByCaseClosingDateAfter(LocalDate.now());
+
+        return insolvencyProcessRepository.findByCaseClosingDateIsNull();
     }
 }
