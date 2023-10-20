@@ -3,9 +3,12 @@ package com.example.documentmanagement.insolvencyprocess;
 import com.example.documentmanagement.administrator.Administrator;
 import com.example.documentmanagement.otherExpenses.OtherExpenses;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
@@ -21,18 +24,22 @@ public class InsolvencyProcess {
     @Id
     @GeneratedValue()
     private Long id;
-    @Column(length=11)
-
+    @NotEmpty(message = "registration number should contain 11 numbers, please fill in.")
     private String registrationNumber;
+    @NotEmpty(message = "company name is required, please fill in.")
     private String companyName;
+    @NotEmpty(message = "Company address is required, please fill in.")
     private String companyAddress;
+    @NotEmpty(message = "court name is required, please fill in.")
     private String courtName;
-    @Column(length = 9)
+    @NotEmpty(message = "court case number is required, please fill in.")
+    @Length(min = 9, max=9)
     private String courtCaseNumber;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate courtDecisionDate;
+    @NotEmpty(message = "E-address should contain 12 symbols, please fill in.")
     private String e_address;
-    @DateTimeFormat(pattern = "mm/dd/yyyy")
+    @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Timestamp createdAt;
     private Timestamp updatedAt;
     @ManyToOne

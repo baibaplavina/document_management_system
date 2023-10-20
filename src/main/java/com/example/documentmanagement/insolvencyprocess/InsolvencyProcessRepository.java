@@ -9,8 +9,10 @@ import java.util.List;
 @Repository
 public interface InsolvencyProcessRepository extends JpaRepository<InsolvencyProcess, Long>  {
 
-   List<InsolvencyProcess> findByCaseClosingDate(LocalDate date);
    List<InsolvencyProcess> findInsolvencyProcessesByCaseClosingDateBefore(LocalDate now);
 
    List<InsolvencyProcess> findInsolvencyProcessesByCaseClosingDateAfter(LocalDate now);
+   List<InsolvencyProcess> findInsolvencyProcessByCaseClosingDate(LocalDate localDate);
+
+   List<InsolvencyProcess> findByCaseClosingDateIsNull();
 }
