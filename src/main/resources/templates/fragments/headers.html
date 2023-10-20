@@ -6,8 +6,8 @@
   <h1 class="p-2">Document Management System</h1>
   <nav class="m-3 p-2">
     <a class="btn btn-success" href="/create-administrator">Create administrator</a>
-    <a class="btn btn-success" href="/create-process">Create new company</a>
-    <a class="btn btn-success" href="/view-processes">View company list</a>
+    <a class="btn btn-success" href="/create-process">Create new process</a>
+    <a class="btn btn-success" href="/view-processes/all">View process list</a>
   </nav>
 </header>
 
@@ -17,29 +17,31 @@
   <h1 class="p-2">Document Management System</h1>
   <nav class="m-3 p-2">
     <a class="btn btn-success" href="/">Home</a>
-    <a class="btn btn-success" href="/create-process">Create new company</a>
-    <a class="btn btn-success" href="/view-processes">View company list</a>
-  </nav>
-</header>
-
-<header th:fragment="process-creator"
-        class="container-fluid text-center text-dark">
-
-  <h1 class="p-2">Document Management System</h1>
-  <nav class="m-3 p-2">
-    <a class="btn btn-success" href="/">Home</a>
-    <a class="btn btn-success" href="/create-administrator">Create administrator</a>
-    <a class="btn btn-success" href="/view-processes">View company list</a>
-  </nav>
-</header>
-<header th:fragment="view-processes"
-        class="container-fluid text-center text-dark">
-
-  <h1 class="p-2">Document Management System</h1>
-  <nav class="m-3 p-2">
-    <a class="btn btn-success" href="/">Home</a>
     <a class="btn btn-success" href="/create-process">Create new process</a>
+    <a class="btn btn-success" href="/view-processes/all">View process list</a>
+  </nav>
+</header>
+
+<header th:fragment="process"
+        class="container-fluid text-center text-dark">
+
+  <h1 class="p-2">Document Management System</h1>
+  <nav class="m-3 p-2">
+    <a class="btn btn-success" href="/">Home</a>
     <a class="btn btn-success" href="/create-administrator">Create administrator</a>
+    <a class="btn btn-success" href="/create-process">Create new process</a>
+
+  </nav>
+</header>
+<header th:fragment="create-process"
+        class="container-fluid text-center text-dark">
+
+  <h1 class="p-2">Document Management System</h1>
+  <nav class="m-3 p-2">
+    <a class="btn btn-success" href="/">Home</a>
+    <a class="btn btn-success" href="/create-administrator">Create administrator</a>
+    <a class="btn btn-success" href="/view-processes/all">View process list</a>
+
   </nav>
 </header>
 
@@ -49,6 +51,6 @@
   <h1 class="p-2">Document Management system</h1>
   <nav class="m-3 p-2">
     <a class="btn btn-success" href="/">Home</a>
-    <a class="btn btn-success" href="/view-processes">View company list</a>
+    <a class="btn btn-success" href="/view-processes/all">View process list</a>
   </nav>
 </header>
