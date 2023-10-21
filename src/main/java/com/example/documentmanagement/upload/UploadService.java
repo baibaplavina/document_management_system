@@ -1,9 +1,9 @@
-package com.example.documentmanagement.documents;
+package com.example.documentmanagement.upload;
 
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessRepository;
-import com.example.documentmanagement.otherExpenses.OtherExpenses;
-import com.example.documentmanagement.otherExpenses.OtherExpensesService;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcessRepository;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpenses;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpensesService;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package com.example.documentmanagement.documents;
 
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
-import com.example.documentmanagement.otherExpenses.OtherExpenses;
-import com.example.documentmanagement.otherExpenses.OtherExpensesService;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpenses;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpensesService;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 

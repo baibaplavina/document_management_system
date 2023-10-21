@@ -1,12 +1,9 @@
-package com.example.documentmanagement.documents;
+package com.example.documentmanagement.download;
 
-import com.example.documentmanagement.administrator.AdministratorService;
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessService;
-import com.example.documentmanagement.otherExpenses.OtherExpensesService;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcessService;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpensesService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.hwpf.HWPFDocument;
-import org.apache.poi.hwpf.HWPFDocumentCore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +16,7 @@ import java.io.IOException;
 public class DownloadingController {
 
     @Autowired
-    private AdministratorService administratorService;
-    @Autowired
     private InsolvencyProcessService insolvencyProcessService;
-    @Autowired
-    private TemplateService templateService;
     @Autowired
     private DownloadService downloadService;
     @Autowired
@@ -32,7 +25,7 @@ public class DownloadingController {
   @GetMapping("/download-blank/{id}")
     public void downloadAdminBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
-        DownloadService adminBlank = new DownloadService(administratorService, insolvencyProcessService, otherExpensesService, templateService);
+        DownloadService adminBlank = new DownloadService( insolvencyProcessService, otherExpensesService);
 
         byte[] xwpfDocumentBytes = adminBlank.exportAdminBlank(id).toByteArray();
 
@@ -69,7 +62,7 @@ public class DownloadingController {
     @GetMapping("/download-tables/{id}")
     public void downloadTables(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
-       // DownloadService downloadService = new DownloadService(administratorService, insolvencyProcessService, otherExpensesService );
+       // DownloadService downloadService = new DownloadService(insolvencyProcessService, otherExpensesService );
 
 
         byte[] xwpfDocumentBytes = downloadService.exportCostsOfInsolvencyProceedings(id).toByteArray();
@@ -87,7 +80,7 @@ public class DownloadingController {
     @GetMapping("/download-company-blank/{id}")
     public void downloadCompanyBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
-        DownloadService companyBlank = new DownloadService(administratorService, insolvencyProcessService, otherExpensesService, templateService);
+        DownloadService companyBlank = new DownloadService(insolvencyProcessService, otherExpensesService);
 
         byte[] xwpfDocumentBytes = companyBlank.exportCompanyBlank(id).toByteArray();
 
@@ -105,7 +98,7 @@ public class DownloadingController {
     @GetMapping("/download-authority-blank/{id}/{number}")
     public void downloadAuthorityBlank(@PathVariable Long id, @PathVariable int number,Model model, HttpServletResponse response) throws IOException {
 
-        DownloadService authorityBlank = new DownloadService(administratorService, insolvencyProcessService, otherExpensesService, templateService);
+        DownloadService authorityBlank = new DownloadService(insolvencyProcessService, otherExpensesService);
 
         byte[] xwpfDocumentBytes = authorityBlank.exportAuthorityBlank(id, number).toByteArray();
 

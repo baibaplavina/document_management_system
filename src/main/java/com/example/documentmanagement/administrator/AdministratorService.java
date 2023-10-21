@@ -28,16 +28,6 @@ public class AdministratorService {
     }
 
 
-    public Administrator findAdministratorByCertificateNumber(int number) throws Exception {
-
-        for (Administrator admin : administratorRepository.findAll()) {
-            if (admin.getCertificateNumber().equals(number))
-                return administratorRepository.findByCertificateNumber(number);
-        }
-        throw new Exception("Administrator not found");
-
-    }
-
     public Administrator findAdministratorById(Long id) throws Exception {
 
         for (Administrator admin : administratorRepository.findAll()) {

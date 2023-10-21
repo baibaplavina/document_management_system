@@ -3,9 +3,9 @@ package com.example.documentmanagement.documents;
 
 import com.example.documentmanagement.administrator.AdministratorService;
 import com.example.documentmanagement.administrator.Gender;
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessService;
-import com.example.documentmanagement.otherExpenses.OtherExpensesService;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcessService;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpensesService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.poi.xwpf.usermodel.*;
@@ -13,14 +13,7 @@ import org.apache.xmlbeans.XmlCursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.text.BreakIterator;
-
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 @NoArgsConstructor
@@ -57,7 +50,7 @@ public class TemplateService {
     }
 
 
-   void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) throws Exception {
+   public void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) throws Exception {
        InsolvencyProcess insolvencyProcess = insolvencyProcessService.findInsolvencyProcessById(id);
        replaceText(doc,"administratorName",
                insolvencyProcess.getAdmin().getAdminName());

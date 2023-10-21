@@ -8,35 +8,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 
-public abstract class AuthorityBlank extends TemplateService {
+public class CompanyBlank extends TemplateService {
+    private InsolvencyProcess insolvencyProcess;
 
-    private final InsolvencyProcess insolvencyProcess;
+    public CompanyBlank(InsolvencyProcess insolvencyProcess) {
 
-    public AuthorityBlank(InsolvencyProcess insolvencyProcess) {
         this.insolvencyProcess = insolvencyProcess;
     }
 
-    public XWPFDocument getAuthorityDocument() throws IOException {
+    public XWPFDocument createFilledDocument() throws IOException {
         InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
         assert inputStream != null;
         XWPFDocument doc = new XWPFDocument(inputStream);
 
         try {
+
             replaceCompanyAdminHeaderText(doc, insolvencyProcess.getId());
             replaceCompanyParagraphText(doc, insolvencyProcess.getId());
-            replacePlaceDateCompanyBlankText(doc, insolvencyProcess.getId());
             replaceIeceltaIeceltsParagraphText(doc, insolvencyProcess.getId());
-            replaceAuthorityDocNameText(doc);
+            replacePlaceDateCompanyBlankText(doc, insolvencyProcess.getId());
+
+            return doc;
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return doc;
     }
 
-    abstract public XWPFDocument createFilledDocument();
-
-   public void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) {
+    public void replaceCompanyAdminHeaderText(XWPFDocument doc, Long id) {
 
         replaceText(doc, "administratorName",
                 insolvencyProcess.getAdmin().getAdminName());
@@ -58,12 +57,18 @@ public abstract class AuthorityBlank extends TemplateService {
                 insolvencyProcess.getRegistrationNumber());
     }
 
-    public void replacePlaceDateCompanyBlankText(XWPFDocument doc, Long id) {
+    public void replaceCompanyParagraphText(XWPFDocument doc, Long id) {
 
-        replaceText(doc, "Place",
-                insolvencyProcess.getAdmin().getPlace());
-        LocalDate documentDate = LocalDate.now();
-        replaceText(doc, "Date", String.valueOf(documentDate));
+       /* replaceText(doc,"companyName",
+        ""+insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName());
+        replaceText(doc,"registrationNumber",
+        ""+insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber());*/
+        replaceText(doc, "courtName",
+                "" + insolvencyProcess.getCourtName());
+        replaceText(doc, "courtDesitionDate",
+                "" + insolvencyProcess.getCourtDecisionDate());
+        replaceText(doc, "courtCaseNumber",
+                "" + insolvencyProcess.getCourtCaseNumber() + " ");
     }
 
     public void replaceIeceltaIeceltsParagraphText(XWPFDocument doc, Long id) {
@@ -78,23 +83,11 @@ public abstract class AuthorityBlank extends TemplateService {
         }
     }
 
-    public void replaceAuthorityDocNameText(XWPFDocument doc) {
-        replaceText(doc, "Document Name (Dokumenta nosaukums)",
-                "Informācijas pieprasījums");
+    void replacePlaceDateCompanyBlankText(XWPFDocument doc, Long id) {
+
+        replaceText(doc, "Place",
+                "" + insolvencyProcess.getAdmin().getPlace());
+        LocalDate documentDate = LocalDate.now();
+        replaceText(doc, "Date", String.valueOf(documentDate));
     }
-
-
-   public void replaceCompanyParagraphText(XWPFDocument doc, Long id) {
-
-        replaceText(doc, "courtName",
-                insolvencyProcess.getCourtName());
-        replaceText(doc, "courtDesitionDate",
-                String.valueOf(insolvencyProcess.getCourtDecisionDate()));
-        replaceText(doc, "courtCaseNumber",
-                insolvencyProcess.getCourtCaseNumber() + " ");
-    }
-
 }
-
-
-

@@ -1,4 +1,4 @@
-package com.example.documentmanagement.insolvencyprocess;
+package com.example.documentmanagement.insolvencyProcess;
 
 import com.example.documentmanagement.administrator.Administrator;
 import com.example.documentmanagement.administrator.AdministratorRepository;

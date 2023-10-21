@@ -1,7 +1,7 @@
-package com.example.documentmanagement.insolvencyprocess;
+package com.example.documentmanagement.insolvencyProcess;
 
 import com.example.documentmanagement.administrator.Administrator;
-import com.example.documentmanagement.otherExpenses.OtherExpenses;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpenses;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

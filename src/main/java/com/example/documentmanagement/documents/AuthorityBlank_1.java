@@ -1,6 +1,6 @@
 package com.example.documentmanagement.documents;
 
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
