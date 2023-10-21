@@ -2,7 +2,6 @@ package com.example.documentmanagement.documents;
 
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
 import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessRepository;
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessService;
 import com.example.documentmanagement.otherExpenses.OtherExpenses;
 import com.example.documentmanagement.otherExpenses.OtherExpensesService;
 import org.apache.poi.ss.usermodel.*;
@@ -37,10 +36,13 @@ public class UploadService {
         int colKreditors = findSheetColumnByName("Kreditors", dataSheet);
         int colPrasijumaVeids = findSheetColumnByName("Prasījuma veids", dataSheet);
         int colPrasijums = findSheetColumnByName("Atzīts / Galvenais prasījums", dataSheet);
+        int colPrasijums2 = findSheetColumnByName("Atzīts / Kopā", dataSheet);
 
         if (colKreditors > -1 && colPrasijumaVeids > -1 && colPrasijums > -1) {
             StringBuilder sbCreditors = new StringBuilder();
             double amountForCreditors = 0;
+            String valstsIenemumuDienenstsPrasijums = "";
+            String maksatnespejasKontrolesApmers = "";
 
             for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
                 if (dataSheet.getRow(i).getCell(colKreditors) != null && !dataSheet.getRow(i).getCell(colKreditors).toString().isEmpty()) {
@@ -50,11 +52,21 @@ public class UploadService {
                 if (dataSheet.getRow(i).getCell(colPrasijumaVeids).getStringCellValue().equals("Nenodrošināts")) {
                     amountForCreditors = amountForCreditors + Double.parseDouble(dataSheet.getRow(i).getCell(colPrasijums).getStringCellValue().replace(',', '.'));
                 }
+                if (dataSheet.getRow(i).getCell(colKreditors).getStringCellValue().contains("Valsts ieņēmumu dienests")) {
+                   valstsIenemumuDienenstsPrasijums = dataSheet.getRow(i).getCell(colPrasijums).getStringCellValue();
+                }
+
+                if (dataSheet.getRow(i).getCell(colKreditors).getStringCellValue().contains("Maksātnespējas kontroles dienests")) {
+                    maksatnespejasKontrolesApmers = dataSheet.getRow(i).getCell(colPrasijums2).getStringCellValue();
+                }
             }
+
             if (insolvencyProcessRepository.findById(processId).isPresent()) {
                 InsolvencyProcess insolvencyProcess = insolvencyProcessRepository.findById(processId).get();
                 insolvencyProcess.setCreditorsList(sbCreditors.substring(0, sbCreditors.length() - 1));
                 insolvencyProcess.setCreditorsRequest(amountForCreditors);
+                insolvencyProcess.setValstsIenemumuApmers(valstsIenemumuDienenstsPrasijums);
+                insolvencyProcess.setMaksatnespejasKontrolesApmers(maksatnespejasKontrolesApmers);
                 insolvencyProcessRepository.save(insolvencyProcess);
             }
         }
@@ -134,28 +146,6 @@ public class UploadService {
         double izmaksasTotal = 0;
         double administratorSalary = 0;
 
-
-        String izmaksuRasanasDatumsType1 = "-";
-        String segtaSummaType1 = "-";
-        String segsanasDatumsType1 = "-";
-        String navApmaksatasType1 = "-";
-
-
-        String izmaksuRasanasDatumsType2 = "-";
-        String segtaSummaType2 = "-";
-        String segsanasDatumsType2 = "-";
-        String navApmaksatasType2 = "-";
-
-        String izmaksuRasanasDatumsType3 = "-";
-        String segtaSummaType3 = "-";
-        String segsanasDatumsType3 = "-";
-        String navApmaksatasType3 = "-";
-
-        String izmaksuRasanasDatumsType4 = "-";
-        String segtaSummaType4 = "-";
-        String segsanasDatumsType4 = "-";
-        String navApmaksatasType4 = "-";
-
         String assetType = "";
         String expName = "";
         String sanemejs = "";
@@ -172,52 +162,18 @@ public class UploadService {
 
         if (colIzmaksasRadusasNo > -1 && colPozicijas > -1 && colIzmaksuSum > -1) {
 
-            for (int i = 1; i <= dataSheet.getLastRowNum()-2; i++) {
+            for (int i = 1; i <= dataSheet.getLastRowNum() - 2; i++) {
                 String cellIsmaksasRadusas = dataSheet.getRow(i).getCell(colIzmaksasRadusasNo).getStringCellValue();
                 String cellPozicijas = dataSheet.getRow(i).getCell(colPozicijas).getStringCellValue();
                 String stringExpensesValue = dataSheet.getRow(i).getCell(colIzmaksuSum).getStringCellValue();
-                String cellSniegtaisPakalpojums = dataSheet.getRow(i).getCell(colSniegtaisPakalpojums).getStringCellValue();
+
 
                 if (cellIsmaksasRadusas.equals("Neieķīlātā manta") && !cellPozicijas.contains("Administratora")) {
                     double izmaksasTotalDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
                     izmaksasTotal = izmaksasTotal + izmaksasTotalDouble;
                 }
 
-                if (cellPozicijas.equals("Administratora atlīdzība par pienākumu pildīšanu maksātnespējas procesā")) {
-                    double administratorSalaryDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
-                    administratorSalary = administratorSalary + administratorSalaryDouble;
-                }
-
-                if (cellIsmaksasRadusas.equals("Neieķīlātā manta") &&
-                        cellPozicijas.contains("Administratora atlīdzība par pienākumu pildīšanu maksātnespējas procesā")) {
-
-                    izmaksuRasanasDatumsType1 = dataSheet.getRow(i).getCell(colIzmaksuDatums).getStringCellValue();
-                    segtaSummaType1 = dataSheet.getRow(i).getCell(colSegtaSumma).getStringCellValue();
-                    segsanasDatumsType1 = dataSheet.getRow(i).getCell(colSegsanasDatums).getStringCellValue();
-                    navApmaksatasType1 = dataSheet.getRow(i).getCell(colNavApmaksatas).getStringCellValue();
-
-                }
-
-                if (cellIsmaksasRadusas.equals("Neieķīlātā manta") &&
-                        cellPozicijas.contains("Administratora atlīdzība par neieķīlātās/ieķīlātās mantas pārdošanu")) {
-                    izmaksuRasanasDatumsType2 = dataSheet.getRow(i).getCell(colIzmaksuDatums).getStringCellValue();
-                    segtaSummaType2 = dataSheet.getRow(i).getCell(colSegtaSumma).getStringCellValue();
-                    segsanasDatumsType2 = dataSheet.getRow(i).getCell(colSegsanasDatums).getStringCellValue();
-                    navApmaksatasType2 = dataSheet.getRow(i).getCell(colNavApmaksatas).getStringCellValue();
-
-                }
-
-                if (cellIsmaksasRadusas.equals("Neieķīlātā manta") &&
-                        cellPozicijas.contains("Administratora atlīdzība par neieķīlātās/ieķīlātās mantas (naudas līdzekļu) atgūšanu")) {
-
-                    izmaksuRasanasDatumsType3 = dataSheet.getRow(i).getCell(colIzmaksuDatums).getStringCellValue();
-                    segtaSummaType3 = dataSheet.getRow(i).getCell(colSegtaSumma).getStringCellValue();
-                    segsanasDatumsType3 = dataSheet.getRow(i).getCell(colSegsanasDatums).getStringCellValue();
-                    navApmaksatasType3 = dataSheet.getRow(i).getCell(colNavApmaksatas).getStringCellValue();
-
-                }
-
-                if (((cellIsmaksasRadusas.equals("Neieķīlātā manta") || cellIsmaksasRadusas.equals("Ieķīlātā manta")) && !cellPozicijas.contains("Administratora"))) {
+                if (cellIsmaksasRadusas.equals("Neieķīlātā manta") || cellIsmaksasRadusas.equals("Ieķīlātā manta")) {
                     assetType = dataSheet.getRow(i).getCell(colIzmaksasRadusasNo).getStringCellValue();
                     expName = dataSheet.getRow(i).getCell(colPozicijas).getStringCellValue();
                     sanemejs = dataSheet.getRow(i).getCell(colSanemejs).getStringCellValue();
@@ -231,24 +187,13 @@ public class UploadService {
                     }
                 }
 
-                if (cellIsmaksasRadusas.equals("Ieķīlātā manta") &&
-                        cellPozicijas.contains("MPA atlīdzība") &&
-                        cellSniegtaisPakalpojums.equals("Izsoles organizēšana MNL 169. panta trešās daļas 4. punktu")) {
-
-                    izmaksuRasanasDatumsType4 = dataSheet.getRow(i).getCell(colIzmaksuDatums).getStringCellValue();
-                    segtaSummaType4 = dataSheet.getRow(i).getCell(colSegtaSumma).getStringCellValue();
-                    segsanasDatumsType4 = dataSheet.getRow(i).getCell(colSegsanasDatums).getStringCellValue();
-                    navApmaksatasType4 = dataSheet.getRow(i).getCell(colNavApmaksatas).getStringCellValue();
-
-                }
-
                 OtherExpenses otherExpenses = new OtherExpenses();
 
                 otherExpenses.setName(expName);
                 otherExpenses.setAssetType(assetType);
                 otherExpenses.setSum(sum);
                 otherExpenses.setUnpaid(unpaid);
-                otherExpenses.setSanemejs(sanemejs);
+                otherExpenses.setRecipient(sanemejs);
                 otherExpenses.setCreatingDate(creatingDate);
                 otherExpenses.setOtherDate(otherDate);
                 otherExpenses.setInsolvencyProcess(insolvencyProcessRepository.findById(processId).get());
@@ -268,29 +213,6 @@ public class UploadService {
         insolvencyProcess.setTotalExpenses(izmaksasTotal);
         insolvencyProcess.setAdminSalary(administratorSalary);
 
-        insolvencyProcess.setIzmaksuRasanasDatumsType1(izmaksuRasanasDatumsType1);
-        insolvencyProcess.setIzmaksuRasanasDatumsType2(izmaksuRasanasDatumsType2);
-        insolvencyProcess.setIzmaksuRasanasDatumsType3(izmaksuRasanasDatumsType3);
-        insolvencyProcess.setIzmaksuRasanasDatumsType4(izmaksuRasanasDatumsType4);
-
-
-        insolvencyProcess.setSegtaSummaType1(segtaSummaType1);
-        insolvencyProcess.setSegtaSummaType2(segtaSummaType2);
-        insolvencyProcess.setSegtaSummaType3(segtaSummaType3);
-        insolvencyProcess.setSegtaSummaType4(segtaSummaType4);
-
-
-        insolvencyProcess.setSegsanasDatumsType1(segsanasDatumsType1);
-        insolvencyProcess.setSegsanasDatumsType2(segsanasDatumsType2);
-        insolvencyProcess.setSegsanasDatumsType3(segsanasDatumsType3);
-        insolvencyProcess.setSegsanasDatumsType4(segsanasDatumsType4);
-
-
-        insolvencyProcess.setNavApmaksatasType1(navApmaksatasType1);
-        insolvencyProcess.setNavApmaksatasType2(navApmaksatasType2);
-        insolvencyProcess.setNavApmaksatasType3(navApmaksatasType3);
-        insolvencyProcess.setNavApmaksatasType4(navApmaksatasType4);
-
         insolvencyProcessRepository.save(insolvencyProcess);
 
     }
@@ -309,6 +231,7 @@ public class UploadService {
         StringBuilder sbSums_neiekilata = new StringBuilder();
         StringBuilder sbMpa_iekilata = new StringBuilder();
         StringBuilder sbSums_iekilata = new StringBuilder();
+
         double total_neiekilata = 0;
         double total_iekilata = 0;
 

@@ -144,12 +144,12 @@ public class TemplateService {
     }
     }
 
-    void replaceAuthorityDocNameText(XWPFDocument doc) throws Exception {
+  /*  void replaceAuthorityDocNameText(XWPFDocument doc) throws Exception {
         replaceText(doc, "Document Name (Dokumenta nosaukums)",
                 "Informācijas pieprasījums");
-    }
+    } */
 
-  private int getParagraphPositionIfContainsText(XWPFDocument doc) {
+  int getParagraphPositionIfContainsText(XWPFDocument doc) {
         int paragraphPosition = -1;
         for (int i = 0; i < doc.getParagraphs().size(); i++) {
             if (doc.getParagraphs().get(i).getText().contains("Dokuments parakstīts elektroniski ar drošu elektronisko parakstu un satur laika zīmogu.")) {
@@ -160,7 +160,7 @@ public class TemplateService {
         return paragraphPosition;
     }
 
-        void replaceAuthorityRecipientText1(XWPFDocument doc) throws Exception {
+  /*      void replaceAuthorityRecipientText1(XWPFDocument doc) throws Exception {
 
            replaceText(doc, "Nosaukums (recipientName)",
                    "Uzņēmumu reģistrs, ");
@@ -169,7 +169,8 @@ public class TemplateService {
            replaceText(doc, "Adrese/ E-pasts/ E-Adrese:",
                    "E-pasts: info@ur.gov.lv");
        }
-    void replaceAuthorityMainText1(XWPFDocument doc) throws Exception {
+       */
+  /*  void replaceAuthorityMainText1(XWPFDocument doc) throws Exception {
         String URtextContent = """
                 Lūdzu sniegt :;
                 1) aktuālo informāciju par Sabiedrības dalībniekiem un valdi (Standartizēta izziņa no visiem Uzņēmumu reģistra reģistriem).;
@@ -196,9 +197,9 @@ public class TemplateService {
 
       replaceText(doc, "TEXT", "");
 
-    }
+    } */
 
-    void replaceAuthorityMainText2(XWPFDocument doc) throws Exception{
+  /*  void replaceAuthorityMainText2(XWPFDocument doc) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
                 "VAS “Latvijas Jūras administrācija” kuģu reģistrs, ");
@@ -212,8 +213,8 @@ public class TemplateService {
                         "konstrukcijas (peldošie doki, peldošās darbnīcas, peldošās degvielas uzpildes stacijas, " +
                         "debarkaderi, kravas pontoni), šobrīd ir un vai ir bijuši reģistrēti Sabiedrībai, no kura " +
                         "līdz kuram brīdim reģistrēti, un kādi liegumi - hipotēkas un apgrūtinājumi šobrīd ir vai ir bijuši reģistrēti.");
-    }
-    void replaceAuthorityMainText3(XWPFDocument doc, Long id) throws Exception{
+    } */
+  /*  void replaceAuthorityMainText3(XWPFDocument doc, Long id) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
                 "Lauksaimniecības datu centrs,");
@@ -226,8 +227,8 @@ public class TemplateService {
                         "bijuši reģistrēti, kā arī tie kuri atrodas " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
                         ", vienotais reģistrācijas numurs " + insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber() +
                         " īpašumā un/vai valdījumā"));
-    }
-    void replaceAuthorityMainText4(XWPFDocument doc, Long id) throws Exception{
+    } */
+  /*  void replaceAuthorityMainText4(XWPFDocument doc, Long id) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
                 "Valsts tehniskās uzraudzības aģentūra,");
@@ -239,9 +240,9 @@ public class TemplateService {
                 "Lūdzu sniegt Jūsu rīcībā esošo informāciju kāda traktortehnika un tās piekabes šobrīd ir un / vai ir " +
                         "bijuši reģistrēti uz Sabiedrības vārda un kādi liegumi šobrīd ir vai ir bijuši reģistrēti.");
 
-    }
+    } */
 
-    void replaceAuthorityMainText5(XWPFDocument doc, Long id) throws Exception{
+  /*  void replaceAuthorityMainText5(XWPFDocument doc, Long id) throws Exception{
 
         replaceText(doc,"Nosaukums (recipientName)",
                 "Valsts Zemes dienests, ");
@@ -253,8 +254,8 @@ public class TemplateService {
                 "Lūdzu sniegt sekojošu aktuālo un vēsturisko informāciju par " + insolvencyProcessService.findInsolvencyProcessById(id).getCompanyName() +
                        ", reģistrācijas numurs: " + insolvencyProcessService.findInsolvencyProcessById(id).getRegistrationNumber()+ "īpašumā esošajiem " +
                         " un bijušajiem reģistrētajiem nekustamajiem īpašumiem, kā arī par reģistrētajiem īpašuma apgrūtinājumiem.");
-    }
-
+    } */
+/*
     void replaceAuthorityRecipientText6(XWPFDocument doc, Long id) throws Exception {
         replaceText(doc, "Nosaukums (recipientName)",
                 "Zvērinātam tiesu izpildītājam _______________, ");
@@ -262,8 +263,8 @@ public class TemplateService {
                 "Reģistrācijas numurs: ___________________, ");
         replaceText(doc, "Adrese/ E-pasts/ E-Adrese:",
                 "E-pasts: _____________________");
-    }
-
+    } */
+/*
        void replaceAuthorityMainText6(XWPFDocument doc, Long id) throws Exception {
        String ZTItextContent = """  
             Saskaņā ar Maksātnespējas likuma 65.pantu Administratora pienākumi pēc juridiskās personas maksātnespējas procesa
@@ -315,12 +316,94 @@ public class TemplateService {
         replaceText(doc, "TEXT", "");
 
     }
-
+*/
    public void styleReplacedText(XWPFParagraph new_par, XWPFRun run) {
         run.setFontFamily("Times New Roman");
         run.setFontSize(11);
         new_par.setAlignment(ParagraphAlignment.BOTH);
        new_par.setFirstLineIndent(400);
        }
+
+    public void styleCell(XWPFTableCell cell, String s) {
+        XWPFRun run = cell.addParagraph().createRun();
+
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(12);
+        run.setText(s.replace('.', ','));
+        cell.removeParagraph(0);
+    }
+
+    public void styleCell(XWPFTableCell cell, double s) {
+        XWPFRun run = cell.addParagraph().createRun();
+
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(12);
+        run.setText(String.format("%1.2f", s));
+        cell.removeParagraph(0);
+    }
+
+    public void styleCellBold(XWPFTableCell cell, String s) {
+        XWPFRun run = cell.addParagraph().createRun();
+
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(12);
+        run.setText(s.replace('.', ','));
+        run.setBold(true);
+        cell.removeParagraph(0);
+    }
+
+    public void styleCellMinimized(XWPFTableCell cell, String s) {
+        XWPFRun run = cell.addParagraph().createRun();
+
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(9);
+        run.setText(s);
+        cell.removeParagraph(0);
+    }
+
+    public void styleCellMinimized(XWPFTableCell cell, double s) {
+        XWPFRun run = cell.addParagraph().createRun();
+
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(9);
+        run.setText(String.format("%1.2f", s));
+        cell.removeParagraph(0);
+    }
+
+    public double doubleFromString(String string) {
+        return Double.parseDouble(string.replace(',', '.'));
+    }
+
+    public String getStyledString(double doubleValue) {
+        return String.format("%1.2f", doubleValue);
+    }
+
+    public String getStyledString(String stringValue) {
+        return stringValue.replace('.', ',');
+    }
+
+    public void createStyledTableHeader(XWPFTable createdTable, List<String> list) {
+        styleCellBold(createdTable.getRow(0).getCell(0), list.get(0));
+        for (int i = 1; i < list.size(); i++) {
+            XWPFTableCell cell = createdTable.getRow(0).createCell();
+            styleCellBold(cell, list.get(i));
+        }
+    }
+
+    public int getParagraphPositionIfContainsText(String s, XWPFDocument doc ) {
+        int paragraphPosition = -1;
+        for (int i = 0; i < doc.getParagraphs().size(); i++) {
+            if (doc.getParagraphs().get(i).getText().contains(s)) {
+                paragraphPosition = i;
+                break;
+            }
+        }
+        return paragraphPosition;
+    }
+
+    public XWPFParagraph insertNewParagraph(int textPosition, XWPFDocument doc) {
+        XmlCursor cursor = doc.getParagraphs().get(textPosition).getCTP().newCursor();
+        return doc.insertNewParagraph(cursor);
+    }
 
 }

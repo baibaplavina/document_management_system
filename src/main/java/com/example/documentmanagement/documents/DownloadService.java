@@ -75,7 +75,7 @@ public class DownloadService {
 
         try {
             CostsOfInsolvencyProceedingsDoc document = new CostsOfInsolvencyProceedingsDoc(insolvencyProcessService.findInsolvencyProcessById(processId), otherExpensesService);
-            XWPFDocument doc  = document.createFilledDocument();
+            XWPFDocument doc = document.createFilledDocument();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             doc.write(out);
             out.close();
@@ -93,9 +93,9 @@ public class DownloadService {
 
         try {
 
-            templateService.replaceCompanyAdminHeaderText(doc,id);
+            templateService.replaceCompanyAdminHeaderText(doc, id);
             templateService.replaceCompanyParagraphText(doc, id);
-          //  templateService.replaceIeceltaIeceltsParagraphText(doc,id);
+            //  templateService.replaceIeceltaIeceltsParagraphText(doc,id);
             templateService.replacePlaceDateCompanyBlankText(doc, id);
 
         } catch (Exception e) {
@@ -109,6 +109,7 @@ public class DownloadService {
 
         return out;
     }
+
     public ByteArrayOutputStream exportCompanyBlank(Long id) throws IOException {
 
         InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
@@ -116,9 +117,9 @@ public class DownloadService {
 
         try {
 
-            templateService.replaceCompanyAdminHeaderText(doc,id);
+            templateService.replaceCompanyAdminHeaderText(doc, id);
             templateService.replaceCompanyParagraphText(doc, id);
-            templateService.replaceIeceltaIeceltsParagraphText(doc,id);
+            templateService.replaceIeceltaIeceltsParagraphText(doc, id);
             templateService.replacePlaceDateCompanyBlankText(doc, id);
 
         } catch (Exception e) {
@@ -135,43 +136,45 @@ public class DownloadService {
 
 
     public ByteArrayOutputStream exportAuthorityBlank(Long id, int number) throws IOException {
-        InputStream inputStream = getClass().getResourceAsStream("/companyBlank.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
 
+        XWPFDocument doc = new XWPFDocument();
         try {
-            templateService.replaceCompanyAdminHeaderText(doc,id);
-            templateService.replaceCompanyParagraphText(doc, id);
-            templateService.replacePlaceDateCompanyBlankText(doc, id);
-            templateService.replaceIeceltaIeceltsParagraphText(doc,id);
-            templateService.replaceAuthorityDocNameText(doc);
-
-            switch (number){
+            switch (number) {
                 case 1:
-                    templateService.replaceAuthorityRecipientText1(doc);
-                    templateService.replaceAuthorityMainText1(doc);
+                    AuthorityBlank_1 authorityBlank1 = new AuthorityBlank_1(insolvencyProcessService.findInsolvencyProcessById(id));
+                    doc = authorityBlank1.createFilledDocument();
                     break;
                 case 2:
-                    templateService.replaceAuthorityMainText2(doc);
+
+                    AuthorityBlank_2 authorityBlank2 = new AuthorityBlank_2(insolvencyProcessService.findInsolvencyProcessById(id));
+                    doc = authorityBlank2.createFilledDocument();
                     break;
                 case 3:
-                    templateService.replaceAuthorityMainText3(doc, id);
+
+                    AuthorityBlank_3 authorityBlank3 = new AuthorityBlank_3(insolvencyProcessService.findInsolvencyProcessById(id));
+                    doc = authorityBlank3.createFilledDocument();
                     break;
                 case 4:
-                    templateService.replaceAuthorityMainText4(doc, id);
+
+                    AuthorityBlank_4 authorityBlank4 = new AuthorityBlank_4(insolvencyProcessService.findInsolvencyProcessById(id));
+                    doc = authorityBlank4.createFilledDocument();
                     break;
                 case 5:
-                    templateService.replaceAuthorityMainText5(doc, id);
+                    AuthorityBlank_5 authorityBlank5 = new AuthorityBlank_5(insolvencyProcessService.findInsolvencyProcessById(id));
+                    doc = authorityBlank5.createFilledDocument();
+
                     break;
                 case 6:
-                    templateService.replaceAuthorityRecipientText6(doc, id);
-                    templateService.replaceAuthorityMainText6(doc, id);
+                    AuthorityBlank_6 authorityBlank6 = new AuthorityBlank_6(insolvencyProcessService.findInsolvencyProcessById(id));
+                    doc = authorityBlank6.createFilledDocument();
+
                     break;
                 default:
                     break;
             }
-
         } catch (Exception e) {
             throw new RuntimeException(e);
+
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();

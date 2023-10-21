@@ -18,7 +18,7 @@ public class OtherExpenses {
     private InsolvencyProcess insolvencyProcess;
     private String assetType;
     String name;
-    private String sanemejs;
+    private String recipient;
     private String creatingDate;
     private String otherDate;
     private double sum;
