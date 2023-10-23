@@ -20,41 +20,51 @@
       <div class="input-group mt-2">
         <label class="input-group-text">Vārds (Name)</label>
         <input class="form-control" name="adminName" type="text">
+        <p th:if="${#fields.hasErrors('adminName')}" class="text-danger" th:errors="*{adminName}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Uzvārds (Surname)</label>
         <input class="form-control" name="adminSurname" type="text">
+        <p th:if="${#fields.hasErrors('adminSurname')}" class="text-danger" th:errors="*{adminSurname}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Sertifikāta numurs (Number of sertificate) </label>
         <input class="form-control" name="certificateNumber" type="text">
+        <p th:if="${#fields.hasErrors('certificateNumber')}" class="text-danger" th:errors="*{certificateNumber}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Prakses vietas adrese (Adrress) </label>
         <input class="form-control" name="adminAddress" type="text">
+        <p th:if="${#fields.hasErrors('adminAddress')}" class="text-danger" th:errors="*{adminAddress}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">E-pasts (Email) </label>
         <input class="form-control" name="adminEmail" type="email">
+        <p th:if="${#fields.hasErrors('adminEmail')}" class="text-danger" th:errors="*{adminEmail}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">E-Adrese (EAdress) </label>
         <input class="form-control" name="adminE_address" type="text">
+        <p th:if="${#fields.hasErrors('adminE_address')}" class="text-danger" th:errors="*{adminE_address}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Telefons ( Phone number) </label>
         <input class="form-control" name="adminPhoneNumber" type="text">
+        <p th:if="${#fields.hasErrors('adminPhoneNumber')}" class="text-danger" th:errors="*{adminPhoneNumber}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Dokumentu sagatavošanas vieta (Place) </label>
         <input class="form-control" name="place" type="text">
+        <p th:if="${#fields.hasErrors('place')}" class="text-danger" th:errors="*{place}"></p>
       </div>
       <div class="input-group mt-2">
         <label class="input-group-text">Gender</label>
-        <select class="form-control" name = "adminGender">
+        <select class="form-control" name = "adminGender" required>
+          <option value="none" selected disabled hidden> (select from the list below)</option>
           <option value="FEMALE">Sieviete (Female)</option>
           <option value="MALE">Vīrietis(Male)</option>
         </select>
+        <p th:if="${#fields.hasErrors('adminGender')}" class="text-danger" th:errors="*{adminGender}"></p>
       </div>
       <div class = "mt-2">
         <button class="btn btn-success text-white p-3" type="submit">Saglabāt (save) </button>
@@ -62,12 +72,6 @@
       </div>
     </form>
   </section>
-
- <!-- <section class="container">
-    <a th:href="${'/download-admin-blank/{id}'}">
-      <button type="button" class="btn btn-outline-success mt-2 mb-2"> Izveidot Administratora veidlapu (Create Admin Blank) </button>
-    </a>
-  </section>-->
 
   <section th:replace="~{fragments/sections.html :: section-editAdmin}"></section>
 </main>

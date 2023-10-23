@@ -13,48 +13,58 @@
 
 <main class="border border-success text-start m-5 row p-2">
     <section class="container">
-        <h3>New Process Registration Form</h3>
+        <h3>New Process Creation Form</h3>
         <form class="form-inline col-md-6" id="creatProcessForm" action="/create-process" method="post" th:object="${process}">
                 <div class="input-group mt-2" >
                     <label class="input-group-text"  >Select Administrator:</label>
-                    <select  th:field="*{admin}" class="form-control" required>
+                    <option class="input text-success" value="none"  selected disabled hidden>(select from the list below)</option>
+                    <select  th:field="*{admin}" class="form-control" required >
                            <th:block th:each="admin:${adminList}" >
+
                     <option th:text="${admin.adminName + ' ' + admin.adminSurname}" th:value="${admin.adminId} " ></option>
                            </th:block>
                     </select>
+                    <p th:if="${#fields.hasErrors('admin')}" class="text-danger" th:errors="*{admin}" ></p>
                 </div>
                 <div class="input-group mt-2" >
-                    <label class="input-group-text">Insolvency Company Registration Number:</label>
-                    <input class="form-control" type="text" placeholder="registration number" name="registrationNumber">
-<!--                    <p th:if="${#fields.hasErrors('registrationNumber')}" th:errors="*{registrationNumber}"></p>-->
+                    <label for="registrationNumber" class="input-group-text">Insolvency Company Registration Number:</label>
+                    <input id ="registrationNumber"class="form-control" type="text" placeholder="registration number" name="registrationNumber">
+                    <p th:if="${#fields.hasErrors('registrationNumber')}" class="text-danger" th:text="${#strings.listJoin(#fields.errors('registrationNumber'), 'companyName')}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Insolvency Company Name: </label>
                     <input class="form-control"type="text" placeholder="company name" name="companyName">
+                    <p th:if="${#fields.hasErrors('companyName')}" class="text-danger" th:errors="*{companyName}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Insolvency Company Address:</label>
                     <input class="form-control"type="text" placeholder="address" name="companyAddress">
+                    <p th:if="${#fields.hasErrors('companyAddress')}" class="text-danger" th:errors="*{companyAddress}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Court Name:</label>
                     <input class="form-control"type="text" placeholder="court name" name="courtName">
+                    <p th:if="${#fields.hasErrors('courtName')}" class="text-danger" th:errors="*{courtName}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Court Case number:</label>
                     <input class="form-control"type="text" placeholder="case number" name="courtCaseNumber">
+                    <p th:if="${#fields.hasErrors('courtCaseNumber')}" class="text-danger" th:errors="*{courtCaseNumber}"></p>
                 </div>
                <div class="input-group  mt-2 ">
                     <label class="input-group-text">Court Decision Date:</label>
-                    <input class="col-xs-3 " type="date" placeholder="court decision date" name="courtDecisionDate">
+                    <input class="col-xs-3 " type="date" placeholder="court decision date" name="courtDecisionDate" required>
+                   <p th:if="${#fields.hasErrors('courtDecisionDate')}" class="text-danger" th:errors="*{courtDecisionDate}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">E-Adrese (EAdress) </label>
                     <input class="form-control" placeholder="e-address" name="e_address" type="text">
+                    <p th:if="${#fields.hasErrors('e_address')}" class="text-danger" th:errors="*{e_address}"></p>
                 </div >
                 <div class="mt-2 ">
                 <button class="btn btn-success text-white p-3" type="submit">Saglabāt (save) </button>
                 <button class="btn btn-dark text-white p-3" type="submit" href="/edit-process">Labot profilu (edit profile) </button>
+
                 </div>
         </form>
 
