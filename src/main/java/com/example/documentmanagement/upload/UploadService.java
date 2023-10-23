@@ -5,6 +5,7 @@ import com.example.documentmanagement.insolvencyProcess.InsolvencyProcessReposit
 import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpenses;
 import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpensesService;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class UploadService {
                     amountForCreditors = amountForCreditors + Double.parseDouble(dataSheet.getRow(i).getCell(colPrasijums).getStringCellValue().replace(',', '.'));
                 }
                 if (dataSheet.getRow(i).getCell(colKreditors).getStringCellValue().contains("Valsts ieņēmumu dienests")) {
-                   valstsIenemumuDienenstsPrasijums = dataSheet.getRow(i).getCell(colPrasijums).getStringCellValue();
+                    valstsIenemumuDienenstsPrasijums = dataSheet.getRow(i).getCell(colPrasijums).getStringCellValue();
                 }
 
                 if (dataSheet.getRow(i).getCell(colKreditors).getStringCellValue().contains("Maksātnespējas kontroles dienests")) {
@@ -163,27 +164,29 @@ public class UploadService {
         if (colIzmaksasRadusasNo > -1 && colPozicijas > -1 && colIzmaksuSum > -1) {
 
             for (int i = 1; i <= dataSheet.getLastRowNum() - 2; i++) {
-                String cellIsmaksasRadusas = dataSheet.getRow(i).getCell(colIzmaksasRadusasNo).getStringCellValue();
-                String cellPozicijas = dataSheet.getRow(i).getCell(colPozicijas).getStringCellValue();
-                String stringExpensesValue = dataSheet.getRow(i).getCell(colIzmaksuSum).getStringCellValue();
-
+                Row row = dataSheet.getRow(i);
+                String cellIsmaksasRadusas = row.getCell(colIzmaksasRadusasNo).getStringCellValue();
+                String cellPozicijas = row.getCell(colPozicijas).getStringCellValue();
+                String stringExpensesValue = row.getCell(colIzmaksuSum).getStringCellValue();
 
                 if (cellIsmaksasRadusas.equals("Neieķīlātā manta") && !cellPozicijas.contains("Administratora")) {
-                    double izmaksasTotalDouble = Double.parseDouble(stringExpensesValue.replace(',', '.'));
-                    izmaksasTotal = izmaksasTotal + izmaksasTotalDouble;
+
+                    izmaksasTotal = izmaksasTotal + doubleFromString(stringExpensesValue);
                 }
 
                 if (cellIsmaksasRadusas.equals("Neieķīlātā manta") || cellIsmaksasRadusas.equals("Ieķīlātā manta")) {
-                    assetType = dataSheet.getRow(i).getCell(colIzmaksasRadusasNo).getStringCellValue();
-                    expName = dataSheet.getRow(i).getCell(colPozicijas).getStringCellValue();
-                    sanemejs = dataSheet.getRow(i).getCell(colSanemejs).getStringCellValue();
-                    creatingDate = dataSheet.getRow(i).getCell(colSegsanasDatums).getStringCellValue();
-                    otherDate = dataSheet.getRow(i).getCell(colIzmaksuDatums).getStringCellValue();
-                    if (!dataSheet.getRow(i).getCell(colIzmaksuSum).getStringCellValue().isEmpty()) {
-                        sum = Double.parseDouble(dataSheet.getRow(i).getCell(colIzmaksuSum).getStringCellValue().replace(',', '.'));
+                    assetType = row.getCell(colIzmaksasRadusasNo).getStringCellValue();
+                    expName = row.getCell(colPozicijas).getStringCellValue();
+                    sanemejs = row.getCell(colSanemejs).getStringCellValue();
+                    creatingDate = row.getCell(colSegsanasDatums).getStringCellValue();
+                    otherDate = row.getCell(colIzmaksuDatums).getStringCellValue();
+
+                    if (!row.getCell(colIzmaksuSum).getStringCellValue().isEmpty()) {
+                        sum = doubleFromString(row.getCell(colIzmaksuSum).getStringCellValue());
+
                     }
-                    if (!dataSheet.getRow(i).getCell(colNavApmaksatas).getStringCellValue().isEmpty()) {
-                        unpaid = Double.parseDouble(dataSheet.getRow(i).getCell(colNavApmaksatas).getStringCellValue().replace(',', '.'));
+                    if (!row.getCell(colNavApmaksatas).getStringCellValue().isEmpty()) {
+                        unpaid = doubleFromString(row.getCell(colNavApmaksatas).getStringCellValue());
                     }
                 }
 
@@ -217,7 +220,6 @@ public class UploadService {
 
     }
 
-
     public void handleAssetsUpload(InputStream stream, Long processId) throws Exception {
         Workbook workbook = WorkbookFactory.create(stream);
 
@@ -247,31 +249,28 @@ public class UploadService {
             }
 
             for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
-                if (dataSheet.getRow(i).getCell(colNumMpaRiciba) != null && !dataSheet.getRow(i).getCell(colNumMpaRiciba).toString().isEmpty() &&
-                        dataSheet.getRow(i).getCell(colNumApmers) != null && !dataSheet.getRow(i).getCell(colNumApmers).toString().isEmpty()
-                        && dataSheet.getRow(i).getCell(colMantasTips).getStringCellValue().equals("Ieķīlātā manta")) {
-                    sbMpa_iekilata.append(dataSheet.getRow(i).getCell(colNumMpaRiciba).getStringCellValue());
-                    Cell cell = dataSheet.getRow(i).getCell(colNumApmers);
-                    cell.setCellType(CellType.STRING);
-                    sbSums_iekilata.append(cell.getStringCellValue());
-                    sbMpa_iekilata.append(';');
-                    sbSums_iekilata.append(';');
-                    total_iekilata = total_iekilata +
-                            Double.parseDouble(dataSheet.getRow(i).getCell(colNumApmers).getStringCellValue()
-                                    .replace(',', '.'));
+                Row row = dataSheet.getRow(i);
+                if (row.getCell(colNumMpaRiciba) != null &&
+                                !row.getCell(colNumMpaRiciba).toString().isEmpty() &&
+                                row.getCell(colNumApmers) != null &&
+                                !row.getCell(colNumApmers).toString().isEmpty() &&
+                                row.getCell(colMantasTips).getStringCellValue().equals("Ieķīlātā manta")) {
 
-                } else if (dataSheet.getRow(i).getCell(colNumMpaRiciba) != null && !dataSheet.getRow(i).getCell(colNumMpaRiciba).toString().isEmpty() &&
-                        dataSheet.getRow(i).getCell(colNumApmers) != null && !dataSheet.getRow(i).getCell(colNumApmers).toString().isEmpty()
+                    appendCellvalueToCsvList(row.getCell(colNumMpaRiciba), sbMpa_iekilata);
+                    appendCellvalueToCsvList(row.getCell(colNumApmers), sbSums_iekilata);
+
+                    total_iekilata = total_iekilata + doubleFromString(row.getCell(colNumApmers).getStringCellValue());
+
+                } else if (row.getCell(colNumMpaRiciba) != null &&
+                        !row.getCell(colNumMpaRiciba).toString().isEmpty() &&
+                        row.getCell(colNumApmers) != null &&
+                        !row.getCell(colNumApmers).toString().isEmpty()
                 ) {
-                    sbMpa_neiekilata.append(dataSheet.getRow(i).getCell(colNumMpaRiciba).getStringCellValue());
-                    Cell cell = dataSheet.getRow(i).getCell(colNumApmers);
-                    cell.setCellType(CellType.STRING);
-                    sbSums_neiekilata.append(cell.getStringCellValue());
-                    sbMpa_neiekilata.append(';');
-                    sbSums_neiekilata.append(';');
-                    total_neiekilata = total_neiekilata +
-                            Double.parseDouble(dataSheet.getRow(i).getCell(colNumApmers).getStringCellValue()
-                                    .replace(',', '.'));
+                    appendCellvalueToCsvList(row.getCell(colNumMpaRiciba), sbMpa_neiekilata);
+                    appendCellvalueToCsvList(row.getCell(colNumApmers), sbSums_neiekilata);
+
+                    total_neiekilata = total_neiekilata + doubleFromString(row.getCell(colNumApmers).getStringCellValue());
+
                 }
             }
             String assets_neiekilata = "-";
@@ -295,7 +294,6 @@ public class UploadService {
                 assetSums_iekilata = sbSums_iekilata.substring(0, sbSums_iekilata.length() - 1);
             }
 
-
             if (insolvencyProcessRepository.findById(processId).isPresent()) {
 
                 InsolvencyProcess insolvencyProcess = insolvencyProcessRepository.findById(processId).get();
@@ -313,6 +311,14 @@ public class UploadService {
         }
     }
 
+    private void appendCellvalueToCsvList(Cell cell, StringBuilder stringValue) {
+        cell.setCellType(CellType.STRING);
+        stringValue.append(cell.getStringCellValue());
+        stringValue.append(';');
+
+    }
+
+
     private int findSheetColumnByName(String columnName, Sheet dataSheet) {
         int columnIndex = -1;
         for (int i = 0; i <= dataSheet.getRow(0).getLastCellNum(); i++) {
@@ -324,5 +330,9 @@ public class UploadService {
             }
         }
         return columnIndex;
+    }
+
+    public double doubleFromString(String string) {
+        return Double.parseDouble(string.replace(',', '.'));
     }
 }

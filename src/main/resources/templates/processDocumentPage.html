@@ -26,7 +26,7 @@
         <h3> Spied uz pogas un lejuplādē vēlamo dokumentu (Push the button of the document you want to create)</h3>
         <div class="container mt-2 mb-2">
 
-                <a th:href="${'/download-blank/' + process.getId()}">
+                <a th:href="${'/download-blank/' + process.getId()}" style="text-decoration: none">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
             </a>
                 <a th:href="${'/download-company-blank/' + process.getId()}">
@@ -37,7 +37,7 @@
     <section class="border border-success m-5 text-left text-black p-5">
         <h3> Lejuplādē vēlamo iesniegumu valsts institūcijai (Create request to public authorities - press button) :</h3>
         <div>
-            <a th:href="${'/download-authority-blank/' + process.getId()+'/1'}">
+            <a th:href="${'/download-authority-blank/' + process.getId()+'/1'}" style="text-decoration: none">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Uzņēmumu reģistrs (Company Register)</button> </a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/2'}">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Kuģu reģistrs (Ship)</button></a>

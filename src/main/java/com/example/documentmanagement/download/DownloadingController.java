@@ -22,10 +22,10 @@ public class DownloadingController {
     @Autowired
     private OtherExpensesService otherExpensesService;
 
-  @GetMapping("/download-blank/{id}")
+    @GetMapping("/download-blank/{id}")
     public void downloadAdminBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
 
-        DownloadService adminBlank = new DownloadService( insolvencyProcessService, otherExpensesService);
+        DownloadService adminBlank = new DownloadService(insolvencyProcessService, otherExpensesService);
 
         byte[] xwpfDocumentBytes = adminBlank.exportAdminBlank(id).toByteArray();
 
@@ -40,40 +40,21 @@ public class DownloadingController {
 
     }
 
-    //Do we need this?
-  /*  @GetMapping("/download-filled")
-    public void downloadFilledFile(Model model, HttpServletResponse response) throws IOException {
-
-       // byte[] xwpfDocumentBytes = templateService.exportWordDoc().toByteArray();
-
-        byte[] xwpfDocumentBytes = downloadService.exportWordDoc().toByteArray();
-
-        response.setContentType("application/msword");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + "filledtemplate";
-        response.setHeader(headerKey, headerValue);
-
-        ServletOutputStream outputStream = response.getOutputStream();
-        outputStream.write(xwpfDocumentBytes);
-        outputStream.close();
-
-    }*/
-
     @GetMapping("/download-tables/{id}")
-    public void downloadTables(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
+    public void downloadTables(@PathVariable Long id, HttpServletResponse response) {
 
-       // DownloadService downloadService = new DownloadService(insolvencyProcessService, otherExpensesService );
-
-
-        byte[] xwpfDocumentBytes = downloadService.exportCostsOfInsolvencyProceedings(id).toByteArray();
-        response.setContentType("application/msword");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + "SegsanasPlans.doc";
-        response.setHeader(headerKey, headerValue);
-
-        ServletOutputStream outputStream = response.getOutputStream();
-        outputStream.write(xwpfDocumentBytes);
-        outputStream.close();
+        try {
+            byte[] xwpfDocumentBytes = downloadService.exportCostsOfInsolvencyProceedings(id).toByteArray();
+            response.setContentType("application/msword");
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename = " + "SegsanasPlans.doc";
+            response.setHeader(headerKey, headerValue);
+            ServletOutputStream outputStream = response.getOutputStream();
+            outputStream.write(xwpfDocumentBytes);
+            outputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing file to output stream");
+        }
 
     }
 
@@ -96,7 +77,7 @@ public class DownloadingController {
     }
 
     @GetMapping("/download-authority-blank/{id}/{number}")
-    public void downloadAuthorityBlank(@PathVariable Long id, @PathVariable int number,Model model, HttpServletResponse response) throws IOException {
+    public void downloadAuthorityBlank(@PathVariable Long id, @PathVariable int number, Model model, HttpServletResponse response) throws IOException {
 
         DownloadService authorityBlank = new DownloadService(insolvencyProcessService, otherExpensesService);
 
