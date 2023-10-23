@@ -17,34 +17,43 @@
                 <div class="input-group mt-2">
                     <label class="input-group-text">Vārds (Name)</label>
                     <input class="form-control" name="adminName" type="text" th:value="${admin.getAdminName()}">
+                    <p th:if="${#fields.hasErrors('adminName')}" class="text-danger" th:errors="*{adminName}"></p>
+
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Uzvārds (Surname)</label>
                     <input class="form-control" name="adminSurname" type="text" th:value="${admin.getAdminSurname()}">
+                    <p th:if="${#fields.hasErrors('adminSurname')}" class="text-danger" th:errors="*{adminSurname}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Sertifikāta numurs (Number of sertificate) </label>
                     <input class="form-control" name="certificateNumber" type="text" th:value="${admin.getCertificateNumber()}">
+                    <p th:if="${#fields.hasErrors('certificateNumber')}" class="text-danger" th:errors="*{certificateNumber}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Prakses vietas adrese (Adrress) </label>
                     <input class="form-control" name="adminAddress" type="text" th:value="${admin.getAdminAddress()}">
+                    <p th:if="${#fields.hasErrors('adminAddress')}" class="text-danger" th:errors="*{adminAddress}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">E-pasts (Email) </label>
                     <input class="form-control" name="adminEmail" type="email" th:value="${admin.getAdminEmail()}">
+                    <p th:if="${#fields.hasErrors('adminEmail')}" class="text-danger" th:errors="*{adminEmail}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">E-Adrese (EAdress) </label>
                     <input class="form-control" name="adminE_address" type="text" th:value="${admin.getAdminE_address()}">
+                    <p th:if="${#fields.hasErrors('adminE_address')}" class="text-danger" th:errors="*{adminE_address}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Telefons ( Phone number) </label>
                     <input class="form-control" name="adminPhoneNumber" type="text" th:value="${admin.getAdminPhoneNumber()}">
+                    <p th:if="${#fields.hasErrors('adminPhoneNumber')}" class="text-danger" th:errors="*{adminPhoneNumber}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Dokumentu sagatavošanas vieta (Place) </label>
                     <input class="form-control" name="place" type="text" th:value="${admin.getPlace()}">
+                    <p th:if="${#fields.hasErrors('place')}" class="text-danger" th:errors="*{place}"></p>
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text">Gender</label>
@@ -52,6 +61,7 @@
                         <option value="FEMALE">Sieviete (Female)</option>
                         <option value="MALE">Vīrietis(Male)</option>
                     </select>
+                    <p th:if="${#fields.hasErrors('adminGender')}" class="text-danger" th:errors="*{adminGender}"></p>
                 </div>
                 <div class = "mt-2">
                     <button class="btn btn-success text-white p-3" type="submit">Saglabāt (save) </button>

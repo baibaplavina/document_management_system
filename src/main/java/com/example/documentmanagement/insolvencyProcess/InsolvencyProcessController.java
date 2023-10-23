@@ -3,14 +3,16 @@ package com.example.documentmanagement.insolvencyProcess;
 import com.example.documentmanagement.administrator.Administrator;
 import com.example.documentmanagement.administrator.AdministratorRepository;
 import com.example.documentmanagement.administrator.AdministratorService;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,10 +43,15 @@ public class InsolvencyProcessController {
     }
 
     @PostMapping("/create-process")
-    public String createProcessPage(InsolvencyProcess insolvencyProcess) {
+    public String createProcessPage(@Valid @ModelAttribute("process") InsolvencyProcess insolvencyProcess,
+                                    BindingResult result, Model model) {
         try {
+            if(result.hasErrors()){
+//                session.setAttribute("process", insolvencyProcess);
+                model.addAttribute("process", insolvencyProcess);
+                return "createProcess";
+            }
             insolvencyProcessRepository.save(insolvencyProcess);
-
 
             return "redirect:/create-process?message=INSOLVENCY_PROCESS_CREATED_SUCCESSFULLY";
         } catch (Exception exception) {
@@ -66,10 +73,13 @@ public class InsolvencyProcessController {
     }
 
     @PostMapping("/edit-process/{id}")
-    public String editProcess(@PathVariable Long id, Model model, InsolvencyProcess insolvencyProcess) {
+    public String editProcess(@PathVariable Long id, @Valid @ModelAttribute("process")  InsolvencyProcess insolvencyProcess,
+                              BindingResult result, Model model) {
         try {
+            if(result.hasErrors()){
+                return "editProcess";
+            }
             insolvencyProcess.setId(id);
-            System.out.println(insolvencyProcess);
             insolvencyProcessService.editInsolvencyProcess(insolvencyProcess);
             List<Administrator> adminList = administratorRepository.findAll();
             model.addAttribute("admin", adminList);

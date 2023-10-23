@@ -1,12 +1,15 @@
 package com.example.documentmanagement.administrator;
 
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,14 +28,22 @@ public class AdministratorController {
             model.addAttribute("error", error);
             model.addAttribute("admin", new Administrator());
             model.addAttribute("adminList", administratorService.findAll());
+            return "createAdministrator";
 
-        return "createAdministrator";
+//        return findPaginated(1, "adminId", "asc", model);
     }
 
 
     @PostMapping("/create-administrator")
-    public String handleAdministratorRegistration(Administrator administrator){
+    public String handleAdministratorRegistration(@Valid @ModelAttribute("admin") Administrator administrator,
+                                                  BindingResult result, Model model, HttpSession session){
         try {
+            if(result.hasErrors()){
+                model.addAttribute("admin", administrator);
+                return "createAdministrator";
+
+            }
+
             administratorRepository.saveAndFlush(administrator);
             return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_SUCCESS";
         } catch (Exception exception) {
@@ -52,8 +63,13 @@ public class AdministratorController {
 
     }
     @PostMapping ("/edit-administrator/{id}")
-    public String editAdmin(@PathVariable Long id, Model model, Administrator administrator){
+    public String editAdmin(@PathVariable Long id,
+                            @Valid @ModelAttribute("admin")  Administrator administrator,
+                             BindingResult result, Model model,HttpSession session){
         try{
+            if(result.hasErrors()){
+                return "editAdministratorProfile";
+            }
             administrator.setAdminId(id);
             administratorService.editAdministrator(administrator);
             List<Administrator> adminList = administratorService.findAll();
