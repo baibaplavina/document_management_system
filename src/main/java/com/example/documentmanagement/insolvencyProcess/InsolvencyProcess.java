@@ -1,10 +1,9 @@
-package com.example.documentmanagement.insolvencyprocess;
+package com.example.documentmanagement.insolvencyProcess;
 
 import com.example.documentmanagement.administrator.Administrator;
-import com.example.documentmanagement.otherExpenses.OtherExpenses;
+import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpenses;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -61,23 +60,9 @@ public class InsolvencyProcess {
     private double totalExpenses;
     private double adminSalary;
     private String creditorsList;
+    private String valstsIenemumuApmers;
+    private String maksatnespejasKontrolesApmers;
     private Boolean securedAssets;
-    private String IzmaksuRasanasDatumsType1;
-    private String SegtaSummaType1;
-    private String SegsanasDatumsType1;
-    private String NavApmaksatasType1;
-    private String IzmaksuRasanasDatumsType2;
-    private String SegtaSummaType2;
-    private String SegsanasDatumsType2;
-    private String NavApmaksatasType2;
-    private String IzmaksuRasanasDatumsType3;
-    private String SegtaSummaType3;
-    private String SegsanasDatumsType3;
-    private String NavApmaksatasType3;
-    private String IzmaksuRasanasDatumsType4;
-    private String SegtaSummaType4;
-    private String SegsanasDatumsType4;
-    private String NavApmaksatasType4;
 
     private LocalDate caseClosingDate;
 
@@ -90,6 +75,5 @@ public class InsolvencyProcess {
     public void updating(){
         this.updatedAt= new Timestamp(System.currentTimeMillis());
     }
-
 
 }

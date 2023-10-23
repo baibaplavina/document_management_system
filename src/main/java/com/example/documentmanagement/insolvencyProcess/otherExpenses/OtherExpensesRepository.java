@@ -1,6 +1,6 @@
-package com.example.documentmanagement.otherExpenses;
+package com.example.documentmanagement.insolvencyProcess.otherExpenses;
 
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

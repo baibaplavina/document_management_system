@@ -1,4 +1,4 @@
-package com.example.documentmanagement.documents;
+package com.example.documentmanagement.upload;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

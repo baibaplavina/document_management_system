@@ -1,9 +1,6 @@
-package com.example.documentmanagement.insolvencyprocess;
+package com.example.documentmanagement.insolvencyProcess;
 
 import com.example.documentmanagement.administrator.AdministratorRepository;
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcessRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 

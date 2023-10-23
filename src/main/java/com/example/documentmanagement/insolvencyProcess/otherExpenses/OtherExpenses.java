@@ -1,6 +1,6 @@
-package com.example.documentmanagement.otherExpenses;
+package com.example.documentmanagement.insolvencyProcess.otherExpenses;
 
-import com.example.documentmanagement.insolvencyprocess.InsolvencyProcess;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class OtherExpenses {
     private InsolvencyProcess insolvencyProcess;
     private String assetType;
     String name;
-    private String sanemejs;
+    private String recipient;
     private String creatingDate;
     private String otherDate;
     private double sum;
