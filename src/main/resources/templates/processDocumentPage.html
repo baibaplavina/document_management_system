@@ -23,7 +23,7 @@
     </section>
     <section class="border border-success m-5 text-left text-black mt-2 mb-2 p-5">
 
-        <h3> Push the button of the document you want to create:</h3>
+        <h3> Spied uz pogas un lejuplādē vēlamo dokumentu (Push the button of the document you want to create)</h3>
         <div class="container mt-2 mb-2">
 
                 <a th:href="${'/download-blank/' + process.getId()}">
@@ -32,75 +32,84 @@
                 <a th:href="${'/download-company-blank/' + process.getId()}">
                     <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot maksātnespējīgās sabiedrības  veidlapu (Create Company Blank)</button>
             </a>
-
         </div>
     </section>
     <section class="border border-success m-5 text-left text-black p-5">
-        <h3> Create request to public authorities - press button:</h3>
-        <div  >
+        <h3> Lejuplādē vēlamo iesniegumu valsts institūcijai (Create request to public authorities - press button) :</h3>
+        <div>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/1'}">
-            <button type="button" class="btn btn-outline-success mt-2 mb-2">Uzņēmumu reģistrs (Company Register)</button> </a>
+                <button type="button" class="btn btn-outline-success mt-2 mb-2">Uzņēmumu reģistrs (Company Register)</button> </a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/2'}">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Kuģu reģistrs (Ship)</button></a>
-                <a th:href="${'/download-authority-blank/' + process.getId()+'/3'}">
-                    <button type="button" class="btn btn-outline-success mt-2 mb-2">Lauksaimniecības datu centrs (Agric)</button></a>
-                    <a th:href="${'/download-authority-blank/' + process.getId()+'/4'}">
-                        <button type="button" class="btn btn-outline-success mt-2 mb-2">Tehniskās uzraudzības aģentūra (State tech)</button></a>
+            <a th:href="${'/download-authority-blank/' + process.getId()+'/3'}">
+                <button type="button" class="btn btn-outline-success mt-2 mb-2">Lauksaimniecības datu centrs (Agric)</button></a>
+            <a th:href="${'/download-authority-blank/' + process.getId()+'/4'}">
+                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Tehniskās uzraudzības aģentūra (State tech)</button></a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/5'}">
                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Valsts zemes dienests (Land)</button></a>
-                <a th:href="${'/download-authority-blank/' + process.getId()+'/6'}">
-                    <button type="button" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button></a>
-            <a th:href="${'/download-tables/' + process.getId()}">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2"> Costs of insolvency proceedings </button>
-            </a>
-
-
+            <a th:href="${'/download-authority-blank/' + process.getId()+'/6'}">
+                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button></a>
         </div>
     </section>
+
     <section class="border border-success m-5 text-left text-black p-5">
-        <h3 id = "listHeader"> Document list to upload:</h3>
+        <h3 id = "listHeader"> Dokumentu saraksts augšuplādei (Document list to upload):</h3>
         <div class="container col-xs-3">
             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
-                <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 1}" enctype="multipart/form-data">
-                    <label class="form-label">1. Upload Assets List ('Mantas saraksts')</label>
-                        <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-                    <button type="submit" class="btn btn-default">Upload File</button>
 
-                </form>
+            <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 1}" enctype="multipart/form-data">
+                <label class="form-label" > 1. Mantas saraksts (Assets List)</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
+                    <div style="width: 1cm;"></div>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                </div>
+            </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 2}" enctype="multipart/form-data">
-                <label class="form-label">2. Upload Costs ('Iegūtie naudas līdzekļi')</label>
-                <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-                <button type="submit" class="btn btn-default">Upload File</button>
-
+                <label class="form-label"> 2. Iegūtie naudas līdzekļi (Obtained money)</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="file" name="file" class="form-control"  accept=".xlsx, .xls, .csv" style="flex: 2;" />
+                    <div style="width: 1cm;"></div>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                </div>
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 3}" enctype="multipart/form-data">
-                <label class="form-label">3. Upload Cash flow ('Naudas plūsma')</label>
-                <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-
-                <button type="submit" class="btn btn-default">Upload File</button>
-
+                <label class="form-label"> 3. Naudas plūsma (Cash flow)</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
+                    <div style="width: 1cm;"></div>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                </div>
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 4}" enctype="multipart/form-data">
-                <label class="form-label">4. Upload Expenses ('Izmaksas')</label>
-                <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-
-                <button type="submit" class="btn btn-default">Upload File</button>
-
+                <label class="form-label" >4. Izmaksas (Expenses)</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
+                    <div style="width: 1cm;"></div>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                </div>
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 5}" enctype="multipart/form-data">
-                <label class="form-label">5. Upload Creditors ('Kreditoru prasījumu saraksts')</label>
-                <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-                <button type="submit" class="btn btn-default">Upload File</button>
+                <label class="form-label" > 5. Kreditoru prasījumu saraksts (Creditors list)</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
+                    <div style="width: 1cm;"></div>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                </div>
             </form>
 
+        </div>
 
-
-            <!--       https://getbootstrap.com/docs/5.3/forms/input-group/
-            Custom file input-->
+        <h3 > Dokuments lejuplādei  (Document for download): </h3>
+        <div class="container mt-2 mb-2">
+            <a th:href="${'/download-tables/' + process.getId()}">
+                <button type="button" class="btn btn-outline-success mt-2 mb-2"> Maksātnespējas procesa izmaksu saraksts un kreditoru prasījumu segšanas plāns (Costs of insol process) </button>
+            </a>
+        </div>
         </div>
     </section>
 </main>
