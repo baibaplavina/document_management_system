@@ -49,27 +49,6 @@ public class DownloadService {
         return out;
     }*/
 
-    public ByteArrayOutputStream exportWordDoc() throws IOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/template1.docx");
-        XWPFDocument doc = new XWPFDocument(inputStream);
-
-        try {
-
-            templateService.replaceHeaderText(doc);
-            templateService.replacePlaceDateText(doc);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        doc.write(out);
-        out.close();
-        doc.close();
-
-        return out;
-    }
 
     public ByteArrayOutputStream exportCostsOfInsolvencyProceedings(Long processId) {
 

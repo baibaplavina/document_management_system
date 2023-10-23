@@ -64,14 +64,15 @@
                 <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 1}" enctype="multipart/form-data">
                     <label class="form-label">1. Upload Assets List ('Mantas saraksts')</label>
                         <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-                    <button type="submit" class="btn btn-default">Upload File</button>
+
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2">Upload File</button>
 
                 </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 2}" enctype="multipart/form-data">
                 <label class="form-label">2. Upload Costs ('Iegūtie naudas līdzekļi')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-                <button type="submit" class="btn btn-default">Upload File</button>
+                <button type="submit" class="btn btn-outline-success mt-2 mb-2">Upload File</button>
 
             </form>
 
@@ -79,7 +80,7 @@
                 <label class="form-label">3. Upload Cash flow ('Naudas plūsma')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
 
-                <button type="submit" class="btn btn-default">Upload File</button>
+                <button type="submit" class="btn btn-outline-success mt-2 mb-2">Upload File</button>
 
             </form>
 
@@ -87,20 +88,20 @@
                 <label class="form-label">4. Upload Expenses ('Izmaksas')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
 
-                <button type="submit" class="btn btn-default">Upload File</button>
+                <button type="submit" class="btn btn-outline-success mt-2 mb-2">Upload File</button>
 
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 5}" enctype="multipart/form-data">
                 <label class="form-label">5. Upload Creditors ('Kreditoru prasījumu saraksts')</label>
                 <input type="file" name="file" class="form-control-file" accept=".xlsx, .xls, .csv">
-                <button type="submit" class="btn btn-default">Upload File</button>
+                <button type="submit" class="btn btn-outline-success mt-2 mb-2">Upload File</button>
             </form>
 
+            <a th:href="${'/download-tables/' + process.getId()}">
+                <button type="button" class="btn btn-outline-success mt-2 mb-2"> Maksātnespējas procesa izmaksu saraksts un kreditoru prasījumu segšanas plāns  </button>
+            </a>
 
-
-            <!--       https://getbootstrap.com/docs/5.3/forms/input-group/
-            Custom file input-->
         </div>
     </section>
 </main>
