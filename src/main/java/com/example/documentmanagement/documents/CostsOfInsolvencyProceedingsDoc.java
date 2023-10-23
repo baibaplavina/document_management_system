@@ -125,47 +125,49 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
 
         } else {
             XWPFRun run = new_paragraph.createRun();
-            run.setBold(true);
-            run.setText("1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā");
 
-            XWPFParagraph new_paragraph1 = insertNewParagraph(beforeAssetsTablePosition + 3, doc);
-            create_1_1_or_2_1table(new_paragraph1, insolvencyProcess.getAssetsList_iekilata(), insolvencyProcess.getAssetsListCosts_iekilata(),
-                    insolvencyProcess.getAssetsTotalCosts_iekilata());
+            runBoldText(run, "1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā");
+            insertTableAfterHeader(doc, run.getText(0));
 
-            XmlCursor cursor3 = new_paragraph1.getCTP().newCursor();
-            cursor3.toNextSibling();
+            XmlCursor cursor3 = insertNewParagraph(beforeAssetsTablePosition + 4, doc).getCTP().newCursor();
 
             XWPFParagraph new_paragraph3 = doc.insertNewParagraph(cursor3);
             XWPFRun run3 = new_paragraph3.createRun();
-            run3.setBold(true);
-            run3.setText("1.2. Izmaksas, kas saistītas ar nodrošināto mantu ");
 
-            XmlCursor cursor4 = new_paragraph3.getCTP().newCursor();
-            cursor4.toNextSibling();
-            XWPFParagraph new_paragraph5 = doc.insertNewParagraph(cursor4);
-            List<OtherExpenses> listSecuredExpenses = otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess);
-            create1_2_or_2_2_table(new_paragraph5, listSecuredExpenses);
+            runBoldText(run3, "1.2. Izmaksas, kas saistītas ar nodrošināto mantu ");
+            insertTableAfterHeader(doc, run3.getText(0));
+
         }
     }
 
+
     private void createUnsecuredAssetsPart() {
 
-        int table2_1_HeaderPosition = getParagraphPositionIfContainsText("Ienākumi no nenodrošinātās mantas maksātnespējas procesā ", doc);
-        XWPFParagraph new_paragraph1 = insertNewParagraph(table2_1_HeaderPosition + 1, doc);
-        create_1_1_or_2_1table(new_paragraph1, insolvencyProcess.getAssetsList_neiekilata(), insolvencyProcess.getAssetsListCosts_neiekilata(), insolvencyProcess.getAssetsTotalCosts_neiekilata());
-
-        int table2_2_HeaderPosition = getParagraphPositionIfContainsText("Izmaksas, kas saistītas ar nenodrošināto kustamo mantu", doc);
-        XWPFParagraph new_paragraph2 = insertNewParagraph(table2_2_HeaderPosition + 1, doc);
-        List<OtherExpenses> listUnsecuredExpenses = otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess);
-        create1_2_or_2_2_table(new_paragraph2, listUnsecuredExpenses);
-
+        insertTableAfterHeader(doc, "Ienākumi no nenodrošinātās mantas maksātnespējas procesā ");
+        insertTableAfterHeader(doc, "Izmaksas, kas saistītas ar nenodrošināto kustamo mantu");
     }
 
-    private void create_1_1_or_2_1table(XWPFParagraph p, String assetList, String sums, String totalCost) {
+    private void insertTableAfterHeader(XWPFDocument doc, String header) {
+        int tableHeaderPosition = getParagraphPositionIfContainsText(header, doc);
+        XWPFParagraph new_paragraph = insertNewParagraph(tableHeaderPosition + 1, doc);
+        XWPFTable newTable = new_paragraph.getBody().insertNewTbl(new_paragraph.getCTP().newCursor());
 
-        XWPFTable createdTable = p.getBody().insertNewTbl(p.getCTP().newCursor());
+        switch (header) {
+            case "1.1. Ienākumi no nodrošinātās mantas maksātnespējas procesā" ->
+                    create_1_1_or_2_1table(newTable, insolvencyProcess.getAssetsList_iekilata(), insolvencyProcess.getAssetsListCosts_iekilata(),
+                            insolvencyProcess.getAssetsTotalCosts_iekilata());
+            case "1.2. Izmaksas, kas saistītas ar nodrošināto mantu " ->
+                    create1_2_or_2_2_table(newTable, otherExpensesService.findSecuredAssetsByProcess(insolvencyProcess));
+            case "Ienākumi no nenodrošinātās mantas maksātnespējas procesā " ->
+                    create_1_1_or_2_1table(newTable, insolvencyProcess.getAssetsList_neiekilata(), insolvencyProcess.getAssetsListCosts_neiekilata(), insolvencyProcess.getAssetsTotalCosts_neiekilata());
+            case "Izmaksas, kas saistītas ar nenodrošināto kustamo mantu" ->
+                    create1_2_or_2_2_table(newTable, otherExpensesService.findUnsecuredAssetsByProcess(insolvencyProcess));
+        }
+    }
 
-        createStyledTableHeader(createdTable, Arrays.asList(
+    private void create_1_1_or_2_1table(XWPFTable newTable, String assetList, String sums, String totalCost) {
+
+        createStyledTableHeader(newTable, Arrays.asList(
                 "Summa, EUR",
                 "Pamatojums"
         ));
@@ -175,15 +177,15 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
 
 
         for (int i = 0; i < listOfAssets.size(); i++) {
-            createdTable.createRow();
+            newTable.createRow();
         }
 
         for (int i = 1; i <= listOfAssets.size(); i++) {
-            styleCell(createdTable.getRow(i).getCell(0), listOfSums.get(i - 1));
-            styleCell(createdTable.getRow(i).getCell(1), listOfAssets.get(i - 1));
+            styleCell(newTable.getRow(i).getCell(0), listOfSums.get(i - 1));
+            styleCell(newTable.getRow(i).getCell(1), listOfAssets.get(i - 1));
         }
 
-        XWPFTableRow row = createdTable.createRow();
+        XWPFTableRow row = newTable.createRow();
         styleCellBold(row.getCell(0), getStyledString(totalCost));
         styleCellBold(row.getCell(1), "Kopā /Total");
 
@@ -191,8 +193,8 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
 
     }
 
-    private void create1_2_or_2_2_table(XWPFParagraph p, List<OtherExpenses> listOfFilteredExpenses) {
-        XWPFTable createdTable = p.getBody().insertNewTbl(p.getCTP().newCursor());
+    private void create1_2_or_2_2_table(XWPFTable newTable, List<OtherExpenses> listOfFilteredExpenses) {
+
         List<String> headerValues = Arrays.asList(
                 "Maksājuma tips",
                 "Pakalpojoums",
@@ -202,7 +204,8 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
                 "Maksājuma datums",
                 "Radušās un nav apmaksātas izmaksas EUR");
 
-        createStyledTableHeader(createdTable, headerValues);
+        createStyledTableHeader(newTable, headerValues);
+
         double totalSegtaSummaIzdevumi = 0;
         double totalNavApmaksataIzdevumi = 0;
 
@@ -210,7 +213,7 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
 
             if (expense.getName().equals("MPA atlīdzība") &&
                     (expense.getSum() != 0 || expense.getUnpaid() != 0)) {
-                XWPFTableRow row = createdTable.createRow();
+                XWPFTableRow row = newTable.createRow();
 
                 styleCellMinimized(row.getCell(0), "Administratora atlīdzība");
                 styleCellMinimized(row.getCell(1), expense.getName());
@@ -222,7 +225,7 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
             }
         }
 
-        XWPFTableRow row = createdTable.createRow();
+        XWPFTableRow row = newTable.createRow();
         styleCellMinimized(row.getCell(0), "Izdevumi");
 
         for (OtherExpenses expense : listOfFilteredExpenses) {
@@ -230,7 +233,7 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
             if ((expense.getSum() != 0 || expense.getUnpaid() != 0) &&
                     (!expense.getName().equals("MPA atlīdzība")) && (!expense.getName().contains("Administratora"))) {
 
-                XWPFTableRow row1 = createdTable.createRow();
+                XWPFTableRow row1 = newTable.createRow();
                 styleCellMinimized(row1.getCell(1), expense.getName());
                 styleCellMinimized(row1.getCell(2), expense.getRecipient());
                 styleCellMinimized(row1.getCell(3), expense.getCreatingDate());
@@ -243,7 +246,7 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
             }
         }
 
-        XWPFTableRow row2 = createdTable.createRow();
+        XWPFTableRow row2 = newTable.createRow();
         styleCellMinimized(row2.getCell(3), "Kopā izdevumi, Eur:");
         styleCellMinimized(row2.getCell(4), totalSegtaSummaIzdevumi);
         styleCellMinimized(row2.getCell(6), totalNavApmaksataIzdevumi);
@@ -275,7 +278,6 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
         createPart4(lineNumber7Value);
     }
 
-
     private void createPart4(double lineNumber7Value) {
 
         replaceText(doc, "/This document table 3 last No/", getStyledString(lineNumber7Value) + " EUR");
@@ -287,10 +289,7 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
             replaceText(doc, "ir/nav", "ir");
             int par_index = getParagraphPositionIfContainsText("sedzis parādnieka darbinieka prasījumus", doc);
             XWPFRun run = doc.getParagraphs().get(par_index).createRun();
-            run.setBold(true);
-            run.setFontFamily("Times New Roman");
-            run.setFontSize(12);
-            run.setText("Maksātnespējas kontroles dienesta segto darbinieku prasījumu summa darbiniekiem: " +
+            runBoldText(run, "Maksātnespējas kontroles dienesta segto darbinieku prasījumu summa darbiniekiem: " +
                     insolvencyProcess.getMaksatnespejasKontrolesApmers() + " EUR, valsts ieņēmumu dienestam: " +
                     insolvencyProcess.getValstsIenemumuApmers() + " EUR.");
 
@@ -303,13 +302,15 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
             int par_index = getParagraphPositionIfContainsText("nodokļu prasījums novirzot naudas līdzekļus tam", doc);
             XWPFParagraph paragraph = insertNewParagraph(par_index + 1, doc);
             XWPFRun run = paragraph.createRun();
-            run.setBold(true);
-            run.setFontFamily("Times New Roman");
-            run.setFontSize(12);
-            run.setText("Valsts ieņēmumu dienesta kreditoru prasījuma apmērs: " +
+            runBoldText(run, "Valsts ieņēmumu dienesta kreditoru prasījuma apmērs: " +
                     insolvencyProcess.getValstsIenemumuApmers() + " EUR.");
-
         }
     }
 
+    private void runBoldText(XWPFRun run, String text) {
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(12);
+        run.setBold(true);
+        run.setText(text);
+    }
 }
