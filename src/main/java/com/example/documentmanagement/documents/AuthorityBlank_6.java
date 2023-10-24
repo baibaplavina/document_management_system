@@ -62,15 +62,12 @@ public class AuthorityBlank_6 extends AuthorityBlank {
                 mantas glabātājam par pienākumu nodot administratoram mantu, kuras pārdošana nav uzsākta.;
 
                 Ņemot vērā iepriekš minēto, lūdzu:;
-                1.\tIzbeigt visas uzsāktās izpildu lietvedības pret companyName, vienotais reģistrācijas numurs:
-                registrationNumber.;
-                2.\tAtcelt visus uzliktos liegumus, atzīmes, kā arī cita veida aizliegumus, kas uzlikti companyName, vienotais reģistrācijas numurs:
-                registrationNumber, mantai un norēķinu kontiem.;
+                1.\tIzbeigt visas uzsāktās izpildu lietvedības pret Sabiedrību.;
+                2.\tAtcelt visus uzliktos liegumus, atzīmes, kā arī cita veida aizliegumus, kas uzlikti Sabiedrības, mantai un norēķinu kontiem.;
                 3.\tAtcelt pieņemtos piespiedu izpildes līdzekļus.;
                 4.\tSniegt informāciju vai izpildu lietu ietvaros ir saņemti naudas līdzekļi, cik, kādā veidā un kādā apmērā;
                 5.\tSniegt informāciju kādā apmērā un kad segts piedzinēja prasījums?;
-                6.\tAtsūtīt sprieduma un/vai izpildu raksta kopiju, uz kura pamata uzsākta izpildu lietvedība pret companyName, vienotais reģistrācijas numurs:
-                registrationNumber.;
+                6.\tAtsūtīt sprieduma un/vai izpildu raksta kopiju, uz kura pamata uzsākta izpildu lietvedība pret Sabiedrību.;
                 7.\tNorādīt vai šobrīd ir piedziņas procesā saņemtie Piedzinējam neizmaksāti naudas līdzekļi? Ja ir, tad tos
                 lūdzu neizmaksāt Piedzinējam, bet sniegt informāciju par summas apmēru ar mērķi atgūt tos un veltīt izmaksai maksātnespējas procesā kreditoriem Maksātnespējas procesa noteiktajā kārtībā.
                    """;
