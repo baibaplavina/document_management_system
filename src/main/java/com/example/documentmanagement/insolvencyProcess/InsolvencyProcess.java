@@ -4,10 +4,11 @@ import com.example.documentmanagement.administrator.Administrator;
 import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpenses;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
@@ -23,20 +24,20 @@ public class InsolvencyProcess {
     @Id
     @GeneratedValue()
     private Long id;
-    @NotEmpty(message = "registration number should contain 11 numbers, please fill in.")
+    @Pattern(regexp = "([0-9]{11})", message = "registration number should contain 11 numbers, please fill in.")
     private String registrationNumber;
     @NotEmpty(message = "company name is required, please fill in.")
     private String companyName;
-    @NotEmpty(message = "Company address is required, please fill in.")
+    @NotEmpty(message = "company address is required, please fill in.")
     private String companyAddress;
     @NotEmpty(message = "court name is required, please fill in.")
     private String courtName;
-    @NotEmpty(message = "court case number is required, please fill in.")
-    @Length(min = 9, max=9)
+    @Pattern(regexp = "(C.*[0-9]{8})", message = "court case number contains  letter C and 8 numbers and is required, please fill in.")
     private String courtCaseNumber;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull
     private LocalDate courtDecisionDate;
-    @NotEmpty(message = "E-address should contain 12 symbols, please fill in.")
+    @NotEmpty(message = "e-address is required, please fill in.")
     private String e_address;
     @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Timestamp createdAt;

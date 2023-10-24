@@ -5,9 +5,9 @@
 
   <h1 class="p-2">Document Management System</h1>
   <nav class="m-3 p-2">
-    <a class="btn btn-success" href="/create-administrator">Create administrator</a>
-    <a class="btn btn-success" href="/create-process">Create new process</a>
-    <a class="btn btn-success" href="/view-processes/all">View process list</a>
+    <a class="btn btn-success" href="/create-administrator" th:text="#{button.admin}"></a>
+    <a class="btn btn-success" href="/create-process" th:text="#{button.process}"></a>
+    <a class="btn btn-success" href="/view-processes/all" th:text="#{button.list}"></a>
   </nav>
 </header>
 
@@ -17,7 +17,7 @@
   <h1 class="p-2">Document Management System</h1>
   <nav class="m-3 p-2">
     <a class="btn btn-success" href="/">Home</a>
-    <a class="btn btn-success" href="/create-process">Create new process</a>
+    <a class="btn btn-success" href="/create-process" th:text="#{button.process}"></a>
     <a class="btn btn-success" href="/view-processes/all">View process list</a>
   </nav>
 </header>
