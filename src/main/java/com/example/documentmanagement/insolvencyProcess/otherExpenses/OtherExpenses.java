@@ -17,7 +17,7 @@ public class OtherExpenses {
     @ManyToOne
     private InsolvencyProcess insolvencyProcess;
     private String assetType;
-    String name;
+    private String name;
     private String recipient;
     private String creatingDate;
     private String otherDate;

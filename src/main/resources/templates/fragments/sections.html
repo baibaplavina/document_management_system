@@ -49,10 +49,10 @@
 
                 <td>
                     <a th:href="${'/process-documents/' + process.getId()}" class="btn btn-success" role="button"
-                       type="submit">Open </a>
+                       type="submit" th:text="#{button.open}"> </a>
                 </td>
                 <td>
-                    <a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit">Edit </a>
+                    <a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit" th:text="#{button.edit}"> </a>
                 </td>
             </tr>
         </th:block>
