@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lv" xmlns="http://www.w3.org/1999/html" xml:lang="lv">
 <head>
     <meta charset="UTF-8">
     <title>Main page</title>
@@ -7,44 +7,63 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet"  href="styles/header.css">
 
+
 </head>
 <body>
 <header th:replace="~{fragments/headers.html::header-main}"></header>
 
-<!--<header class="border border-success m-5 text-center text-green p-3"> -->
 <main>
 <section class="border border-success m-5 text-black mt-2 mb-2 p-2">
     <div id="date" class="fw-bold " th:text="${date}"></div>
+    <span th:text="#{lang.change}"></span>
+    <select id="locales">
+        <option value=""></option>
+        <option value="en" th:text="#{lang.en}"></option>
+        <option value="lv" th:text="#{lang.lv}"></option>
+    </select>
+
 
 </section>
 
 
     <section class="border border-success m-5 text-left text-black mt-2 mb-2 p-2">
-        <h3> Introduction</h3>
-        <div>
-            In Latvia in company bankruptcy process the system is organized that: there is self-employed persons
-            insolvency process
-            administrators, who is supervised by state institution - Insolvency Control Service Republic of Latvia.
-            Insolvency Control Service is created EMUS -
-            electronic insolvency supervision system. EMUS system aim is to supervise all administrators and all
-            administrators are obligated to insert data about every
-            process in this system. System is not a help tool for administrators, but only instrument for the state
-            institution for the supervision. The TASK for our project
-            is to create a program as a tool for helping insolvency administrators to create necessary documents in
-            bankruptcy process – Document Management System
-            (DMS).
+        <h3 th:text="#{introduction}"></h3>
+        <div th:text="#{textIntroduction}">
+<!--            In Latvia in company bankruptcy process the system is organized that: there is self-employed persons-->
+<!--            insolvency process-->
+<!--            administrators, who is supervised by state institution - Insolvency Control Service Republic of Latvia.-->
+<!--            Insolvency Control Service is created EMUS - -->
+<!--            electronic insolvency supervision system. EMUS system aim is to supervise all administrators and all-->
+<!--            administrators are obligated to insert data about every-->
+<!--            process in this system. System is not a help tool for administrators, but only instrument for the state-->
+<!--            institution for the supervision. The TASK for our project-->
+<!--            is to create a program as a tool for helping insolvency administrators to create necessary documents in-->
+<!--            bankruptcy process – Document Management System-->
+<!--            (DMS).-->
         </div>
     </section>
     <section class="border border-success  text-left text-black m-5 mt-2 mb-2 p-3">
-        <h3> User guide</h3>
+        <h3 th:text="#{user.guide}"></h3>
         <div clas="user-guide-list p-5">
-            <p>DMS will help you: </p>
-            <p> -to administrate and organize documents</p>
-            <p> -to open new processes and administrate ongoing much easier </p>
-            <p> -to create and download required blanks quickly</p>
-            <p> -to have all information in one place and manipulate data efficiently</p>
+            <p th:text="#{user.text}"></p>
+            <p th:text="#{p1}"> -to administrate and organize documents</p>
+            <p th:text="#{p2}"> -to open new processes and administrate ongoing much easier </p>
+            <p th:text="#{p3}"> -to create and download required blanks quickly</p>
+            <p th:text="#{p4}"> -to have all information in one place and manipulate data efficiently</p>
         </div>
     </section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#locales").change(function () {
+                var selectedOption = $('#locales').val();
+                if (selectedOption != ''){
+                    window.location.replace('?lang=' + selectedOption);
+                }
+            });
+        });
+    </script>
 
 </main>
 <footer th:replace="~{fragments/footer.html::footer}"></footer>

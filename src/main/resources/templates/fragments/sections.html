@@ -87,6 +87,7 @@
         </div>
     </section>
 </section>
+
 <!------------------------------------------------------------------------>
 
 
@@ -99,38 +100,18 @@
     <table class="table table-bordered text-center">
         <thead class="table-header-dark">
         <tr>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=adminId&sortDir=' + ${reverseSortDirection}}">Id </a>
-
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=certificateNumber&sortDir=' + ${reverseSortDirection}}">Certificate Number </a>
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=adminName&sortDir=' + ${reverseSortDirection}}">Name </a>
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=adminSurname&sortDir=' + ${reverseSortDirection}}">Surname </a>
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=adminAddress&sortDir=' + ${reverseSortDirection}}">Address</a>
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=adminEmail&sortDir=' + ${reverseSortDirection}}">Email</a>
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=admin_Eaddress&sortDir=' + ${reverseSortDirection}}">E-address</a></th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=adminPhoneNumber&sortDir=' + ${reverseSortDirection}}">Phone</a>
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=adminGender&sortDir=' + ${reverseSortDirection}}">Gender</a>
-            </th>
-            <th>
-                <a th:href="@{'/pages/' + ${currentPage} + '?sortField=place&sortDir=' + ${reverseSortDirection}}">Place</a>
-            </th>
-            <th> Edit</th>
-            <th> Delete</th>
+            <th> Id </th>
+            <th> Certificate Number </th>
+            <th> Name </th>
+            <th> Surname </th>
+            <th> Address </th>
+            <th> Email </th>
+            <th> E-address </th>
+            <th> Phone </th>
+            <th> Gender </th>
+            <th> Place </th>
+            <th> Edit </th>
+            <th> Delete </th>
         </tr>
         </thead>
         <tbody>
@@ -159,31 +140,4 @@
         </th:block>
         </tbody>
     </table>
-    <section>
-        <div th:if="${totalPages>0}">
-            <div class=" row col-sm-10">
-                <div class="col-sm-2">
-                    Total Rows: [[${totalItems}]]
-                </div>
-                <div class="col-sm-1">
-                    <span th:each="i : ${#numbers.sequence(1,totalPages)}">
-                         <a th:if="${currentPage!=i}"
-                            th:href="@{'/pages/' + ${i} +'?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">[[${i}]]</a>
-                        <span th:unless="${currentPage!=i}">[[${i}]]</span>
-                    </span>
-                </div>
-                <div class="col-sm-1">
-                    <a th:if="${currentPage<totalPages}"
-                       th:href="@{'/pages/'+ ${currentPage+1} + '?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">Next</a>
-                    <span th:unless="${currentPage<totalPages}">Next</span>
-                </div>
-                <div class="col-sm-1">
-                    <a th:if="${currentPage<totalPages}"
-                       th:href="@{'/pages/'+ ${totalPages} + '?sortField=' + ${sortField} +'&sortDir=' + ${sortDir}}">Last</a>
-                    <span th:unless="${currentPage<totalPages}">Last</span>
-                </div>
-            </div>
-
-        </div>
-    </section>
 </section>
