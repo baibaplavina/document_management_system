@@ -1,6 +1,5 @@
 package com.example.documentmanagement.insolvencyProcess;
 
-import com.example.documentmanagement.administrator.AdministratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -16,13 +14,10 @@ import java.util.List;
 public class InsolvencyProcessService {
     @Autowired
     private InsolvencyProcessRepository insolvencyProcessRepository;
-    @Autowired
-    private AdministratorRepository administratorRepository;
 
     @Autowired
-    public InsolvencyProcessService(InsolvencyProcessRepository insolvencyProcessRepository, AdministratorRepository administratorRepository) {
+    public InsolvencyProcessService(InsolvencyProcessRepository insolvencyProcessRepository) {
         this.insolvencyProcessRepository = insolvencyProcessRepository;
-        this.administratorRepository = administratorRepository;
     }
 
     List<InsolvencyProcess> findAll() {
@@ -94,13 +89,4 @@ public class InsolvencyProcessService {
 
     }
 
-    public List<InsolvencyProcess> findClosedProcesses() throws Exception {
-
-       return insolvencyProcessRepository.findInsolvencyProcessesByCaseClosingDateBefore(LocalDate.now());
-    }
-    public List<InsolvencyProcess> findActiveProcesses() throws Exception {
-
-
-        return insolvencyProcessRepository.findByCaseClosingDateIsNull();
-    }
 }

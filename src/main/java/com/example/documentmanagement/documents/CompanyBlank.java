@@ -83,7 +83,7 @@ public class CompanyBlank extends TemplateService {
         }
     }
 
-    void replacePlaceDateCompanyBlankText(XWPFDocument doc, Long id) {
+    public void replacePlaceDateCompanyBlankText(XWPFDocument doc, Long id) {
 
         replaceText(doc, "Place",
                 "" + insolvencyProcess.getAdmin().getPlace());

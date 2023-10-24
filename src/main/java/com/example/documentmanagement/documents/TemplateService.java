@@ -7,7 +7,6 @@ import java.util.List;
 
 public class TemplateService {
 
-
     XWPFDocument replaceText(XWPFDocument doc, String originalText, String updatedText) {
         replaceTextInParagraphs(doc.getParagraphs(), originalText, updatedText);
 
@@ -28,7 +27,6 @@ public class TemplateService {
             }
         }
     }
-
 
     int getParagraphPositionIfContainsText(XWPFDocument doc) {
         int paragraphPosition = -1;

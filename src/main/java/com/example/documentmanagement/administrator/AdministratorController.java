@@ -1,11 +1,8 @@
 package com.example.documentmanagement.administrator;
 
-import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +33,7 @@ public class AdministratorController {
 
     @PostMapping("/create-administrator")
     public String handleAdministratorRegistration(@Valid @ModelAttribute("admin") Administrator administrator,
-                                                  BindingResult result, Model model, HttpSession session){
+                                                  BindingResult result, Model model){
         try {
             if(result.hasErrors()){
                 model.addAttribute("admin", administrator);
@@ -65,7 +62,7 @@ public class AdministratorController {
     @PostMapping ("/edit-administrator/{id}")
     public String editAdmin(@PathVariable Long id,
                             @Valid @ModelAttribute("admin")  Administrator administrator,
-                             BindingResult result, Model model,HttpSession session){
+                             BindingResult result, Model model){
         try{
             if(result.hasErrors()){
                 return "editAdministratorProfile";
