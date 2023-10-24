@@ -24,5 +24,4 @@ public class OtherExpenses {
     private double sum;
     private double unpaid;
 
-
 }

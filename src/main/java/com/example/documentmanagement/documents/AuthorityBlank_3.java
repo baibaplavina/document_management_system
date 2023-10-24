@@ -25,7 +25,6 @@ public class AuthorityBlank_3 extends AuthorityBlank {
 
     }
 
-
     public void replaceAuthorityMainText3(XWPFDocument doc, Long id) {
 
         replaceText(doc,"Nosaukums (recipientName)",
