@@ -2,7 +2,6 @@ package com.example.documentmanagement.administrator;
 
 import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import jakarta.persistence.*;
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

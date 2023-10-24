@@ -2,8 +2,6 @@ package com.example.documentmanagement.insolvencyProcess;
 
 import com.example.documentmanagement.administrator.Administrator;
 import com.example.documentmanagement.administrator.AdministratorRepository;
-import com.example.documentmanagement.administrator.AdministratorService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,8 +17,6 @@ import java.util.stream.Collectors;
 public class InsolvencyProcessController {
     @Autowired
     private InsolvencyProcessService insolvencyProcessService;
-    @Autowired
-    private AdministratorService administratorService;
     @Autowired
     private AdministratorRepository administratorRepository;
     @Autowired
@@ -93,7 +88,7 @@ public class InsolvencyProcessController {
     public String searchActive(@RequestParam(required = false) String message,
                                @RequestParam(required = false) String error,
                                @PathVariable String status,
-                               Model model) throws Exception {
+                               Model model) {
 
         model.addAttribute("status",status);
         model.addAttribute("message", message);

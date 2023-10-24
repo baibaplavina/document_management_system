@@ -51,11 +51,9 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
         replaceText(doc, "Place",
                 insolvencyProcess.getAdmin().getPlace());
         replaceText(doc, "Document_date",
-
                 LocalDate.now().getYear() + "-" + LocalDate.now().getMonthValue() + "-" + LocalDate.now().getDayOfMonth());
         replaceText(doc, "/administratorName AdministratorSurname/",
-                insolvencyProcess.getAdmin().getAdminName() + " " +
-                        insolvencyProcess.getAdmin().getAdminSurname());
+                insolvencyProcess.getAdmin().getAdminName() + " " + insolvencyProcess.getAdmin().getAdminSurname());
         replaceText(doc, "/sertificateNumber/",
                 insolvencyProcess.getAdmin().getCertificateNumber());
         replaceText(doc, "/administratorAddress/",
@@ -74,7 +72,6 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
                 insolvencyProcess.getCompanyName());
         replaceText(doc, "vienotais reģistrācijas Nr. ", " vienotais reģistrācijas Nr. " +
                 insolvencyProcess.getRegistrationNumber());
-
         replaceText(doc, "courtName",
                 insolvencyProcess.getCourtName());
         replaceText(doc, "courtDesitionDate",
@@ -175,7 +172,6 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
         List<String> listOfAssets = new ArrayList<>(Arrays.asList(assetList.split(";")));
         List<String> listOfSums = new ArrayList<>(Arrays.asList(sums.split(";")));
 
-
         for (int i = 0; i < listOfAssets.size(); i++) {
             newTable.createRow();
         }
@@ -251,7 +247,6 @@ public class CostsOfInsolvencyProceedingsDoc extends TemplateService {
         styleCellMinimized(row2.getCell(4), totalSegtaSummaIzdevumi);
         styleCellMinimized(row2.getCell(6), totalNavApmaksataIzdevumi);
     }
-
 
     private void createPart3And4() {
 

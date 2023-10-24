@@ -1,7 +1,5 @@
 package com.example.documentmanagement.administrator;
 
-import com.example.documentmanagement.administrator.Administrator;
-import com.example.documentmanagement.administrator.AdministratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

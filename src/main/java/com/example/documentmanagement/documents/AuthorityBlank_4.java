@@ -4,7 +4,6 @@ import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 
-
 public class AuthorityBlank_4 extends AuthorityBlank {
     private InsolvencyProcess insolvencyProcess;
 
@@ -25,7 +24,6 @@ public class AuthorityBlank_4 extends AuthorityBlank {
         }
 
     }
-
 
       public void replaceAuthorityMainText4(XWPFDocument doc, Long id) {
 
