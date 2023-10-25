@@ -129,9 +129,9 @@ public class InsolvencyProcessController {
     public String deleteProcess(@PathVariable Long id) {
         try {
             insolvencyProcessRepository.deleteById(id);
-            return "redirect:/view-processes?message=PROCESS_DELETED_SUCCESSFULLY";
+            return "redirect:/view-processes/all?message=PROCESS_DELETED_SUCCESSFULLY";
         } catch (Exception ex) {
-            return "redirect:/view-processes?message=PROCESS_DELETE_FAILED&error=" + ex.getMessage();
+            return "redirect:/view-processes/all?message=PROCESS_DELETE_FAILED&error=";
         }
     }
 

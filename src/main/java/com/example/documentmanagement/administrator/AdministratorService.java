@@ -41,8 +41,8 @@ public class AdministratorService {
             if (currentAdmin.getAdminId().equals(administrator.getAdminId())) {
                 currentAdmin.setCertificateNumber(administrator.getCertificateNumber());
                 currentAdmin.setAdminName(administrator.getAdminName());
-                currentAdmin.setAdminSurname(administrator.getAdminAddress());
-                currentAdmin.setAdminAddress(administrator.getAdminSurname());
+                currentAdmin.setAdminSurname(administrator.getAdminSurname());
+                currentAdmin.setAdminAddress(administrator.getAdminAddress());
                 currentAdmin.setAdminEmail(administrator.getAdminEmail());
                 currentAdmin.setAdminE_address(administrator.getAdminE_address());
                 currentAdmin.setAdminPhoneNumber(administrator.getAdminPhoneNumber());
