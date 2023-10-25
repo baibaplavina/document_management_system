@@ -4,7 +4,6 @@ import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 
-
 public class AuthorityBlank_5 extends AuthorityBlank {
     private InsolvencyProcess insolvencyProcess;
 

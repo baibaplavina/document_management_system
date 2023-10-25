@@ -5,7 +5,6 @@ import com.example.documentmanagement.insolvencyProcess.InsolvencyProcessReposit
 import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpenses;
 import com.example.documentmanagement.insolvencyProcess.otherExpenses.OtherExpensesService;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +15,7 @@ import java.util.List;
 @Service
 public class UploadService {
 
-
     private final InsolvencyProcessRepository insolvencyProcessRepository;
-
     private final OtherExpensesService otherExpensesService;
 
     @Autowired
@@ -46,19 +43,20 @@ public class UploadService {
             String maksatnespejasKontrolesApmers = "";
 
             for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
-                if (dataSheet.getRow(i).getCell(colKreditors) != null && !dataSheet.getRow(i).getCell(colKreditors).toString().isEmpty()) {
-                    sbCreditors.append(dataSheet.getRow(i).getCell(colKreditors).getStringCellValue());
+                Row row = dataSheet.getRow(i);
+                if (row.getCell(colKreditors) != null && !row.getCell(colKreditors).toString().isEmpty()) {
+                    sbCreditors.append(row.getCell(colKreditors).getStringCellValue());
                     sbCreditors.append(';');
                 }
-                if (dataSheet.getRow(i).getCell(colPrasijumaVeids).getStringCellValue().equals("Nenodrošināts")) {
-                    amountForCreditors = amountForCreditors + Double.parseDouble(dataSheet.getRow(i).getCell(colPrasijums).getStringCellValue().replace(',', '.'));
+                if (row.getCell(colPrasijumaVeids).getStringCellValue().equals("Nenodrošināts")) {
+                    amountForCreditors = amountForCreditors + doubleFromString(row.getCell(colPrasijums).getStringCellValue());
                 }
-                if (dataSheet.getRow(i).getCell(colKreditors).getStringCellValue().contains("Valsts ieņēmumu dienests")) {
-                    valstsIenemumuDienenstsPrasijums = dataSheet.getRow(i).getCell(colPrasijums).getStringCellValue();
+                if (row.getCell(colKreditors).getStringCellValue().contains("Valsts ieņēmumu dienests")) {
+                    valstsIenemumuDienenstsPrasijums = row.getCell(colPrasijums).getStringCellValue();
                 }
 
-                if (dataSheet.getRow(i).getCell(colKreditors).getStringCellValue().contains("Maksātnespējas kontroles dienests")) {
-                    maksatnespejasKontrolesApmers = dataSheet.getRow(i).getCell(colPrasijums2).getStringCellValue();
+                if (row.getCell(colKreditors).getStringCellValue().contains("Maksātnespējas kontroles dienests")) {
+                    maksatnespejasKontrolesApmers = row.getCell(colPrasijums2).getStringCellValue();
                 }
             }
 
@@ -85,11 +83,9 @@ public class UploadService {
         if (colIegutieNaudas > -1 && colSumma > -1) {
 
             for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
-                Cell cell = dataSheet.getRow(i).getCell(colIegutieNaudas);
-                String stringCostValue = dataSheet.getRow(i).getCell(colSumma).getStringCellValue();
-                if (cell.getStringCellValue().equals("Neieķīlātā manta")) {
-                    double value = Double.parseDouble(stringCostValue.replace(',', '.'));
-                    neikilataMantaSum = neikilataMantaSum + value;
+                Row row = dataSheet.getRow(i);
+                if (row.getCell(colIegutieNaudas).getStringCellValue().equals("Neieķīlātā manta")) {
+                    neikilataMantaSum = neikilataMantaSum + doubleFromString(row.getCell(colSumma).getStringCellValue());
                 }
             }
         }
@@ -97,12 +93,9 @@ public class UploadService {
         if (insolvencyProcessRepository.findById(processId).isPresent()) {
             InsolvencyProcess insolvencyProcess = insolvencyProcessRepository.findById(processId).get();
             insolvencyProcess.setNeikilataMantaSum(neikilataMantaSum);
-
             insolvencyProcessRepository.save(insolvencyProcess);
-
         }
     }
-
 
     public void handleMoneyUpload(InputStream stream, Long processId) throws Exception {
 
@@ -114,17 +107,13 @@ public class UploadService {
         String cellNaudasLidzekli = "";
 
         if (colNaudasLidzekli > -1) {
-
             cellNaudasLidzekli = dataSheet.getRow(dataSheet.getLastRowNum()).getCell(colNaudasLidzekli).getStringCellValue();
-
         }
 
         if (insolvencyProcessRepository.findById(processId).isPresent()) {
             InsolvencyProcess insolvencyProcess = insolvencyProcessRepository.findById(processId).get();
             insolvencyProcess.setProcessMoney(cellNaudasLidzekli);
-
             insolvencyProcessRepository.save(insolvencyProcess);
-
         }
     }
 
@@ -135,14 +124,13 @@ public class UploadService {
         int colIzmaksasRadusasNo = findSheetColumnByName("Izmaksas radušās no", dataSheet);
         int colPozicijas = findSheetColumnByName("Pozīcijas nosaukums", dataSheet);
         int colSanemejs = findSheetColumnByName("Saņēmējs", dataSheet);
-        int colSniegtaisPakalpojums = findSheetColumnByName("Sniegtais pakalpojums", dataSheet);
+        //   int colSniegtaisPakalpojums = findSheetColumnByName("Sniegtais pakalpojums", dataSheet);
         int colIzmaksuDatums = findSheetColumnByName("Izmaksu rašanās datums", dataSheet);
-        int colSegtaSumma = findSheetColumnByName("Segtā summa", dataSheet);
+        //  int colSegtaSumma = findSheetColumnByName("Segtā summa", dataSheet);
         int colSegsanasDatums = findSheetColumnByName("Segšanas datums", dataSheet);
         int colNavApmaksatas = findSheetColumnByName("Radušās un nav apmaksātas izmaksas", dataSheet);
 
         int colIzmaksuSum = findSheetColumnByName("Izmaksu summa", dataSheet);
-
 
         double izmaksasTotal = 0;
         double administratorSalary = 0;
@@ -170,7 +158,6 @@ public class UploadService {
                 String stringExpensesValue = row.getCell(colIzmaksuSum).getStringCellValue();
 
                 if (cellIsmaksasRadusas.equals("Neieķīlātā manta") && !cellPozicijas.contains("Administratora")) {
-
                     izmaksasTotal = izmaksasTotal + doubleFromString(stringExpensesValue);
                 }
 
@@ -222,7 +209,6 @@ public class UploadService {
 
     public void handleAssetsUpload(InputStream stream, Long processId) throws Exception {
         Workbook workbook = WorkbookFactory.create(stream);
-
         Sheet dataSheet = workbook.getSheetAt(0);
 
         int colMantasTips = findSheetColumnByName("Mantas tips", dataSheet);
@@ -251,10 +237,10 @@ public class UploadService {
             for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
                 Row row = dataSheet.getRow(i);
                 if (row.getCell(colNumMpaRiciba) != null &&
-                                !row.getCell(colNumMpaRiciba).toString().isEmpty() &&
-                                row.getCell(colNumApmers) != null &&
-                                !row.getCell(colNumApmers).toString().isEmpty() &&
-                                row.getCell(colMantasTips).getStringCellValue().equals("Ieķīlātā manta")) {
+                        !row.getCell(colNumMpaRiciba).toString().isEmpty() &&
+                        row.getCell(colNumApmers) != null &&
+                        !row.getCell(colNumApmers).toString().isEmpty() &&
+                        row.getCell(colMantasTips).getStringCellValue().equals("Ieķīlātā manta")) {
 
                     appendCellvalueToCsvList(row.getCell(colNumMpaRiciba), sbMpa_iekilata);
                     appendCellvalueToCsvList(row.getCell(colNumApmers), sbSums_iekilata);
@@ -317,7 +303,6 @@ public class UploadService {
         stringValue.append(';');
 
     }
-
 
     private int findSheetColumnByName(String columnName, Sheet dataSheet) {
         int columnIndex = -1;

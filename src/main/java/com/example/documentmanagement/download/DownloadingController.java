@@ -6,7 +6,6 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -23,7 +22,7 @@ public class DownloadingController {
     private OtherExpensesService otherExpensesService;
 
     @GetMapping("/download-blank/{id}")
-    public void downloadAdminBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
+    public void downloadAdminBlank(@PathVariable Long id, HttpServletResponse response) throws IOException {
 
         DownloadService adminBlank = new DownloadService(insolvencyProcessService, otherExpensesService);
 
@@ -59,7 +58,7 @@ public class DownloadingController {
     }
 
     @GetMapping("/download-company-blank/{id}")
-    public void downloadCompanyBlank(@PathVariable Long id, Model model, HttpServletResponse response) throws IOException {
+    public void downloadCompanyBlank(@PathVariable Long id, HttpServletResponse response) throws IOException {
 
         DownloadService companyBlank = new DownloadService(insolvencyProcessService, otherExpensesService);
 
@@ -77,7 +76,7 @@ public class DownloadingController {
     }
 
     @GetMapping("/download-authority-blank/{id}/{number}")
-    public void downloadAuthorityBlank(@PathVariable Long id, @PathVariable int number, Model model, HttpServletResponse response) throws IOException {
+    public void downloadAuthorityBlank(@PathVariable Long id, @PathVariable int number, HttpServletResponse response) throws IOException {
 
         DownloadService authorityBlank = new DownloadService(insolvencyProcessService, otherExpensesService);
 

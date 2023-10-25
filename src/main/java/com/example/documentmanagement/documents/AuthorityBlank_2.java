@@ -4,12 +4,10 @@ import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 
-
 public class AuthorityBlank_2 extends AuthorityBlank {
 
     public AuthorityBlank_2(InsolvencyProcess insolvencyProcess) {
         super(insolvencyProcess);
-
     }
 
     public XWPFDocument createFilledDocument() {
