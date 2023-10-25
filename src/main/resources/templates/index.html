@@ -14,13 +14,16 @@
 
 <main>
 <section class="border border-success m-5 text-black mt-2 mb-2 p-2">
-    <div id="date" class="fw-bold " th:text="${date}"></div>
-    <span th:text="#{lang.change}"></span>
-    <select id="locales">
-        <option value=""></option>
-        <option value="en" th:text="#{lang.en}"></option>
-        <option value="lv" th:text="#{lang.lv}"></option>
-    </select>
+    <div id="d-inline" class="fw-bold " th:text="${date}"></div>
+    <div id="d-inline1">
+        <span th:text="#{lang.change}"></span>
+        <select id="locales">
+            <option value=""></option>
+            <option value="en" th:text="#{lang.en}"></option>
+            <option value="lv" th:text="#{lang.lv}"></option>
+        </select>
+    </div>
+
 
 
 </section>

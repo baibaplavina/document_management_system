@@ -41,7 +41,7 @@ public class AdministratorController {
 
             }
 
-            administratorRepository.saveAndFlush(administrator);
+            administratorService.createAdministrator(administrator);
             return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_SUCCESS";
         } catch (Exception exception) {
             return "redirect:/create-administrator?status=ADMINISTRATOR_REGISTRATION_FAILED&error=" + exception.getMessage();
