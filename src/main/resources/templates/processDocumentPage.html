@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Main page</title>
+    <title>DMS-Doc create</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{~/styles/header.css}">
@@ -16,98 +16,97 @@
 <main >
 
       <section class="border border-success m-5 text-left text-dark mt-2 mb-2 p-5">
-        <h4> Company's profile:</h4>
+        <h4 th:text="#{docSec1}"> </h4>
         <h4 class="company-name text-success"th:text="${process.getCompanyName() +', reg. nr. ' + process.getRegistrationNumber() + ', ' + process.getCompanyAddress() }"></h4>
-          <a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit">Edit information </a>
-          <a th:href="${'/delete-process/' + process.getId()}" class="btn btn-warning" role="button" type="submit">Delete process </a>
+          <a th:href="${'/edit-process/' + process.getId()}" class="btn btn-dark" role="button" type="submit" th:text="#{button.edit}"></a>
+          <a th:href="${'/delete-process/' + process.getId()}" class="btn btn-warning" role="button" type="submit" th:text="#{button.delete}"></a>
     </section>
     <section class="border border-success m-5 text-left text-black mt-2 mb-2 p-5">
 
-        <h3> Spied uz pogas un lejuplādē vēlamo dokumentu (Push the button of the document you want to create)</h3>
-        <div class="container mt-2 mb-2">
-
-                <a th:href="${'/download-blank/' + process.getId()}" style="text-decoration: none">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot Administratora veidlapu (Create Admin Blank)</button>
+        <h3 th:text="#{docSec2}"> </h3>
+        <div >
+            <a th:href="${'/download-blank/' + process.getId()}" style="text-decoration: none">
+                <button type="button" th:text="#{button.adminBlank}" class="btn btn-outline-success mt-2 mb-2"><!--Izveidot Administratora veidlapu (Create Admin Blank)--></button>
             </a>
                 <a th:href="${'/download-company-blank/' + process.getId()}">
-                    <button type="button" class="btn btn-outline-success mt-2 mb-2">Izveidot maksātnespējīgās sabiedrības  veidlapu (Create Company Blank)</button>
+                    <button type="button" th:text="#{button.companyBlank}" class="btn btn-outline-success mt-2 mb-2"></button>
             </a>
         </div>
     </section>
     <section class="border border-success m-5 text-left text-black p-5">
-        <h3> Lejuplādē vēlamo iesniegumu valsts institūcijai (Create request to public authorities - press button) :</h3>
+        <h3 th:text="#{docSec3}"> </h3>
         <div>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/1'}" style="text-decoration: none">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2">Uzņēmumu reģistrs (Company Register)</button> </a>
+                <button type="button" th:text="#{button.CR}" class="btn btn-outline-success mt-2 mb-2"></button> </a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/2'}">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2">Kuģu reģistrs (Ship)</button></a>
+                <button type="button" th:text="#{button.ship}" class="btn btn-outline-success mt-2 mb-2">Kuģu reģistrs (Ship)</button></a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/3'}">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2">Lauksaimniecības datu centrs (Agric)</button></a>
+                <button type="button" th:text="#{button.ldc}" class="btn btn-outline-success mt-2 mb-2">Lauksaimniecības datu centrs (Agric)</button></a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/4'}">
-                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Tehniskās uzraudzības aģentūra (State tech)</button></a>
+                 <button type="button" th:text="#{button.TUA}" class="btn btn-outline-success mt-2 mb-2">Tehniskās uzraudzības aģentūra (State tech)</button></a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/5'}">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2">Valsts zemes dienests (Land)</button></a>
+                <button type="button" th:text="#{button.VZD}" class="btn btn-outline-success mt-2 mb-2">Valsts zemes dienests (Land)</button></a>
             <a th:href="${'/download-authority-blank/' + process.getId()+'/6'}">
-                 <button type="button" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button></a>
+                 <button type="button" th:text="#{button.ZTI}" class="btn btn-outline-success mt-2 mb-2">Zvērināti tiesu izpildītāji (Bailiff)</button></a>
         </div>
     </section>
 
     <section class="border border-success m-5 text-left text-black p-5">
-        <h3 id = "listHeader"> Dokumentu saraksts augšuplādei (Document list to upload):</h3>
+        <h3 id = "listHeader" th:text="#{docSec4}"> </h3>
         <div class="container col-xs-3">
             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 1}" enctype="multipart/form-data">
-                <label class="form-label" > 1. Mantas saraksts (Assets List)</label>
+                <label class="form-label" th:text="#{docSec41}"> </label>
                 <div style="display: flex; align-items: center;">
                     <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
                     <div style="width: 1cm;"></div>
-                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" th:text="#{button.upload} "style="flex: 1;"></button>
                 </div>
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 2}" enctype="multipart/form-data">
-                <label class="form-label"> 2. Iegūtie naudas līdzekļi (Obtained money)</label>
+                <label class="form-label" th:text="#{docSec42}"> </label>
                 <div style="display: flex; align-items: center;">
                     <input type="file" name="file" class="form-control"  accept=".xlsx, .xls, .csv" style="flex: 2;" />
                     <div style="width: 1cm;"></div>
-                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" th:text="#{button.upload}" style="flex: 1;"></button>
                 </div>
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 3}" enctype="multipart/form-data">
-                <label class="form-label"> 3. Naudas plūsma (Cash flow)</label>
+                <label class="form-label" th:text="#{docSec43}"> </label>
                 <div style="display: flex; align-items: center;">
                     <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
                     <div style="width: 1cm;"></div>
-                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" th:text="#{button.upload}" style="flex: 1;"></button>
                 </div>
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 4}" enctype="multipart/form-data">
-                <label class="form-label" >4. Izmaksas (Expenses)</label>
+                <label class="form-label" th:text="#{docSec44}"></label>
                 <div style="display: flex; align-items: center;">
                     <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
                     <div style="width: 1cm;"></div>
-                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" th:text="#{button.upload}" style="flex: 1;"></button>
                 </div>
             </form>
 
             <form method="post" th:action="${'/process-documents/' + process.getId() + '/documents/' + 5}" enctype="multipart/form-data">
-                <label class="form-label" > 5. Kreditoru prasījumu saraksts (Creditors list)</label>
+                <label class="form-label" th:text="#{docSec45}" > </label>
                 <div style="display: flex; align-items: center;">
                     <input type="file" name="file" class="form-control" accept=".xlsx, .xls, .csv" style="flex: 2;" />
                     <div style="width: 1cm;"></div>
-                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" style="flex: 1;">Upload File</button>
+                    <button type="submit" class="btn btn-outline-success mt-2 mb-2" th:text="#{button.upload}" style="flex: 1;"></button>
                 </div>
             </form>
 
         </div>
 
-        <h3 > Dokuments lejuplādei  (Document for download): </h3>
+        <h3 th:text="#{docSec5}"> </h3>
         <div class="container mt-2 mb-2">
             <a th:href="${'/download-tables/' + process.getId()}">
-                <button type="button" class="btn btn-outline-success mt-2 mb-2"> Maksātnespējas procesa izmaksu saraksts un kreditoru prasījumu segšanas plāns (Costs of insol process) </button>
+                <button type="button" th:text="#{button.costDoc}" class="btn btn-outline-success mt-2 mb-2"> </button>
             </a>
         </div>
         </div>

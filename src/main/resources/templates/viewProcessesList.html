@@ -14,9 +14,9 @@
 <main class="border border-success text-start m-5 row p-2">
     <section class="container">
         <div>
-            <a class="btn btn-success text-white p-3" type="submit" th:href="${'/view-processes/active'}">View active processes </a>
-            <a class="btn btn-success text-white p-3" type="submit" th:href="${'/view-processes/completed'}">View completed processes </a>
-            <a class="btn btn-success text-white p-3" type="submit" th:href="${'/view-processes/all'}">View all</a>
+            <a class="btn btn-success text-white p-3" type="submit" th:href="${'/view-processes/active'}" th:text="#{button.activeProc}" ></a>
+            <a class="btn btn-success text-white p-3" type="submit" th:href="${'/view-processes/completed'}" th:text="#{button.closeProc}" ></a>
+            <a class="btn btn-success text-white p-3" type="submit" th:href="${'/view-processes/all'}" th:text="#{button.list}" >View all</a>
         </div>
     </section>
     <section th:replace="~{fragments/sections.html::section-caseList}"></section>
