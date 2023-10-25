@@ -19,9 +19,9 @@
                 <label class="input-group-text" th:text="#{proc.admin}" ></label>
 
                 <select  th:field="*{admin}" class="form-control" required>
-                    <th:block th:each="currentAdmin:${admin}" >
+                   <th:block th:each="currentAdmin:${admin}" >
                         <option th:text="${currentAdmin.adminName + ' ' + currentAdmin.adminSurname}" th:value="${currentAdmin.adminId} " ></option>
-                    </th:block>
+                       </th:block>
                 </select>
                 <p th:if="${#fields.hasErrors('admin')}" class="text-danger" th:errors="*{admin}" ></p>
             </div>
