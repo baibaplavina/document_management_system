@@ -57,9 +57,9 @@
                 </div>
                 <div class="input-group mt-2">
                     <label class="input-group-text" th:text="#{admin.gender}"></label>
-                    <select class="form-control" name = "adminGender" th:value="${admin.getAdminGender().toString()}">
-                        <option value="FEMALE" th:text="#{admin.gender.F}" ></option>
-                        <option value="MALE" th:text="#{admin.gender.M}"></option>
+                    <select class="form-control" name="adminGender">
+                        <option value="FEMALE" th:text="#{admin.gender.F}" th:selected="${admin.getAdminGender().toString() == 'FEMALE'}"></option>
+                        <option value="MALE" th:text="#{admin.gender.M}" th:selected="${admin.getAdminGender().toString() == 'MALE'}"></option>
                     </select>
                     <p th:if="${#fields.hasErrors('adminGender')}" class="text-danger" th:errors="*{adminGender}"></p>
                 </div>

@@ -120,10 +120,10 @@
                 <td class="details" th:text="${admin.getAdminEmail()}"></td>
                 <td class="details" th:text="${admin.getAdminE_address()}"></td>
                 <td class="details" th:text="${admin.getAdminPhoneNumber()}"></td>
-                <td class="details" th:text="${admin.getAdminGender()}"></td>
                 <td class="details" th:text="${admin.getPlace()}"></td>
+                <td class="details" th:text="${admin.getAdminGender()}"></td>
 
-                <td class="mt-2">
+           <td class="mt-2">
                     <a th:href="${'/edit-administrator/' + admin.getAdminId()}" class="btn btn-dark text-white p-3"
                        role="button" type="submit">Labot profilu (edit) </a>
                 </td>
