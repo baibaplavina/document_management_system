@@ -25,8 +25,8 @@
             <th>
                 <a th:href="@{'/page/' + ${currentPage} + '?sortField=caseClosingDate&sortDir=' + ${reverseSortDirection}}" th:text="#{proc.status}"></a>
             </th>
-            <th> Open</th>
-            <th> Edit</th>
+            <th th:text="#{button.open}"></th>
+            <th th:text="#{button.edit}"></th>
         </tr>
         </thead>
         <tbody>
@@ -104,9 +104,8 @@
             <th th:text="#{admin.eaddress}"></th>
             <th th:text="#{admin.phone}"></th>
             <th th:text="#{admin.place}"></th>
-            <th th:text="#{admin.gender}"></th>
-            <th> Edit </th>
-            <th> Delete </th>
+            <th th:text="#{button.edit}"></th>
+            <th th:text="#{button.delete}"></th>
         </tr>
         </thead>
         <tbody>
@@ -120,16 +119,15 @@
                 <td class="details" th:text="${admin.getAdminEmail()}"></td>
                 <td class="details" th:text="${admin.getAdminE_address()}"></td>
                 <td class="details" th:text="${admin.getAdminPhoneNumber()}"></td>
-                <td class="details" th:text="${admin.getAdminGender()}"></td>
                 <td class="details" th:text="${admin.getPlace()}"></td>
 
                 <td class="mt-2">
                     <a th:href="${'/edit-administrator/' + admin.getAdminId()}" class="btn btn-dark text-white p-3"
-                       role="button" type="submit">Labot profilu (edit) </a>
+                       role="button" type="submit" th:text="#{button.edit}"></a>
                 </td>
                 <td class="mt-2">
                     <a th:href="${'/delete-administrator/' + admin.getAdminId()}" class="btn btn-warning text-white p-3"
-                       role="button">Dzēst profilu (delete) </a>
+                       role="button" th:text="#{button.delete}"></a>
 
             </tr>
         </th:block>
