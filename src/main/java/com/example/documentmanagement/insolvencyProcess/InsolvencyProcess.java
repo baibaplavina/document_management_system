@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
@@ -45,7 +47,8 @@ public class InsolvencyProcess {
     @ManyToOne
     @JoinColumn(name = "adminId", nullable = false)
     private Administrator admin;
-    @OneToMany
+        @OneToMany
+    @Cascade(value={CascadeType.ALL})
     List<OtherExpenses> otherExpenses;
     private double CreditorsRequest;
     private String assetsList_iekilata;

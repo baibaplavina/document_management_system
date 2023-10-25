@@ -71,17 +71,18 @@ public class InsolvencyProcessController {
     public String editProcess(@PathVariable Long id, @Valid @ModelAttribute("process")  InsolvencyProcess insolvencyProcess,
                               BindingResult result, Model model) {
         try {
+            List<Administrator> adminList = administratorRepository.findAll();
             if(result.hasErrors()){
+                model.addAttribute("admin", adminList);
                 return "editProcess";
             }
             insolvencyProcess.setId(id);
             insolvencyProcessService.editInsolvencyProcess(insolvencyProcess);
             System.out.println(insolvencyProcess);
-            List<Administrator> adminList = administratorRepository.findAll();
             model.addAttribute("admin", adminList);
-            return "redirect:/view-processes?message=INSOLVENCY_PROCESS_EDITED_SUCCESSFULLY";
+            return "redirect:/view-processes/all?message=INSOLVENCY_PROCESS_EDITED_SUCCESSFULLY";
         } catch (Exception exception) {
-            return "redirect:/?message=INSOLVENCY_PROCESS_EDIT_FAILED&error=" + exception.getMessage();
+            return "redirect:/?message=INSOLVENCY_PROCESS_EDIT_FAILED&error=";
         }
     }
 
