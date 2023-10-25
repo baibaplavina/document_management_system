@@ -1,33 +1,29 @@
 <section th:fragment="section-caseList" class="container">
     <br>
     <br>
-    <h3>The List Of Processes:</h3>
+    <h3 th:text="#{proc.list.header}"></h3>
     <br>
     <br>
     <table class="table table-bordered text-center">
         <thead class="table-header-dark">
         <tr>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDirection}}">Process ID</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDirection}}">ID</a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=companyName&sortDir=' + ${reverseSortDirection}}">Company
-                    Name</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=companyName&sortDir=' + ${reverseSortDirection}}" th:text="#{proc.company}"></a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=registrationNumber&sortDir=' + ${reverseSortDirection}}">Registration </a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=registrationNumber&sortDir=' + ${reverseSortDirection}}" th:text="#{proc.reg.nr.table}"></a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courtName&sortDir=' + ${reverseSortDirection}}">Court
-                    Name</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courtName&sortDir=' + ${reverseSortDirection}}" th:text="#{proc.court}"></a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courtCaseNumber&sortDir=' + ${reverseSortDirection}}">Court
-                    Case Number</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=courtCaseNumber&sortDir=' + ${reverseSortDirection}}" th:text="#{proc.case.nr}"></a>
             </th>
             <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=caseClosingDate&sortDir=' + ${reverseSortDirection}}">Process
-                    status ACTIVE/COMPLETED</a>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=caseClosingDate&sortDir=' + ${reverseSortDirection}}" th:text="#{proc.status}"></a>
             </th>
             <th> Open</th>
             <th> Edit</th>
@@ -42,8 +38,7 @@
                 <td class="details" th:text="${process.getCourtName()}"></td>
                 <td class="details" th:text="${process.getCourtCaseNumber()}"></td>
                 <td class="details"
-                    th:text="${process.getCaseClosingDate()!= null} ? ${'completed: ' + process.getCaseClosingDate()} : 'active'">
-                    Process status</span>
+                    th:text="${process.getCaseClosingDate()!= null} ? #{proc.status.compl} + ' ' +  ${process.getCaseClosingDate()} : #{proc.status.act}"></span>
 
                 </td>
 
@@ -94,22 +89,22 @@
 <section th:fragment="section-editAdmin" class="container">
     <br>
     <br>
-    <h3>Administrator's details:</h3>
+    <h3 th:text="#{admin.header2}"></h3>
     <br>
     <br>
     <table class="table table-bordered text-center">
         <thead class="table-header-dark">
         <tr>
             <th> Id </th>
-            <th> Certificate Number </th>
-            <th> Name </th>
-            <th> Surname </th>
-            <th> Address </th>
-            <th> Email </th>
-            <th> E-address </th>
-            <th> Phone </th>
-            <th> Gender </th>
-            <th> Place </th>
+            <th th:text="#{admin.cert}"></th>
+            <th th:text="#{admin.name}"></th>
+            <th th:text="#{admin.surname}"></th>
+            <th th:text="#{admin.address}"></th>
+            <th th:text="#{admin.mail}"></th>
+            <th th:text="#{admin.eaddress}"></th>
+            <th th:text="#{admin.phone}"></th>
+            <th th:text="#{admin.place}"></th>
+            <th th:text="#{admin.gender}"></th>
             <th> Edit </th>
             <th> Delete </th>
         </tr>

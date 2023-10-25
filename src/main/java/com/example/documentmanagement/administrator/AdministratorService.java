@@ -2,7 +2,12 @@ package com.example.documentmanagement.administrator;
 
 import com.example.documentmanagement.administrator.Administrator;
 import com.example.documentmanagement.administrator.AdministratorRepository;
+import com.example.documentmanagement.insolvencyProcess.InsolvencyProcess;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,4 +66,5 @@ public class AdministratorService {
     public void deleteAdministrator(Long id){
         administratorRepository.deleteById(id);
     }
+
 }

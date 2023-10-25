@@ -12,54 +12,54 @@
 <header th:replace="~{fragments/headers.html::header-administrator}"></header>
     <main class="border border-success text-start m-5 row p-2">
         <section class="container">
-            <h3> Izveidot administratora profilu (Edit administrator's profile) </h3>
-            <form class="form-inline" id="createAdministrator" th:action="${'/edit-administrator/'+ admin.getAdminId()} " method="post" th:object="${admin}">
+            <h3 th:text="#{admin.edit.header1}"></h3>
+            <form class="form-inline col-md-6" id="createAdministrator" th:action="${'/edit-administrator/'+ admin.getAdminId()} " method="post" th:object="${admin}">
                 <div class="input-group mt-2">
-                    <label class="input-group-text">Vārds (Name)</label>
+                    <label class="input-group-text" th:text="#{admin.name}"></label>
                     <input class="form-control" name="adminName" type="text" th:value="${admin.getAdminName()}">
                     <p th:if="${#fields.hasErrors('adminName')}" class="text-danger" th:errors="*{adminName}"></p>
 
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">Uzvārds (Surname)</label>
+                    <label class="input-group-text" th:text="#{admin.surname}"></label>
                     <input class="form-control" name="adminSurname" type="text" th:value="${admin.getAdminSurname()}">
                     <p th:if="${#fields.hasErrors('adminSurname')}" class="text-danger" th:errors="*{adminSurname}"></p>
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">Sertifikāta numurs (Number of sertificate) </label>
+                    <label class="input-group-text" th:text="#{admin.cert}"></label>
                     <input class="form-control" name="certificateNumber" type="text" th:value="${admin.getCertificateNumber()}">
                     <p th:if="${#fields.hasErrors('certificateNumber')}" class="text-danger" th:errors="*{certificateNumber}"></p>
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">Prakses vietas adrese (Adrress) </label>
+                    <label class="input-group-text" th:text="#{admin.address}"></label>
                     <input class="form-control" name="adminAddress" type="text" th:value="${admin.getAdminAddress()}">
                     <p th:if="${#fields.hasErrors('adminAddress')}" class="text-danger" th:errors="*{adminAddress}"></p>
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">E-pasts (Email) </label>
+                    <label class="input-group-text" th:text="#{admin.mail}"></label>
                     <input class="form-control" name="adminEmail" type="email" th:value="${admin.getAdminEmail()}">
                     <p th:if="${#fields.hasErrors('adminEmail')}" class="text-danger" th:errors="*{adminEmail}"></p>
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">E-Adrese (EAdress) </label>
+                    <label class="input-group-text" th:text="#{admin.eaddress}"></label>
                     <input class="form-control" name="adminE_address" type="text" th:value="${admin.getAdminE_address()}">
                     <p th:if="${#fields.hasErrors('adminE_address')}" class="text-danger" th:errors="*{adminE_address}"></p>
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">Telefons ( Phone number) </label>
+                    <label class="input-group-text" th:text="#{admin.phone}"></label>
                     <input class="form-control" name="adminPhoneNumber" type="text" th:value="${admin.getAdminPhoneNumber()}">
                     <p th:if="${#fields.hasErrors('adminPhoneNumber')}" class="text-danger" th:errors="*{adminPhoneNumber}"></p>
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">Dokumentu sagatavošanas vieta (Place) </label>
+                    <label class="input-group-text" th:text="#{admin.place}"></label>
                     <input class="form-control" name="place" type="text" th:value="${admin.getPlace()}">
                     <p th:if="${#fields.hasErrors('place')}" class="text-danger" th:errors="*{place}"></p>
                 </div>
                 <div class="input-group mt-2">
-                    <label class="input-group-text">Gender</label>
+                    <label class="input-group-text" th:text="#{admin.gender}"></label>
                     <select class="form-control" name = "adminGender" th:value="${admin.getAdminGender().toString()}">
-                        <option value="FEMALE">Sieviete (Female)</option>
-                        <option value="MALE">Vīrietis(Male)</option>
+                        <option value="FEMALE" th:text="#{admin.gender.F}" ></option>
+                        <option value="MALE" th:text="#{admin.gender.M}"></option>
                     </select>
                     <p th:if="${#fields.hasErrors('adminGender')}" class="text-danger" th:errors="*{adminGender}"></p>
                 </div>

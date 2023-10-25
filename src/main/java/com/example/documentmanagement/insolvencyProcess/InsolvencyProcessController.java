@@ -81,6 +81,7 @@ public class InsolvencyProcessController {
             }
             insolvencyProcess.setId(id);
             insolvencyProcessService.editInsolvencyProcess(insolvencyProcess);
+            System.out.println(insolvencyProcess);
             List<Administrator> adminList = administratorRepository.findAll();
             model.addAttribute("admin", adminList);
             return "redirect:/view-processes?message=INSOLVENCY_PROCESS_EDITED_SUCCESSFULLY";
